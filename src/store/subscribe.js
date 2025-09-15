@@ -1,31 +1,29 @@
 import store from "@/store";
-import axios from 'axios';
-import router from "@/router"; // Assuming you have a Vue Router instance
+import axios from "axios";
+import router from "@/router";
 
-const SESSION_TIMEOUT = 120 * 60 * 1000; // 120 minutes in milliseconds
-const IDLE_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
+const SESSION_TIMEOUT = 120 * 60 * 1000; // 120 mins
+const IDLE_TIMEOUT = 7200 * 60 * 1000; // 10 mins
 
 let logoutTimer;
 let idleTimer;
 
+// Subscribe to token changes
 store.subscribe((mutation) => {
-  switch (mutation.type) {
-    case 'auth/SET_TOKEN':
-      if (mutation.payload) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${mutation.payload}`;
-        localStorage.setItem('access_token', mutation.payload);
-        startSessionTimeout(); // Start the session timeout when the token is set
-      } else {
-        axios.defaults.headers.common['Authorization'] = null;
-        localStorage.removeItem('access_token');
-        clearTimers(); // Clear both session and idle timers when the token is cleared
-      }
-      break;
-    // Handle other mutations if needed
-    // case ...
+  if (mutation.type === "auth/SET_TOKEN") {
+    const token = mutation.payload?.token;
+
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      startSessionTimeout();
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+      clearTimers();
+    }
   }
 });
 
+// Intercept 401 responses and force logout
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -66,24 +64,18 @@ function clearTimers() {
   clearIdleTimeout();
 }
 
-function logout() {
-  store.commit('auth/SET_TOKEN', null);
-  localStorage.removeItem('access_token');
+async function logout() {
+  await store.dispatch("auth/logout"); // ✅ Call Vuex logout
   clearTimers();
-  // Perform any additional logout actions, such as redirecting to the login page
-  router.push('/'); // Redirect the user to the login page
+  router.push("/"); // Redirect to homepage/login
 }
 
-// Bind event listeners to reset idle timer on user activity
+// Reset idle timer on activity
 function resetIdleTimeoutOnActivity() {
-  const resetIdleTimeoutHandler = () => {
-    resetIdleTimeout();
-  };
-  ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach((event) => {
-    document.addEventListener(event, resetIdleTimeoutHandler, { passive: true });
+  ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach((event) => {
+    document.addEventListener(event, resetIdleTimeout, { passive: true });
   });
 }
 
-// Call the function to start/reset the session and idle timeouts
 startSessionTimeout();
 resetIdleTimeoutOnActivity();

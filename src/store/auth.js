@@ -4,98 +4,94 @@ export default {
   namespaced: true,
   state: {
     access_token: null,
+    expires_in: null,
     user: {
-      permissions: [],
-      roles: [],
-      company:null
-    },
+      id: null,
+      firstname: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      roles: []
+    }
   },
   getters: {
     authenticated(state) {
-      return state.access_token && state.user;
+      return !!state.access_token && !!state.user.id;
     },
     user(state) {
       return state.user;
     },
-    stores(state) {
-      // Safely access stores in case company or stores is null
-      return state.user.company ? state.user.company.stores : [];
-    },
-    hasPermission: (state) => (permission) => {
-      return state.user.permissions.includes(permission);
-    },
     hasRole: (state) => (role) => {
-      return state.user.roles.includes(role);
-    },
+      return state.user.roles?.includes(role) || false;
+    }
   },
   mutations: {
-    SET_TOKEN(state, access_token) {
-      state.access_token = access_token;
+    SET_TOKEN(state, { token, expires_in }) {
+      state.access_token = token;
+      state.expires_in = expires_in;
     },
     SET_USER(state, user) {
       state.user = user;
-    },
+    }
   },
   actions: {
-    // Login action (existing)
-    async login({ dispatch, commit }, credentials) {
+    async login({ commit }, credentials) {
       try {
-        let response = await axios.post("/login", credentials);
-        const { access_token } = response.data;
-        commit("SET_TOKEN", access_token);
-        return dispatch("attempt", access_token);
-      } catch (error) {
-        return error.response.data.message;
-      }
-    },
+        const response = await axios.post("/login", credentials);
 
-    // Attempt to authenticate and set user data (existing)
-    async attempt({ commit, state }, access_token) {
-      if (access_token) {
-        commit("SET_TOKEN", access_token);
-      }
-      if (!state.access_token) {
-        return;
-      }
-      try {
-        let response = await axios.get("/user");
-        const { name, username, email, phone, permissions, roles, company, loginCount, lastLogin } = response.data.data;
-        const user = { name, username, email, phone, permissions, roles, company, loginCount, lastLogin };
-        commit("SET_USER", user);
-      } catch (e) {
-        commit("SET_TOKEN", null);
-        commit("SET_USER", null);
-      }
-    },
+        if (response.data.status === "success") {
+          const { token, expires_in, user } = response.data.data;
 
-    // OTP verification action
-    async verifyOtp({ commit, dispatch }, { otp, user_id }) {
-      if (!otp || !user_id) {
-        throw new Error("OTP and User ID are required.");
-      }
-      try {
-        const response = await axios.post("/verify-otp", { otp, user_id });
-        if (response.data.success) {
-          // Destructure the access_token directly from the response
-          const { access_token } = response.data;
-          // Store the access token in Vuex state
-          commit("SET_TOKEN", access_token);
-          // Fetch user data with the newly acquired token
-          await dispatch("attempt", access_token);  // Pass the access token for user data fetch
-          return access_token;
+          // Save in state
+          commit("SET_TOKEN", { token, expires_in });
+          commit("SET_USER", user);
+
+          // Save in localStorage for persistence
+          localStorage.setItem("access_token", token);
+          localStorage.setItem("expires_in", expires_in);
+          localStorage.setItem("user", JSON.stringify(user));
+
+          return {
+            status: "success",
+            message: response.data.message,
+            code: response.data.code
+          };
         } else {
-          throw new Error(response.data.message || "Invalid OTP");
+          return {
+            status: "error",
+            message: response.data.message || "Login failed"
+          };
         }
       } catch (error) {
-        throw new Error(error.response?.data?.message || "OTP Verification Failed");
+        return {
+          status: "error",
+          message: error.response?.data?.message || "Login request failed"
+        };
       }
     },
-    // Logout action (existing)
+
     logout({ commit }) {
-      return axios.get("/logout").then(() => {
-        commit("SET_TOKEN", null);
-        commit("SET_USER", null);
+      return axios.get("/logout").finally(() => {
+        // Clear Vuex state
+        commit("SET_TOKEN", { token: null, expires_in: null });
+        commit("SET_USER", {
+          id: null,
+          firstname: "",
+          lastname: "",
+          email: "",
+          phone: "",
+          roles: []
+        });
+
+        // Clear localStorage
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("expires_in");
+        localStorage.removeItem("user");
+
+        // Clear axios headers
+        delete axios.defaults.headers.common["Authorization"];
       });
-    },
-  },
+    }
+
+  }
 };

@@ -28,19 +28,27 @@ app.component('apexchart', VueApexCharts);
 loadFonts();
 
 // Set the base URL for Axios
-axios.defaults.baseURL = 'http://41.59.228.237/bims-backend/public/api';
-// axios.defaults.baseURL = 'http://localhost:8000/api/';
+// axios.defaults.baseURL = 'http://41.59.228.237/bims-backend/public/api';
+axios.defaults.baseURL = 'http://localhost:8000/api/';
 
 // Add method to fetch image URLs
 app.config.globalProperties.$getImageUrl = function (imageName) {
-  return `http://41.59.228.237/bims-backend/public/${imageName}`;
-  // return `http://localhost:8000/${imageName}`;
+//   // return `http://41.59.228.237/bims-backend/public/${imageName}`;
+  return `http://localhost:8000/${imageName}`;
 };
 
-// Dispatch auth attempt and mount the app after authentication attempt
-store.dispatch('auth/attempt', localStorage.getItem('access_token')).then(() => {
-  app.use(store);
-  app.use(router);
-  app.use(vuetify);
-  app.mount('#app');
-});
+// Restore token and user from localStorage if available
+const savedToken = localStorage.getItem('access_token');
+const savedUser = localStorage.getItem('user');
+const savedExpiry = localStorage.getItem('expires_in');
+
+if (savedToken && savedUser) {
+  store.commit('auth/SET_TOKEN', { token: savedToken, expires_in: savedExpiry });
+  store.commit('auth/SET_USER', JSON.parse(savedUser));
+}
+
+// Mount the app
+app.use(store);
+app.use(router);
+app.use(vuetify);
+app.mount('#app');

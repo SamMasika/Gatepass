@@ -9,5 +9,15 @@ export default createVuetify({
   components: {
     VCalendar,
   },
+  theme: {
+    themes: {
+      light: {
+        colors: {
+          darkblue: '#020B2C',
+          red: '#D32F2F'
+        }
+      }
+    }
+  }
   
 })
