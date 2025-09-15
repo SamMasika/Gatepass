@@ -28,13 +28,12 @@ app.component('apexchart', VueApexCharts);
 loadFonts();
 
 // Set the base URL for Axios
-// axios.defaults.baseURL = 'http://41.59.228.237/bims-backend/public/api';
-axios.defaults.baseURL = 'http://localhost:8000/api/';
+axios.defaults.baseURL = 'http://41.59.228.237/Stailika-API/public/api';
+// axios.defaults.baseURL = 'http://localhost:8000/api/';
 
-// Add method to fetch image URLs
 app.config.globalProperties.$getImageUrl = function (imageName) {
-//   // return `http://41.59.228.237/bims-backend/public/${imageName}`;
-  return `http://localhost:8000/${imageName}`;
+  return `http://41.59.228.237/Stailika-API/public/${imageName}`;
+  // return `http://localhost:8000/${imageName}`;
 };
 
 // Restore token and user from localStorage if available
