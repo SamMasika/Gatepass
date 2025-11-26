@@ -1,15 +1,14 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
-import Login from '@/components/Stailika/Auth/Login.vue';
-import Master from '@/components/Stailika/Layout/Master.vue';
-import Dashboard from '@/components/Stailika/Layout/Dashboard.vue';
-import Pricing from '@/components/Stailika/pages/Pricing.vue';
-import Appointment from '@/components/Stailika/pages/Appointment.vue';
-import Comments from '@/components/Stailika/pages/Comments.vue';
-import Contactus from '@/components/Stailika/pages/Contactus.vue';
-import Categories from '@/components/Stailika/pages/Categories.vue';
-import Products from '@/components/Stailika/pages/Products.vue';
-import AddPricing from '@/components/Stailika/pages/addPricing.vue';
+import Login from '@/components/MNK/Auth/Login.vue';
+import Master from '@/components/MNK/Layout/Master.vue';
+import Dashboard from '@/components/MNK/Layout/Dashboard.vue';
+import Team from '@/components/MNK/pages/Team.vue';
+import Comments from '@/components/MNK/pages/Comments.vue';
+import Contactus from '@/components/MNK/pages/Contactus.vue';
+import Gallery from '@/components/MNK/pages/Gallery.vue';
+import Changepassword from '@/components/MNK/Settings/Changepassword.vue';
+import Profile from '@/components/MNK/Layout/Profile.vue';
 
 
 
@@ -44,14 +43,9 @@ const routes = [
         }
       },
       {
-        path: '/pricing',
-        name: 'pricing',
-        component: Pricing,
-      },
-      {
-        path: '/appointments',
-        name: 'appointments',
-        component: Appointment,
+        path: '/team',
+        name: 'team',
+        component: Team,
       },
       {
         path: '/comments',
@@ -59,24 +53,24 @@ const routes = [
         component: Comments,
       },
       {
-        path: '/categories',
-        name: 'categories',
-        component: Categories,
-      },
-      {
-        path: '/products',
-        name: 'products',
-        component: Products,
-      },
-      {
-        path: '/pricing/add-package',
-        name: 'add-package',
-        component: AddPricing,
+        path: '/gallery',
+        name: 'gallery',
+        component: Gallery,
       },
       {
         path: '/contact-us',
         name: 'contact-us',
         component: Contactus,
+      },
+      {
+        path: '/change-password',
+        name: 'change-password',
+        component: Changepassword,
+      },
+      {
+        path: '/profile',
+        name: 'profile',
+        component: Profile,
       }
 
 
@@ -85,7 +79,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

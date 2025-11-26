@@ -7,8 +7,7 @@ export default {
     expires_in: null,
     user: {
       id: null,
-      firstname: "",
-      lastname: "",
+      name: "",
       email: "",
       phone: "",
       roles: []
@@ -70,7 +69,7 @@ export default {
       }
     },
 
-    logout({ commit }) {
+    async logout({ commit }) {
       return axios.get("/logout").finally(() => {
         // Clear Vuex state
         commit("SET_TOKEN", { token: null, expires_in: null });

@@ -2,80 +2,118 @@ import store from "@/store";
 import axios from "axios";
 import router from "@/router";
 
-const SESSION_TIMEOUT = 120 * 60 * 1000; // 120 mins
-const IDLE_TIMEOUT = 7200 * 60 * 1000; // 10 mins
-
 let logoutTimer;
 let idleTimer;
+let interceptorId = null;
+let isLoggingOut = false;
+let isLoggedIn = false; // ✅ track true/false login state
 
-// Subscribe to token changes
+// --- Vuex Token Watcher ---
 store.subscribe((mutation) => {
   if (mutation.type === "auth/SET_TOKEN") {
     const token = mutation.payload?.token;
+    const expiresIn = mutation.payload?.expires_in;
 
     if (token) {
+      isLoggedIn = true;
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      startSessionTimeout();
+      startSessionTimeout(expiresIn);
+      attachInterceptor();
     } else {
-      delete axios.defaults.headers.common["Authorization"];
       clearTimers();
+      detachInterceptor();
+      delete axios.defaults.headers.common["Authorization"];
+      isLoggedIn = false;
     }
   }
 });
 
-// Intercept 401 responses and force logout
-axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      logout();
+// --- Axios 401 Interceptor ---
+function attachInterceptor() {
+  if (interceptorId !== null) return;
+  interceptorId = axios.interceptors.response.use(
+    (res) => res,
+    (err) => {
+      if (
+        err.response &&
+        err.response.status === 401 &&
+        !isLoggingOut &&
+        isLoggedIn // ✅ only if actually logged in
+      ) {
+        logout("401 Unauthorized");
+      }
+      return Promise.reject(err);
     }
-    return Promise.reject(error);
+  );
+}
+
+function detachInterceptor() {
+  if (interceptorId !== null) {
+    axios.interceptors.response.eject(interceptorId);
+    interceptorId = null;
   }
-);
-
-function startSessionTimeout() {
-  logoutTimer = setTimeout(() => {
-    logout();
-  }, SESSION_TIMEOUT);
 }
 
-function clearSessionTimeout() {
+// --- Session Timeout ---
+function startSessionTimeout(expiresIn) {
   clearTimeout(logoutTimer);
+  const timeout = (expiresIn || 86400) * 1000;
+  logoutTimer = setTimeout(() => logout("Token Expired"), timeout);
 }
+
+// --- Idle Timeout ---
+const IDLE_TIMEOUT = 10 * 60 * 1000; // 2 mins
 
 function startIdleTimeout() {
-  idleTimer = setTimeout(() => {
-    logout();
-  }, IDLE_TIMEOUT);
-}
-
-function clearIdleTimeout() {
   clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => logout("Idle Timeout"), IDLE_TIMEOUT);
 }
 
 function resetIdleTimeout() {
-  clearIdleTimeout();
-  startIdleTimeout();
+  clearTimeout(idleTimer);
+  if (isLoggedIn) startIdleTimeout(); // ✅ only if logged in
 }
 
 function clearTimers() {
-  clearSessionTimeout();
-  clearIdleTimeout();
+  clearTimeout(logoutTimer);
+  clearTimeout(idleTimer);
 }
 
-async function logout() {
-  await store.dispatch("auth/logout"); // ✅ Call Vuex logout
+// --- Logout (Single Entry Point) ---
+async function logout(reason = "Manual Logout") {
+  if (isLoggingOut) return;
+  isLoggingOut = true;
+  console.log("🔴 Logging out:", reason);
+
   clearTimers();
-  router.push("/"); // Redirect to homepage/login
+  detachInterceptor();
+  delete axios.defaults.headers.common["Authorization"];
+  removeIdleListeners();
+
+  try {
+    await store.dispatch("auth/logout");
+  } catch (e) {
+    console.warn("Logout dispatch error:", e);
+  } finally {
+    isLoggedIn = false;
+    isLoggingOut = false;
+    if (router.currentRoute.path !== "/") {
+      router.push("/");
+    }
+  }
 }
 
-// Reset idle timer on activity
+// --- Activity Listeners ---
 function resetIdleTimeoutOnActivity() {
-  ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach((event) => {
-    document.addEventListener(event, resetIdleTimeout, { passive: true });
-  });
+  ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach((event) =>
+    document.addEventListener(event, resetIdleTimeout, { passive: true })
+  );
 }
 
-startSessionTimeout();
+function removeIdleListeners() {
+  ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach((event) =>
+    document.removeEventListener(event, resetIdleTimeout)
+  );
+}
+
 resetIdleTimeoutOnActivity();
