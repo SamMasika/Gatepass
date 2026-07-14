@@ -8,7 +8,7 @@
     <v-row justify="end" class="mb-4">
         <v-col cols="12" md="auto">
 
-            <v-dialog v-model="dialog"  persistent transition="dialog-bottom-transition"  scrollable>
+            <v-dialog v-model="dialog" max-width="980" persistent transition="dialog-bottom-transition"  scrollable>
                 <!-- ACTIVATOR -->
                 <template #activator="{ props }">
                     <v-btn class="button-color my-5" prepend-icon="mdi-account-plus-outline" rounded="xl" elevation="0" height="50" v-bind="props">
