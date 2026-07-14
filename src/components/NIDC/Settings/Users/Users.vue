@@ -361,7 +361,7 @@
                         <div class="premium-avatar danger-avatar">
 
                             {{
-                            UserToActivate?.name
+                            UserToActivate?.first_name
                                 ?.charAt(0)
                                 ?.toUpperCase()
                         }}
@@ -372,7 +372,7 @@
                         <div class="ml-4 flex-grow-1">
 
                             <div class="premium-user-name">
-                                {{ UserToActivate?.name }}
+                                {{ UserToActivate?.first_name }} {{ UserToActivate?.last_name }}
                             </div>
 
                             <div class="premium-user-email">
@@ -489,7 +489,7 @@
                         <div class="premium-avatar success-avatar">
 
                             {{
-                            UserToActivate?.name
+                            UserToActivate?.first_name
                                 ?.charAt(0)
                                 ?.toUpperCase()
                         }}
@@ -500,7 +500,7 @@
                         <div class="ml-4 flex-grow-1">
 
                             <div class="premium-user-name">
-                                {{ UserToActivate?.name }}
+                                {{ UserToActivate?.first_name }} {{ UserToActivate?.last_name }}
                             </div>
 
                             <div class="premium-user-email">
