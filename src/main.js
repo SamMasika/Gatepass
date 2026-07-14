@@ -26,7 +26,7 @@ loadFonts();
 // AXIOS CONFIG
 // =========================
 // axios.defaults.baseURL = 'http://localhost:8000/api/';
-axios.defaults.baseURL = 'http://41.59.85.12/Gatepass-api/public/#/';
+axios.defaults.baseURL = 'http://41.59.85.12/Gatepass-api/public/api/';
 
 // helper for images
 const getImageUrl = (imageName) => {
