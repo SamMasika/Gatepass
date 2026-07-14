@@ -8,7 +8,7 @@
     <v-row justify="end" class="mb-4">
         <v-col cols="12" md="auto">
 
-            <v-dialog v-model="dialog" max-width="980" persistent transition="dialog-bottom-transition">
+            <v-dialog v-model="dialog"  persistent transition="dialog-bottom-transition"  scrollable>
                 <!-- ACTIVATOR -->
                 <template #activator="{ props }">
                     <v-btn class="button-color my-5" prepend-icon="mdi-account-plus-outline" rounded="xl" elevation="0" height="50" v-bind="props">
@@ -17,7 +17,7 @@
                 </template>
 
                 <!-- DIALOG CARD -->
-                <v-card class="premium-dialog overflow-hidden" rounded="xl" elevation="0">
+                <v-card class="premium-dialog " rounded="xl" elevation="0">
 
                     <!-- =====================================================
         HEADER
@@ -131,39 +131,8 @@
                                     </div>
                                 </v-col>
 
-                                <!-- PASSWORD -->
-                                <v-col cols="12" md="6" v-if="!user.id">
-                                    <div class="premium-input-group">
-                                        <label class="premium-label">
-                                            Password <span class="text-red">*</span>
-                                        </label>
-
-                                        <v-text-field v-model="user.password" placeholder="Enter password" variant="solo-filled" flat rounded="xl" hide-details :type="showPassword ? 'text' : 'password'" prepend-inner-icon="mdi-lock-outline" :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'" @click:append-inner="showPassword = !showPassword" class="premium-input" />
-                                    </div>
-                                </v-col>
-
-                                <!-- CONFIRM PASSWORD -->
-                                <v-col cols="12" md="6" v-if="!user.id">
-                                    <div class="premium-input-group">
-                                        <label class="premium-label">
-                                            Confirm Password <span class="text-red">*</span>
-                                        </label>
-
-                                        <v-text-field v-model="user.password_confirmation" placeholder="Confirm password" variant="solo-filled" flat rounded="xl" hide-details :type="showConfirmPassword ? 'text' : 'password'" prepend-inner-icon="mdi-lock-check-outline" :append-inner-icon="showConfirmPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'" @click:append-inner="showConfirmPassword = !showConfirmPassword" class="premium-input" />
-                                    </div>
-                                </v-col>
-
-                                <!-- SIGNATURE -->
-                                <v-col cols="12">
-                                    <div class="premium-input-group">
-                                        <label class="premium-label">
-                                            User Signature
-                                        </label>
-
-                                        <v-file-input v-model="user.signature" accept="image/*" prepend-inner-icon="mdi-draw" prepend-icon="" variant="solo-filled" flat rounded="xl" hide-details show-size class="premium-input" placeholder="Upload signature" />
-                                    </div>
-                                </v-col>
-
+                               
+                               
                                 <v-col cols="12">
                                     <div class="premium-input-group">
                                         <label class="premium-label"> Roles </label>
@@ -727,93 +696,112 @@ export default {
 
             this.selectedRoles = [];
         },
+async saveItem() {
 
-        async saveItem() {
+    const formData = new FormData();
 
-            const formData = new FormData();
+    formData.append("first_name", this.user.first_name || "");
+    formData.append("middle_name", this.user.middle_name || "");
+    formData.append("last_name", this.user.last_name || "");
+    formData.append("email", this.user.email || "");
+    formData.append("phone", this.user.phone || "");
 
-            formData.append("first_name", this.user.first_name || "");
-            formData.append("middle_name", this.user.middle_name || "");
-            formData.append("last_name", this.user.last_name || "");
-            formData.append("email", this.user.email || "");
-            formData.append("phone", this.user.phone || "");
 
-            // PASSWORD + CONFIRMATION
-            if (!this.user.id) {
+    if (!this.user.id) {
 
-                formData.append(
-                    "password",
-                    this.user.password || ""
-                );
+        formData.append(
+            "password",
+            this.user.password || ""
+        );
 
-                formData.append(
-                    "password_confirmation",
-                    this.user.password_confirmation || ""
-                );
-            }
+        formData.append(
+            "password_confirmation",
+            this.user.password_confirmation || ""
+        );
+    }
 
-            /*
-            |--------------------------------------------------------------------------
-            | ROLES
-            |--------------------------------------------------------------------------
-            */
-            this.selectedRoles.forEach((roleId, index) => {
 
-                formData.append(`roles[${index}]`, roleId);
+    this.selectedRoles.forEach((roleId, index) => {
 
-            });
+        formData.append(
+            `roles[${index}]`,
+            roleId
+        );
 
-            /*
-            |--------------------------------------------------------------------------
-            | SIGNATURE
-            |--------------------------------------------------------------------------
-            */
-            if (this.user.signature) {
+    });
 
-                const file = Array.isArray(this.user.signature) ?
-                    this.user.signature[0] :
-                    this.user.signature;
 
-                formData.append("signature", file);
-            }
+    if (this.user.signature) {
 
-            try {
+        const file = Array.isArray(this.user.signature)
+            ? this.user.signature[0]
+            : this.user.signature;
 
-                if (this.user.id) {
+        formData.append(
+            "signature",
+            file
+        );
+    }
 
-                    formData.append("_method", "PUT");
 
-                    await axios.post(
-                        `/users/${this.user.id}`,
-                        formData
-                    );
+    try {
 
-                } else {
+        let response;
 
-                    await axios.post(
-                        "/users",
-                        formData
-                    );
+        if (this.user.id) {
 
-                }
+            formData.append("_method", "PUT");
 
-                this.dialog = false;
+            response = await axios.post(
+                `/users/${this.user.id}`,
+                formData
+            );
 
-                this.refreshTable();
 
-                this.closeDialog();
+        } else {
 
-            } catch (error) {
+            response = await axios.post(
+                "/users",
+                formData
+            );
 
-                console.error(
-                    error.response ?
-                    error.response.data :
-                    error
-                );
+        }
 
-            }
 
-        },
+        // BACKEND MESSAGE
+        this.showAlert(
+            response.data.message,
+            "success"
+        );
+
+
+        this.dialog = false;
+
+        this.refreshTable();
+
+        this.closeDialog();
+
+
+    } catch (error) {
+
+
+        console.error(error);
+
+
+        const message =
+            error.response?.data?.message ||
+            "Something went wrong";
+
+
+        // BACKEND ERROR MESSAGE
+        this.showAlert(
+            message,
+            "error"
+        );
+
+    }
+
+},
         deleteDialog(item) {
             this.itemToDelete = item;
             this.confirmDialogVisible = true;
@@ -1296,5 +1284,79 @@ export default {
 
     box-shadow:
         0 12px 28px rgba(239, 68, 68, 0.28);
+}
+/* =========================================================
+   PREMIUM DIALOG SCROLL FIX
+========================================================= */
+
+.premium-dialog {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* HEADER FIXED */
+.dialog-header {
+    flex-shrink: 0;
+}
+
+
+/* BODY SCROLL AREA */
+.dialog-body {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    max-height: calc(90vh - 230px);
+
+    padding: 28px;
+
+}
+
+
+/* FOOTER FIXED */
+.dialog-footer {
+
+    flex-shrink: 0;
+
+    background: white;
+
+    padding: 20px 28px;
+
+    border-top: 1px solid #e2e8f0;
+
+}
+
+
+/* BEAUTIFUL SCROLLBAR */
+.dialog-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+
+.dialog-body::-webkit-scrollbar-track {
+
+    background: #f1f5f9;
+
+    border-radius: 20px;
+
+}
+
+
+.dialog-body::-webkit-scrollbar-thumb {
+
+    background: #cbd5e1;
+
+    border-radius: 20px;
+
+}
+
+
+.dialog-body::-webkit-scrollbar-thumb:hover {
+
+    background: #94a3b8;
+
 }
 </style>
