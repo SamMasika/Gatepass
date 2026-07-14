@@ -10,18 +10,13 @@ module.exports = defineConfig({
     }
   },
 
-  // === TEMPORARY FIX FOR BUILD ERROR ===
+  // === TEMPORARY FIX: Disable CSS minification ===
   css: {
     extract: true
   },
 
-  chainWebpack: config => {
-    // Disable CSS minification temporarily to see the real error
-    config.optimization.minimizer('css').tap(args => {
-      if (args[0]) {
-        args[0].options.minify = false
-      }
-      return args
-    })
+  chainWebpack: (config) => {
+    // Safer way to disable CSS minimizer
+    config.optimization.minimize(false)
   }
 })
