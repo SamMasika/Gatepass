@@ -289,7 +289,7 @@ export default {
     min-height: 100vh;
     padding: 20px 0;
     background: #ffffff;
-    /* border-right: 0.3px solid #e5e7eb; */
+   
 }
 
 /* LOGO */
