@@ -1,0 +1,21 @@
+.swal-message {
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.6;
+    padding: 4px 0;
+}
+
+.premium-swal-popup {
+    border-radius: 16px !important;
+    padding: 20px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2) !important;
+}
+
+.premium-swal-title {
+    font-weight: 600 !important;
+    font-size: 20px !important;
+}
+
+.premium-swal-content {
+    font-size: 15px !important;
+}

@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
-  transpileDependencies: ['vuetify'], // ✅ must be an array, not true
+  transpileDependencies: ['vuetify'], //  must be an array, not true
 
   publicPath: process.env.NODE_ENV === 'production' ? './' : './',
 

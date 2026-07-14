@@ -1,5 +1,5 @@
 {
-  "name": "MNK-Portal",
+  "name": "NIDC-Gatepass-Portal",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "apexcharts": "^4.0.0",
     "axios": "^1.7.7",
     "browserslist": "^4.24.2",
+    "canvas-confetti": "^1.9.4",
     "core-js": "^3.8.3",
     "jwt-decode": "^3.1.2",
     "material-design-icons-iconfont": "^6.7.0",
@@ -22,7 +23,8 @@
     "vue3-apexcharts": "^1.7.0",
     "vuetify": "^3.4.9",
     "vuex": "^4.0.0",
-    "webfontloader": "^1.0.0"
+    "webfontloader": "^1.0.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

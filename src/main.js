@@ -3,55 +3,84 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from 'axios';
+
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
+
 import Swal from 'sweetalert2';
 import ApexCharts from 'apexcharts';
 import VueApexCharts from 'vue3-apexcharts';
+
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import '@mdi/font/css/materialdesignicons.css';
 
-// Import custom store subscription
+import '@/assets/css/swal.css';
+import '@/assets/css/gate-dialog.css';
+
+// custom store subscriptions
 require('@/store/subscribe');
 
-// Initialize the Vue app
+loadFonts();
+
+// =========================
+// AXIOS CONFIG
+// =========================
+axios.defaults.baseURL = 'http://localhost:8000/api/';
+
+// helper for images
+const getImageUrl = (imageName) => {
+  return `http://localhost:8000/${imageName}`;
+};
+
+// =========================
+// CREATE APP
+// =========================
 const app = createApp(App);
 
 // Global properties
 app.config.globalProperties.$swal = Swal;
-app.config.globalProperties.$apexcharts = ApexCharts; // Declare ApexCharts globally
+app.config.globalProperties.$apexcharts = ApexCharts;
+app.config.globalProperties.$getImageUrl = getImageUrl;
 
-// Register VueApexCharts globally
+// register chart component
 app.component('apexchart', VueApexCharts);
 
-// Load fonts
-loadFonts();
+// =========================
+// GLOBAL PERMISSION HELPERS
+// =========================
+app.config.globalProperties.$hasPermission = (permission) => {
+  return store.getters['auth/hasPermission'](permission);
+};
 
-// Set the base URL for Axios
-// axios.defaults.baseURL = 'http://localhost:8000/api/';
+app.config.globalProperties.$hasRole = (role) => {
+  return store.getters['auth/hasRole'](role);
+};
 
-// app.config.globalProperties.$getImageUrl = function (imageName) {
-//   return `http://localhost:8000/${imageName}`;
-// };
+// =========================
+// AUTH BOOTSTRAP (CRITICAL FIX)
+// =========================
+const token = localStorage.getItem('access_token');
 
-axios.defaults.baseURL = 'https://api.mnk.co.tz/api/';
-  app.config.globalProperties.$getImageUrl = function (imageName) {
-    return `https://api.mnk.co.tz/${imageName}`;
-  };
+async function bootstrapAuth() {
+  if (!token) return;
 
-
-// Restore token and user from localStorage if available
-const savedToken = localStorage.getItem('access_token');
-const savedUser = localStorage.getItem('user');
-const savedExpiry = localStorage.getItem('expires_in');
-
-if (savedToken && savedUser) {
-  store.commit('auth/SET_TOKEN', { token: savedToken, expires_in: savedExpiry });
-  store.commit('auth/SET_USER', JSON.parse(savedUser));
+  try {
+    await store.dispatch('auth/attempt', token);
+  } catch (e) {
+    console.error('Auth bootstrap failed:', e);
+  }
 }
 
-// Mount the app
-app.use(store);
-app.use(router);
-app.use(vuetify);
-app.mount('#app');
+// =========================
+// INIT APP FLOW
+// =========================
+(async () => {
+  await bootstrapAuth();
+
+  // IMPORTANT: mount ONLY after auth is resolved
+  app.use(store);
+  app.use(router);
+  app.use(vuetify);
+
+  app.mount('#app');
+})();
