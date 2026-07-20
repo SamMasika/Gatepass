@@ -7,8 +7,7 @@ export default {
         return {
 
             stats: {
-                // totalGatePasses: 0,
-                activeToday: 0,
+                activePasses: 0,
                 pending: 0,
                 approved: 0,
                 rejected: 0,
@@ -24,8 +23,8 @@ export default {
 
             kpis: [
                 {
-                    key: "activeToday",
-                    label: "Todays Active Passes",
+                    key: "activePasses",
+                    label: "Active Today",
                     value: 0,
                     icon: "mdi-file-document-multiple",
                     color: "#2563eb",
@@ -166,6 +165,7 @@ export default {
  
     mounted() {
         this.fetchCustomRangeData(null, null);
+        this.loadDashboardData();
     },
 
     methods: {
@@ -175,7 +175,26 @@ export default {
             this.$router.push(route);
 
         },
+        async loadDashboardData() {
+            try {
+                const [
+                    activePassesRes,
+                   
+                ] = await Promise.all([
+                    axios.get("/gate-passes/active"),
+                    // axios.get("/users/count"),
+                    // axios.get("/companies/count"),
+                    // axios.get("/visitors/count")
+                ]);
 
+                this.stats.activePasses = activePassesRes.data.data.total;
+                console.log("Active Passes:", this.stats.activePasses); // Debugging the active passes count
+               
+                this.updateKpis();
+            } catch (error) {
+                console.error("Failed to load dashboard data:", error);
+            }
+        },
         async fetchCustomRangeData(start, end) {
             try {
 

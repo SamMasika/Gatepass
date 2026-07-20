@@ -1,13 +1,6 @@
 <template>
-<v-row class="mb-4" justify="start" align="start">
-    <v-col cols="12" md="6">
-        <nav class="custom-breadcrumbs">
-            <span class="breadcrumb-item" @click="$router.push('/dashboard')">Dashboard</span>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item active">Change Password</span>
-        </nav>
-    </v-col>
-</v-row>
+ <!-- BREADCRUMB -->
+    <PageBreadcrumb title="Change Password" />
 
 <v-container class="d-flex justify-center align-center fill-height" fluid>
     <v-card class="password-card pa-8 border" max-width="600" flat elevation="0">
@@ -43,7 +36,12 @@
 
 <script>
 import axios from "axios";
+import PageBreadcrumb from "../SharedComponents/PageBreadcrumb.vue";
+
 export default {
+    components: {
+        PageBreadcrumb
+    },
     data() {
         return {
             showCurrent: false,

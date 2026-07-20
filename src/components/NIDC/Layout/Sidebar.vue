@@ -100,12 +100,12 @@ export default {
                             to: "/gate-pass",
                             permission: "GATEPASS_ACCESS"
                         },
-                        {
-                            title: "Archive",
-                            icon: "mdi-archive-outline",
-                            to: "/archive",
-                            permission: "GATEPASS_ACCESS"
-                        },
+                        // {
+                        //     title: "Archive",
+                        //     icon: "mdi-archive-outline",
+                        //     to: "/archive",
+                        //     permission: "GATEPASS_ACCESS"
+                        // },
                     ]
                 },
 

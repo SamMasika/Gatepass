@@ -449,7 +449,6 @@ import gateChart from "../Report/gateChart.vue";
 import swtalert from "@/mixins/swtalert";
 import dashboardReport from "@/mixins/dashboardReport.js";
 
-
 export default {
 
     name: "GatePassDashboard",
@@ -458,13 +457,12 @@ export default {
         gateChart
     },
 
-    mixins: [swtalert,dashboardReport],
+    mixins: [swtalert, dashboardReport],
 
     data() {
 
         return {
 
-           
             gatePasses: [
 
                 {
@@ -556,8 +554,7 @@ export default {
 
             this.$router.push(route);
 
-		},
-	
+        },
 
         getStatusColor(status) {
 
@@ -567,9 +564,11 @@ export default {
 
             return "grey";
 
-        }
+        },
+      
+    },
 
-    }
+  
 
 };
 </script>

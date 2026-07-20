@@ -351,11 +351,29 @@ TABLE WRAPPER
                                     <!-- ================= BODY ================= -->
                                     <transition-group name="fade-slide" tag="div">
 
-                                        <div v-for="item in paginatedVisitors" :key="item.id" class="table-row">
-                                            <!-- CHECKBOX -->
-                                            <div class="td mx-3">
-                                                <v-checkbox v-model="selectedVisitors" :value="item.id" hide-details density="compact" color="primary" />
-                                            </div>
+                               <div 
+    v-for="item in paginatedVisitors" 
+    :key="item.id" 
+    class="table-row"
+    :class="{ 'disabled-row': !canTakeAnyAction(item) }"
+>
+                                         <!-- CHECKBOX -->
+<div class="td mx-3">
+    <v-tooltip bottom :disabled="canTakeAnyAction(item)">
+        <template #activator="{ props }">
+            <v-checkbox 
+                v-bind="props"
+                v-model="selectedVisitors" 
+                :value="item.id" 
+                hide-details 
+                density="compact" 
+                color="primary"
+                :disabled="!canTakeAnyAction(item)"
+            />
+        </template>
+        <span v-if="!canTakeAnyAction(item)">No actions available at this stage</span>
+    </v-tooltip>
+</div>
 
                                             <!-- VISITOR -->
                                             <div class="td mx-5">
@@ -790,7 +808,7 @@ FOOTER
     </v-dialog>
     <!-- DELETE -->
     <DeleteDialog v-model="confirmDialogVisible" title="Delete User" :item-name="itemToDelete.full_name" :item-description="itemToDelete.email" @confirm="deleteItem" />
-    <!-- <approveAtGate1 v-model="approveGate1Dialog" title="Approve at Gate 1" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Approve" cancel-text="No, Cancel" @confirm="approveVisitorAtGate1">
+    <approveAtGate1 v-model="approveGate1Dialog" title="Approve at Gate 1" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Approve" cancel-text="No, Cancel" @confirm="approveVisitorAtGate1">
         <template #notice>
             Are you sure you want to grant Gate 1 clearance to
             <span class="notice-name">
@@ -799,7 +817,7 @@ FOOTER
             This will allow them to proceed to Gate 2 for final approval.
         </template>
 
-    </approveAtGate1> -->
+    </approveAtGate1>
     <!-- BULK APPROVE DIALOG -->
     <approveAtGate1 v-model="bulkApproveDialog" title="Approve Multiple Visitors" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Approve All" cancel-text="Cancel" @confirm="bulkApproveVisitors">
         <template #notice>
@@ -1093,13 +1111,35 @@ export default {
         const item = this.filteredVisitors.find(v => v.id === id);
         return item && this.canCheckoutAtGate1(item);
       });
-    },
+		},
+	
 
-  
+
 },
 
-    methods: {
-       
+	methods: {
+		
+  canTakeAnyAction(item) {
+        if (!item || !this.user?.current_gate) return false;
+
+        const gate = this.user.current_gate;
+        const workflowStatus = this.selectedGatePass?.workflow_status || '';
+
+        // Allow editing in early stages
+        if (workflowStatus === 'PENDING_SUBMISSION') {
+            return true;
+        }
+
+        if (gate === 'GATE_1') {
+            return this.canApproveAtGate1(item) || this.canCheckoutAtGate1(item);
+        }
+
+        if (gate === 'GATE_2') {
+            return this.canCheckInAtGate2(item) || this.canCheckoutAtGate2(item);
+        }
+
+        return false;
+    },     
         // ==================== BULK ACTIONS ====================
 
         openBulkApprove() {
@@ -4239,5 +4279,14 @@ export default {
 .final-exit-btn {
     background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
     color: white;
+}
+
+.table-row.disabled-row {
+    opacity: 0.65;
+    background-color: #f8fafc;
+}
+
+.table-row.disabled-row .v-checkbox {
+    pointer-events: none;
 }
 </style>

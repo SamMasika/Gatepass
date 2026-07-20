@@ -37,7 +37,7 @@
                         <!--  ALL OTHER ACTIONS ONLY IF NOT EXPIRED -->
                         <template v-if="item.operation_status !== 'EXPIRED'">
 
-                            <div class="premium-menu-item" @click="viewPass(item)" v-if="item.workflow_status !== 'COMPLETED'">
+                            <!-- <div class="premium-menu-item" @click="viewPass(item)" v-if="item.workflow_status !== 'COMPLETED'">
                                 <div class="menu-item-left">
                                     <div class="menu-item-icon edit-bg">
                                         <v-icon size="18" color="#2563EB">mdi-clipboard-check-outline</v-icon>
@@ -50,8 +50,8 @@
 									<v-icon size="18" color="#94a3b8">
 																			mdi-chevron-right
 																	</v-icon>
-                            </div>
-									<div class="premium-menu-item" @click="addVisitorDialog(item)" v-if="item.workflow_status=='PENDING_SUBMISSION'">
+                            </div> -->
+									<!-- <div class="premium-menu-item" @click="addVisitorDialog(item)" v-if="item.workflow_status=='PENDING_SUBMISSION'">
 																	<div class="menu-item-left">
 																			<div class="menu-item-icon create-bg">
 																					<v-icon size="18" color="#10B981"> mdi-account-plus-outline </v-icon>
@@ -69,9 +69,9 @@
 																			mdi-chevron-right
 																	</v-icon>
 
-															</div>
+															</div> -->
 
-                            <div class="premium-menu-item" @click="submitPass(item)" v-if="item.workflow_status=='PENDING_SUBMISSION'">
+                            <!-- <div class="premium-menu-item" @click="submitPass(item)" v-if="item.workflow_status=='PENDING_SUBMISSION'">
                                 <div class="menu-item-left">
                                     <div class="menu-item-icon edit-bg">
                                         <v-icon size="18" color="#6366F1">mdi-send-outline</v-icon>
@@ -84,10 +84,10 @@
 									<v-icon size="18" color="#94a3b8">
 																			mdi-chevron-right
 																	</v-icon>
-                            </div>
+                            </div> -->
                           
 
-                            <div class="premium-menu-item" @click="submitGate1Pass(item)" v-if="item.workflow_status == 'IN_REVIEW' && item.current_gate == 'GATE_2'">
+                            <!-- <div class="premium-menu-item" @click="submitGate1Pass(item)" v-if="item.workflow_status == 'IN_REVIEW' && item.current_gate == 'GATE_2'">
                                 <div class="menu-item-left">
                                     <div class="menu-item-icon delete-bg">
                                         <v-icon size="18" color="#f59e0b">mdi-send-outline</v-icon>
@@ -97,7 +97,7 @@
                                         <div class="menu-item-subtitle">Further security verification</div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </template>
                         <!--  ONLY ACTION ALLOWED WHEN EXPIRED -->
                         <div class="premium-menu-item" @click="openPreview(item)">
@@ -118,7 +118,7 @@
                         </div>
                         <!-- EXPIRED LABEL (OPTIONAL) -->
 								
-                <div class="premium-menu-item" @click="viewActivities(item)" v-if="item.workflow_status === 'COMPLETED'">
+                <div class="premium-menu-item" @click="viewActivities(item)">
                     <div class="menu-item-left">
                         <div class="menu-item-icon activities-bg">
                             <v-icon size="18" color="#8B5CF6">mdi-calendar-clock</v-icon>
