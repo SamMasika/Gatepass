@@ -242,7 +242,7 @@ export default {
                             title: "Access Area",
                             icon: "mdi-badge-account-outline",
                             to: "/access-areas",
-                            permission: "VISIT_PURPOSE_ACCESS"
+                            permission: "AREA_ACCESS"
                         }
 
                     ]

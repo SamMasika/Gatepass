@@ -1,18 +1,12 @@
 <template>
 <v-container fluid class="ultra-wrapper py-12">
 
-     <!-- Breadcrumb -->
-    <nav class="custom-breadcrumbs">
-        <span class="breadcrumb-item" @click="$router.push('/dashboard')">Dashboard</span>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item active">Profile Overview</span>
-    </nav>
-
+    <PageBreadcrumb title="Profile Overview" />
 
     <v-row justify="center">
         <v-col cols="12" lg="10">
 
-            <v-card class="ultra-card border" elevation="0" >
+            <v-card class="ultra-card border" elevation="0">
 
                 <!-- TOP HEADER -->
                 <div class="ultra-header">
@@ -24,15 +18,10 @@
                         </v-avatar>
 
                         <div class="ml-6">
-                            <h1 class="ultra-name">{{ user.name }}</h1>
+                            <h1 class="ultra-name">{{ user.first_name }} {{ user.last_name }}</h1>
                             <p class="ultra-email">{{ user.email }}</p>
 
-                            <div class="d-flex align-center mt-3">
-                                <v-chip size="small" class="gold-chip mr-3">
-                                    Premium Member
-                                </v-chip>
-                                <span class="member-since">Member since 2024</span>
-                            </div>
+                          
                         </div>
 
                     </div>
@@ -50,7 +39,7 @@
 
                                 <div class="info-row">
                                     <span class="label">Full Name</span>
-                                    <span class="value">{{ user.name }}</span>
+                                    <span class="value">{{ user.first_name }} {{ user.last_name }}</span>
                                 </div>
 
                                 <div class="info-row">
@@ -75,7 +64,7 @@
                                     Change Password
                                 </v-btn>
 
-                                <v-btn block variant="outlined" rounded="xl" class="luxury-otline-btn"  @click="editUser">
+                                <v-btn block variant="outlined" rounded="xl" class="luxury-otline-btn" @click="editUser">
                                     <v-icon start>mdi-account-edit</v-icon>
                                     Edit Profile
                                 </v-btn>
@@ -98,7 +87,8 @@
 
             <h2 class="mb-6">Edit Profile</h2>
 
-            <v-text-field label="Full Name" v-model="editData.name" variant="outlined" />
+            <v-text-field label="First Name" v-model="editData.first_name" variant="outlined" />
+            <v-text-field label="Last Name" v-model="editData.last_name" variant="outlined" />
             <v-text-field label="Phone" v-model="editData.phone" variant="outlined" />
             <v-text-field label="Email" v-model="editData.email" variant="outlined" />
 
@@ -117,6 +107,7 @@
 
 <script>
 import swtalert from '@/mixins/swtalert';
+import PageBreadcrumb from '../SharedComponents/PageBreadcrumb.vue';
 import axios from 'axios';
 
 import {
@@ -124,6 +115,9 @@ import {
 } from 'vuex';
 export default {
     mixins: [swtalert],
+    components: {
+        PageBreadcrumb
+    },
     data() {
         return {
             editDialog: false,
@@ -193,7 +187,6 @@ export default {
 
 /* Breadcrumb */
 
-
 /* Card */
 .ultra-card {
     background: #ffffff;
@@ -207,9 +200,14 @@ export default {
 /* Header */
 .ultra-header {
     padding: 50px 60px;
-    background: linear-gradient(135deg, #22ce67, #06923e);
+    background:
+        linear-gradient(135deg,
+            #1b867c,
+            #003B73,
+            #0f172a);
+
     border-bottom: 1px solid #eef1f5;
-	/* color: #ffffff; */
+    /* color: #ffffff; */
 }
 
 .header-content {

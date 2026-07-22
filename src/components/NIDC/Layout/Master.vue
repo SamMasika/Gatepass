@@ -226,7 +226,7 @@
                     </div>
                 </div>
 
-                <div class="menu-item-premium">
+                <div class="menu-item-premium" @click="$router.push('/change-password')">
                     <v-icon class="icon-security">mdi-lock-outline</v-icon>
                     <div>
                         <div class="title">Security</div>
@@ -820,12 +820,16 @@ export default {
      SAVE/EDIT DIALOG
 ========================================= */
 
-.premium-dialog {
-    background: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+.premium-dialog{
+    width:min(980px,96vw);
+    max-width:980px;
+    max-height:95vh;
 
-    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12),
-        0 10px 25px rgba(15, 23, 42, 0.08);
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+    border-radius:30px;
 }
 
 /* HEADER */
@@ -913,11 +917,14 @@ export default {
 }
 
 /* BODY */
-.dialog-body {
-    padding: 36px;
-    background: #f8fafc;
-}
+.dialog-body{
+    flex:1 1 auto;
+    overflow-y:auto;
+    overflow-x:hidden;
 
+    padding:24px;
+    min-height:0;
+}
 /* SECTION TITLE */
 .form-section-title {
     display: flex;
@@ -2313,5 +2320,52 @@ border: 1px solid rgba(226, 232, 240, 0.9);
 .gate-right {
     display: flex;
     align-items: center;
+}
+@media (max-width:960px){
+
+.dialog-header{
+    padding:22px;
+}
+
+.dialog-body{
+    padding:20px;
+}
+
+.dialog-footer{
+    padding:18px;
+}
+
+}
+
+@media (max-width:600px){
+
+.premium-dialog{
+    width:100vw;
+    height:100vh;
+    max-width:100vw;
+    max-height:100vh;
+    border-radius:0;
+}
+
+.dialog-header{
+    padding:18px;
+}
+
+.dialog-body{
+    padding:16px;
+}
+
+.dialog-footer{
+    padding:16px;
+}
+
+.dialog-title{
+    font-size:22px;
+}
+
+.dialog-subtitle{
+    font-size:13px;
+}
+
 }
 </style>

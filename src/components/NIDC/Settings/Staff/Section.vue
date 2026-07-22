@@ -32,11 +32,8 @@
 
                     <!-- HEADER -->
                     <div class="dialog-header">
-
                         <div class="header-glow"></div>
-
                         <div class="d-flex align-center justify-space-between flex-wrap position-relative">
-
                             <!-- LEFT -->
                             <div class="d-flex align-center">
 
@@ -94,17 +91,7 @@
 
                         <v-form>
 
-                            <!-- TITLE -->
-                            <div class="form-title mb-6">
-
-                                <div class="line"></div>
-
-                                <span>
-                                    Section Information
-                                </span>
-
-                            </div>
-
+                          
                             <!-- FORM -->
                             <v-row>
 

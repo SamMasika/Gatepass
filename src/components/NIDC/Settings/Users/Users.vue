@@ -15,7 +15,6 @@
                         Add User
                     </v-btn>
                 </template>
-
                 <!-- DIALOG CARD -->
                 <v-card class="premium-dialog " rounded="xl" elevation="0">
 
@@ -948,18 +947,17 @@ async saveItem() {
     DIALOG
 ========================================================= */
 
-.premium-dialog {
+.premium-dialog{
+    width:min(980px,96vw);
+    max-width:980px;
+    max-height:95vh;
 
-    overflow: hidden;
+    display:flex;
+    flex-direction:column;
 
-    border-radius: 34px !important;
-
-    background: white;
-
-    box-shadow:
-        0 30px 80px rgba(15, 23, 42, 0.15);
+    overflow:hidden;
+    border-radius:30px;
 }
-
 /* =========================================================
     TOP
 ========================================================= */
@@ -979,7 +977,6 @@ async saveItem() {
 
 /* ACTIVATE */
 .activate-top {
-
     background:
         linear-gradient(135deg,
             #16a34a,
@@ -1061,7 +1058,7 @@ async saveItem() {
 
     font-weight: 800;
 
-    color: #0f172a;
+    color: #EBEEF5;
 
     margin-bottom: 12px;
 }
@@ -1303,31 +1300,15 @@ async saveItem() {
 
 
 /* BODY SCROLL AREA */
-.dialog-body {
+.dialog-body{
+    flex:1 1 auto;
+    overflow-y:auto;
+    overflow-x:hidden;
 
-    flex: 1;
-
-    overflow-y: auto;
-
-    max-height: calc(90vh - 230px);
-
-    padding: 28px;
-
+    padding:24px;
+    min-height:0;
 }
 
-
-/* FOOTER FIXED */
-.dialog-footer {
-
-    flex-shrink: 0;
-
-    background: white;
-
-    padding: 20px 28px;
-
-    border-top: 1px solid #e2e8f0;
-
-}
 
 
 /* BEAUTIFUL SCROLLBAR */
@@ -1357,6 +1338,53 @@ async saveItem() {
 .dialog-body::-webkit-scrollbar-thumb:hover {
 
     background: #94a3b8;
+
+}
+@media (max-width:960px){
+
+.dialog-header{
+    padding:22px;
+}
+
+.dialog-body{
+    padding:20px;
+}
+
+.dialog-footer{
+    padding:18px;
+}
+
+}
+
+@media (max-width:600px){
+
+.premium-dialog{
+    width:100vw;
+    height:100vh;
+    max-width:100vw;
+    max-height:100vh;
+    border-radius:0;
+}
+
+.dialog-header{
+    padding:18px;
+}
+
+.dialog-body{
+    padding:16px;
+}
+
+.dialog-footer{
+    padding:16px;
+}
+
+.dialog-title{
+    font-size:22px;
+}
+
+.dialog-subtitle{
+    font-size:13px;
+}
 
 }
 </style>

@@ -53,6 +53,8 @@ function getLandingRoute() {
     { permission: "COMPANY_ACCESS", route: "companies" },
     { permission: "SECTION_ACCESS", route: "sections" },
     { permission: "LOG_ACCESS", route: "logs" },
+    { permission: "VISIT_PURPOSE_ACCESS", route: "visit-purposes" },
+    { permission: "AREA_ACCESS", route: "access-areas" },
   ];
 
   for (const r of routes) {
@@ -61,7 +63,7 @@ function getLandingRoute() {
     }
   }
 
-  // 🔥 IMPORTANT: must always be public-safe route
+  // IMPORTANT: must always be public-safe route
   return "profile"; // or "dashboard" ONLY if dashboard is always accessible
 }
 
@@ -192,7 +194,7 @@ const routes = [
         path: "access-areas",
         name: "access-areas",
         component: AccessArea,
-        meta: { permission: "ACCESS_AREA_ACCESS" },
+        meta: { permission: "AREA_ACCESS" },
       },
 
       {
