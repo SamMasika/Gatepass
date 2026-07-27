@@ -22,5 +22,5 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-# Ignore specific file
-# src/main.js
+
+

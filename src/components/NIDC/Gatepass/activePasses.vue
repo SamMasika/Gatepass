@@ -43,7 +43,7 @@
                                         <v-icon size="18" color="#2563EB">mdi-clipboard-check-outline</v-icon>
                                     </div>
                                     <div>
-                                        <div class="menu-item-title">Allow Entry</div>
+                                        <div class="menu-item-title">Manage Pass</div>
                                         <div class="menu-item-subtitle">See Pass Details</div>
                                     </div>
                                 </div>

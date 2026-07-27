@@ -8,7 +8,7 @@
     <v-row justify="end" class="mb-4">
         <v-col cols="12" md="auto">
 
-            <v-dialog v-model="dialog" max-width="980" persistent transition="dialog-bottom-transition"  scrollable>
+            <v-dialog v-model="dialog" max-width="980" persistent transition="dialog-bottom-transition" scrollable>
                 <!-- ACTIVATOR -->
                 <template #activator="{ props }">
                     <v-btn class="button-color my-5" prepend-icon="mdi-account-plus-outline" rounded="xl" elevation="0" height="50" v-bind="props">
@@ -82,7 +82,7 @@
                                             First Name <span class="text-red">*</span>
                                         </label>
 
-                                        <v-text-field v-model="user.first_name" placeholder="Enter first name" variant="solo-filled" flat rounded="xl" hide-details prepend-inner-icon="mdi-account-outline" class="premium-input" />
+                                        <v-text-field v-model="user.first_name" placeholder="Enter first name" variant="solo-filled" flat rounded="lg" hide-details prepend-inner-icon="mdi-account-outline" class="premium-input" />
                                     </div>
                                 </v-col>
 
@@ -93,7 +93,7 @@
                                             Middle Name
                                         </label>
 
-                                        <v-text-field v-model="user.middle_name" placeholder="Enter middle name" variant="solo-filled" flat rounded="xl" hide-details prepend-inner-icon="mdi-account-outline" class="premium-input" />
+                                        <v-text-field v-model="user.middle_name" placeholder="Enter middle name" variant="solo-filled" flat rounded="lg" hide-details prepend-inner-icon="mdi-account-outline" class="premium-input" />
                                     </div>
                                 </v-col>
 
@@ -104,7 +104,7 @@
                                             Last Name <span class="text-red">*</span>
                                         </label>
 
-                                        <v-text-field v-model="user.last_name" placeholder="Enter last name" variant="solo-filled" flat rounded="xl" hide-details prepend-inner-icon="mdi-account-outline" class="premium-input" />
+                                        <v-text-field v-model="user.last_name" placeholder="Enter last name" variant="solo-filled" flat rounded="lg" hide-details prepend-inner-icon="mdi-account-outline" class="premium-input" />
                                     </div>
                                 </v-col>
 
@@ -115,7 +115,7 @@
                                             Email Address <span class="text-red">*</span>
                                         </label>
 
-                                        <v-text-field v-model="user.email" placeholder="Enter email address" variant="solo-filled" flat rounded="xl" hide-details prepend-inner-icon="mdi-email-outline" class="premium-input" />
+                                        <v-text-field v-model="user.email" placeholder="Enter email address" variant="solo-filled" flat rounded="lg" hide-details prepend-inner-icon="mdi-email-outline" class="premium-input" />
                                     </div>
                                 </v-col>
 
@@ -126,13 +126,21 @@
                                             Phone Number <span class="text-red">*</span>
                                         </label>
 
-                                        <v-text-field v-model="user.phone" placeholder="Enter phone number" variant="solo-filled" flat rounded="xl" hide-details prepend-inner-icon="mdi-phone-outline" class="premium-input" />
+                                        <v-text-field v-model="user.phone" placeholder="Enter phone number" variant="solo-filled" flat rounded="lg" hide-details prepend-inner-icon="mdi-phone-outline" class="premium-input" />
+                                    </div>
+                                </v-col>
+                                <!--DEPARTMENT TITLE -->
+                                <v-col cols="12" md="6">
+                                    <div class="premium-input-group">
+                                        <label class="premium-label">
+                                            Department Title
+                                        </label>
+
+                                        <PaginatedDropdown api-endpoint="/sections" label="" placeholder="Select department" item-title="name" v-model="user.section_id" />
                                     </div>
                                 </v-col>
 
-                               
-                               
-                                <v-col cols="12">
+                                <v-col cols="12" md="6">
                                     <div class="premium-input-group">
                                         <label class="premium-label"> Roles </label>
                                         <v-autocomplete v-model="selectedRoles" :items="Array.isArray(roles) ? roles : []" item-title="name" item-value="id" multiple chips closable-chips variant="solo-filled" flat hide-details class="premium-input" placeholder="Select roles for this user">
@@ -195,14 +203,13 @@
 
     <!-- TABLE -->
     <DataTable ref="userTable" api-url="users" :headers="headers" title="User Management" subtitle="Manage system users">
-
         <!-- =====================================================
             ACTIONS SLOT
         ====================================================== -->
         <template #actions="{ item }">
             <!-- =====================================================
-    PREMIUM ACTION MENU
-====================================================== -->
+									PREMIUM ACTION MENU
+							====================================================== -->
             <v-menu location="bottom end" transition="scale-transition" offset="12">
                 <!-- ACTIVATOR -->
                 <template #activator="{ props }">
@@ -336,13 +343,10 @@
 
                 <!-- TITLE -->
                 <div class="text-center mt-7">
-
                     <h2 class="dialog-title">
                         Confirm Deactivation
                     </h2>
-
                     <p class="dialog-subtitle">
-
                         This user will immediately lose
                         access to the system and all
                         assigned permissions.
@@ -565,7 +569,6 @@
     <!-- DELETE -->
     <DeleteDialog v-model="confirmDialogVisible" title="Delete User" :item-name="itemToDelete.full_name" :item-description="itemToDelete.email" @confirm="deleteItem" />
     <!-- <StatusDialog v-model="statusDialogVisible" :item-name="itemToUpdate.first_name" :action="statusAction" @confirm="updateStatus" /> -->
-
 </v-container>
 </template>
 
@@ -575,6 +578,7 @@ import DataTable from "../../SharedComponents/dataTable.vue";
 import DeleteDialog from "../../SharedComponents/DeleteDialog.vue";
 // import statusDialog from "../../SharedComponents/statusDialog.vue";
 import PageBreadcrumb from "@/components/NIDC/SharedComponents/PageBreadcrumb.vue";
+import PaginatedDropdown from "@/components/NIDC/SharedComponents/paginatedDropdown.vue";
 import swtalert from "@/mixins/swtalert";
 
 export default {
@@ -582,7 +586,8 @@ export default {
         DataTable,
         DeleteDialog,
         // statusDialog,
-        PageBreadcrumb
+        PageBreadcrumb,
+        PaginatedDropdown
     },
     mixins: [swtalert],
 
@@ -598,10 +603,11 @@ export default {
 
             user: {
                 id: null,
-				first_name: "",
-				middle_name: null,
+                first_name: "",
+                middle_name: null,
                 last_name: "",
                 email: "",
+                section_id: null,
                 phone: "",
                 password: "",
                 signature: null,
@@ -688,6 +694,7 @@ export default {
                 last_name: "",
                 email: "",
                 phone: "",
+                section_id: null,
                 password: "",
                 signature: null,
                 roles: [],
@@ -695,112 +702,101 @@ export default {
 
             this.selectedRoles = [];
         },
-async saveItem() {
+        async saveItem() {
 
-    const formData = new FormData();
+            const formData = new FormData();
 
-    formData.append("first_name", this.user.first_name || "");
-    formData.append("middle_name", this.user.middle_name || "");
-    formData.append("last_name", this.user.last_name || "");
-    formData.append("email", this.user.email || "");
-    formData.append("phone", this.user.phone || "");
+            formData.append("first_name", this.user.first_name || "");
+            formData.append("middle_name", this.user.middle_name || "");
+            formData.append("last_name", this.user.last_name || "");
+            formData.append("email", this.user.email || "");
+            formData.append("phone", this.user.phone || "");
+            formData.append("section_id", this.user.section_id || null);
+            if (!this.user.id) {
 
+                formData.append(
+                    "password",
+                    this.user.password || ""
+                );
 
-    if (!this.user.id) {
+                formData.append(
+                    "password_confirmation",
+                    this.user.password_confirmation || ""
+                );
+            }
 
-        formData.append(
-            "password",
-            this.user.password || ""
-        );
+            this.selectedRoles.forEach((roleId, index) => {
 
-        formData.append(
-            "password_confirmation",
-            this.user.password_confirmation || ""
-        );
-    }
+                formData.append(
+                    `roles[${index}]`,
+                    roleId
+                );
 
+            });
 
-    this.selectedRoles.forEach((roleId, index) => {
+            if (this.user.signature) {
 
-        formData.append(
-            `roles[${index}]`,
-            roleId
-        );
+                const file = Array.isArray(this.user.signature) ?
+                    this.user.signature[0] :
+                    this.user.signature;
 
-    });
+                formData.append(
+                    "signature",
+                    file
+                );
+            }
 
+            try {
 
-    if (this.user.signature) {
+                let response;
 
-        const file = Array.isArray(this.user.signature)
-            ? this.user.signature[0]
-            : this.user.signature;
+                if (this.user.id) {
 
-        formData.append(
-            "signature",
-            file
-        );
-    }
+                    formData.append("_method", "PUT");
 
+                    response = await axios.post(
+                        `/users/${this.user.id}`,
+                        formData
+                    );
 
-    try {
+                } else {
 
-        let response;
+                    response = await axios.post(
+                        "/users",
+                        formData
+                    );
 
-        if (this.user.id) {
+                }
 
-            formData.append("_method", "PUT");
+                // BACKEND MESSAGE
+                this.showAlert(
+                    response.data.message,
+                    "success"
+                );
 
-            response = await axios.post(
-                `/users/${this.user.id}`,
-                formData
-            );
+                this.dialog = false;
 
+                this.refreshTable();
 
-        } else {
+                this.closeDialog();
 
-            response = await axios.post(
-                "/users",
-                formData
-            );
+            } catch (error) {
 
-        }
+                console.error(error);
 
+                const message =
+                    error.response.data.message ||
+                    "Something went wrong";
 
-        // BACKEND MESSAGE
-        this.showAlert(
-            response.data.message,
-            "success"
-        );
+                // BACKEND ERROR MESSAGE
+                this.showAlert(
+                    message,
+                    "error"
+                );
 
+            }
 
-        this.dialog = false;
-
-        this.refreshTable();
-
-        this.closeDialog();
-
-
-    } catch (error) {
-
-
-        console.error(error);
-
-
-        const message =
-            error.response?.data?.message ||
-            "Something went wrong";
-
-
-        // BACKEND ERROR MESSAGE
-        this.showAlert(
-            message,
-            "error"
-        );
-
-    }
-
-},
+        },
         deleteDialog(item) {
             this.itemToDelete = item;
             this.confirmDialogVisible = true;
@@ -947,17 +943,18 @@ async saveItem() {
     DIALOG
 ========================================================= */
 
-.premium-dialog{
-    width:min(980px,96vw);
-    max-width:980px;
-    max-height:95vh;
+.premium-dialog {
+    width: min(980px, 96vw);
+    max-width: 980px;
+    max-height: 95vh;
 
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
 
-    overflow:hidden;
-    border-radius:30px;
+    overflow: hidden;
+    border-radius: 30px;
 }
+
 /* =========================================================
     TOP
 ========================================================= */
@@ -1282,6 +1279,7 @@ async saveItem() {
     box-shadow:
         0 12px 28px rgba(239, 68, 68, 0.28);
 }
+
 /* =========================================================
    PREMIUM DIALOG SCROLL FIX
 ========================================================= */
@@ -1292,30 +1290,25 @@ async saveItem() {
     flex-direction: column;
 }
 
-
 /* HEADER FIXED */
 .dialog-header {
     flex-shrink: 0;
 }
 
-
 /* BODY SCROLL AREA */
-.dialog-body{
-    flex:1 1 auto;
-    overflow-y:auto;
-    overflow-x:hidden;
+.dialog-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 
-    padding:24px;
-    min-height:0;
+    padding: 24px;
+    min-height: 0;
 }
-
-
 
 /* BEAUTIFUL SCROLLBAR */
 .dialog-body::-webkit-scrollbar {
     width: 8px;
 }
-
 
 .dialog-body::-webkit-scrollbar-track {
 
@@ -1325,7 +1318,6 @@ async saveItem() {
 
 }
 
-
 .dialog-body::-webkit-scrollbar-thumb {
 
     background: #cbd5e1;
@@ -1334,57 +1326,57 @@ async saveItem() {
 
 }
 
-
 .dialog-body::-webkit-scrollbar-thumb:hover {
 
     background: #94a3b8;
 
 }
-@media (max-width:960px){
 
-.dialog-header{
-    padding:22px;
+@media (max-width:960px) {
+
+    .dialog-header {
+        padding: 22px;
+    }
+
+    .dialog-body {
+        padding: 20px;
+    }
+
+    .dialog-footer {
+        padding: 18px;
+    }
+
 }
 
-.dialog-body{
-    padding:20px;
-}
+@media (max-width:600px) {
 
-.dialog-footer{
-    padding:18px;
-}
+    .premium-dialog {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+    }
 
-}
+    .dialog-header {
+        padding: 18px;
+    }
 
-@media (max-width:600px){
+    .dialog-body {
+        padding: 16px;
+    }
 
-.premium-dialog{
-    width:100vw;
-    height:100vh;
-    max-width:100vw;
-    max-height:100vh;
-    border-radius:0;
-}
+    .dialog-footer {
+        padding: 16px;
+    }
 
-.dialog-header{
-    padding:18px;
-}
+    .dialog-title {
+        font-size: 22px;
+    }
 
-.dialog-body{
-    padding:16px;
-}
-
-.dialog-footer{
-    padding:16px;
-}
-
-.dialog-title{
-    font-size:22px;
-}
-
-.dialog-subtitle{
-    font-size:13px;
-}
+    .dialog-subtitle {
+        font-size: 13px;
+    }
 
 }
 </style>
