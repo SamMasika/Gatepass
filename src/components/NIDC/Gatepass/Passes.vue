@@ -130,6 +130,23 @@
                     </div>
                     <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
                 </div>
+				<!-- RENEW / REACTIVATE (EXPIRED or COMPLETED) -->
+<div
+  class="premium-menu-item"
+  @click="openReactivateDialog(item)"
+  v-if="item.operation_status === 'EXPIRED' || item.operation_status === 'COMPLETED'"
+>
+  <div class="menu-item-left">
+    <div class="menu-item-icon create-bg">
+      <v-icon size="18" color="#10B981">mdi-refresh</v-icon>
+    </div>
+    <div>
+      <div class="menu-item-title">Renew / Reactivate</div>
+      <div class="menu-item-subtitle">Extend validity & restart workflow</div>
+    </div>
+  </div>
+  <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
+</div>
 
                         <div v-if="item.operation_status === 'EXPIRED'" class="expired-text pa-3 d-flex align-center">
                             <v-icon color="error" size="18" class="mr-2">mdi-alert-circle</v-icon>
@@ -200,7 +217,151 @@
         </v-card>
 
     </v-dialog>
+<!-- =========================================================
+     REACTIVATE / RENEW GATE PASS DIALOG
+========================================================= -->
+<v-dialog v-model="reactivateDialog" max-width="620" persistent transition="dialog-bottom-transition">
+  <v-card class="premium-dialog overflow-hidden" rounded="xl" elevation="0">
 
+    <!-- HEADER -->
+    <div class="dialog-header">
+      <div class="header-glow"></div>
+      <div class="d-flex align-center position-relative">
+        <div class="dialog-icon">
+          <v-icon size="32" color="white">mdi-refresh</v-icon>
+        </div>
+        <div class="ml-4">
+          <div class="dialog-title">Renew / Reactivate Gate Pass</div>
+          <div class="dialog-subtitle">
+            {{ selectedGatePass?.pass_number }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="dialog-body">
+      <v-form ref="reactivateForm">
+        <v-row>
+          <!-- Valid From -->
+          <v-col cols="12" md="6">
+            <div class="premium-input-group">
+              <label class="premium-label">Valid From *</label>
+              <v-text-field
+                v-model="reactivateForm.valid_from"
+                type="date"
+                variant="solo-filled"
+                flat
+                rounded="xl"
+                hide-details="auto"
+                :min="today"
+                :rules="[v => !!v || 'Required']"
+              />
+            </div>
+          </v-col>
+
+          <!-- Valid To -->
+          <v-col cols="12" md="6">
+            <div class="premium-input-group">
+              <label class="premium-label">Valid To *</label>
+              <v-text-field
+                v-model="reactivateForm.valid_to"
+                type="date"
+                variant="solo-filled"
+                flat
+                rounded="xl"
+                hide-details="auto"
+                :min="reactivateForm.valid_from || today"
+                :rules="[v => !!v || 'Required']"
+              />
+            </div>
+          </v-col>
+
+          <!-- Time In -->
+          <v-col cols="12" md="6">
+            <div class="premium-input-group">
+              <label class="premium-label">Time In</label>
+              <v-text-field
+                v-model="reactivateForm.time_in"
+                type="time"
+                variant="solo-filled"
+                flat
+                rounded="xl"
+                hide-details
+              />
+            </div>
+          </v-col>
+
+          <!-- Time Out -->
+          <v-col cols="12" md="6">
+            <div class="premium-input-group">
+              <label class="premium-label">Time Out</label>
+              <v-text-field
+                v-model="reactivateForm.time_out"
+                type="time"
+                variant="solo-filled"
+                flat
+                rounded="xl"
+                hide-details
+              />
+            </div>
+          </v-col>
+
+          <!-- Multi-day -->
+          <v-col cols="12">
+            <v-checkbox
+              v-model="reactivateForm.is_multi_day"
+              label="Multi-day pass"
+              hide-details
+              color="primary"
+            />
+          </v-col>
+
+          <!-- Remarks -->
+          <v-col cols="12">
+            <div class="premium-input-group">
+              <label class="premium-label">Remarks (optional)</label>
+              <v-textarea
+                v-model="reactivateForm.remarks"
+                rows="2"
+                variant="solo-filled"
+                flat
+                rounded="xl"
+                hide-details
+                placeholder="Reason for reactivation / extension"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </v-form>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="dialog-footer">
+      <v-btn
+        variant="outlined"
+        rounded="xl"
+        height="48"
+        class="px-8"
+        @click="reactivateDialog = false"
+      >
+        Cancel
+      </v-btn>
+
+      <v-btn
+        rounded="xl"
+        height="48"
+        class="px-8 button-color ml-3"
+        elevation="0"
+        :loading="reactivateLoading"
+        @click="submitReactivate"
+      >
+        <v-icon start size="18">mdi-refresh</v-icon>
+        Reactivate Pass
+      </v-btn>
+    </div>
+  </v-card>
+</v-dialog>
     <!-- =========================================================
     PREMIUM VIEW GATE PASS DIALOG
 ========================================================= -->
@@ -1064,8 +1225,8 @@ export default {
             itemsPerPage: 10,
 			selectedVisitor: {},
 			dailyTransactions: [],     // NEW
-        selectedDate: null,        // NEW - for PDF generation
-        loadingDetails: false,
+			selectedDate: null,        // NEW - for PDF generation
+			loadingDetails: false,
             companyDialog: false,
             selectedVisitorTransactions: [],
             selectedGatePass: {},
@@ -1094,7 +1255,18 @@ export default {
             loadingStatus: false,
             UserToActivate: {},
             visitor: {},
-            statusAction: "",
+			statusAction: "",
+			reactivateDialog: false,
+			reactivateLoading: false,
+			reactivateForm: {
+			valid_from: '',
+			valid_to: '',
+			time_in: '',
+			time_out: '',
+			is_multi_day: false,
+			remarks: ''
+			},
+			today: new Date().toISOString().split('T')[0],
             headers: [{
                     title: "Pass Number",
                     value: "pass_number",
@@ -1886,7 +2058,52 @@ async bulkGate1CheckOutVisitors() {
                 );
                 this.viewDialog = false;
             }
-        },
+		},
+		openReactivateDialog(item) {
+  this.selectedGatePass = JSON.parse(JSON.stringify(item));
+const formatTime = (time) => {
+    if (!time) return '';
+    return time.substring(0, 5); // "08:00:00" → "08:00"
+  };
+  // Pre-fill sensible defaults
+  this.reactivateForm = {
+  valid_from: this.today,
+  valid_to: this.today,
+  time_in: formatTime(item.time_in),
+  time_out: formatTime(item.time_out),
+  is_multi_day: !!item.is_multi_day,
+  remarks: item.remarks || ''
+};
+
+  this.reactivateDialog = true;
+},
+
+async submitReactivate() {
+  if (!this.reactivateForm.valid_from || !this.reactivateForm.valid_to) {
+    this.showAlert('Please select Valid From and Valid To dates', 'error');
+    return;
+  }
+
+  this.reactivateLoading = true;
+
+  try {
+    const response = await axios.post(
+      `/gate-passes/${this.selectedGatePass.id}/reactivate`,
+      this.reactivateForm
+    );
+
+    this.reactivateDialog = false;
+    this.showAlert(response.data.message || 'Gate pass reactivated successfully', 'success');
+    this.refreshTable();
+  } catch (error) {
+    this.showAlert(
+      error.response?.data?.message || 'Failed to reactivate gate pass',
+      'error'
+    );
+  } finally {
+    this.reactivateLoading = false;
+  }
+},
         refreshTable() {
             this.$refs.gatepassTable.fetchData();
         },

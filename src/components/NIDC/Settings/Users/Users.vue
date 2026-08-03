@@ -1,5 +1,5 @@
 <template>
-<v-container fluid class="users-page">
+<v-container fluid>
 
     <!-- BREADCRUMB -->
     <PageBreadcrumb title="Users" />
@@ -143,7 +143,7 @@
                                 <v-col cols="12" md="6">
                                     <div class="premium-input-group">
                                         <label class="premium-label"> Roles </label>
-                                        <v-autocomplete v-model="selectedRoles" :items="Array.isArray(roles) ? roles : []" item-title="name" item-value="id" multiple chips closable-chips variant="solo-filled" flat hide-details class="premium-input" placeholder="Select roles for this user">
+                                        <v-autocomplete v-model="selectedRoles" :items="Array.isArray(roles) ? roles : []" item-title="name" item-value="id" multiple chips closable-chips variant="solo-filled" flat hide-details class="premium-input" placeholder="Select roles for this user" rounded="lg">
                                             <template v-slot:item="{ props, item }">
                                                 <v-list-item v-bind="props" class="premium-role-item">
                                                     <!-- ICON -->
@@ -627,6 +627,10 @@ export default {
                 {
                     title: "Phone",
                     value: "phone"
+                },
+                {
+                    title: "Department",
+                    value: "section.name"
                 },
                 {
                     title: "Status",
