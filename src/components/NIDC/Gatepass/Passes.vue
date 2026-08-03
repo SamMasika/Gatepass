@@ -134,17 +134,22 @@
 <div
   class="premium-menu-item"
   @click="openReactivateDialog(item)"
-  v-if="item.operation_status === 'EXPIRED' || item.operation_status === 'COMPLETED'"
+  v-if="
+    $hasPermission('GATEPASS_CREATE') &&
+    (item.operation_status === 'EXPIRED' || item.operation_status === 'COMPLETED')
+  "
 >
   <div class="menu-item-left">
     <div class="menu-item-icon create-bg">
       <v-icon size="18" color="#10B981">mdi-refresh</v-icon>
     </div>
+
     <div>
       <div class="menu-item-title">Renew / Reactivate</div>
       <div class="menu-item-subtitle">Extend validity & restart workflow</div>
     </div>
   </div>
+
   <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
 </div>
 
