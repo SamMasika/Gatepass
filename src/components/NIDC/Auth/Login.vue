@@ -47,52 +47,8 @@
                     </h1>
 
                     <h2 class="brand-subtitle text-center">
-                        Secure Entry Management
+                        Secure Access Control
                     </h2>
-
-                    <!-- <p class="brand-description">
-                        Modern enterprise-grade visitor and gate pass
-                        management designed for secure facilities,
-                        seamless monitoring, and intelligent access control.
-                    </p> -->
-
-                    <!-- FEATURE ITEMS -->
-                    <div class="feature-list">
-
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <v-icon>mdi-cctv</v-icon>
-                            </div>
-
-                            <div>
-                                <h4>Real-time Monitoring</h4>
-                                <p>Track entries and exits instantly.</p>
-                            </div>
-                        </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <v-icon>mdi-shield-lock</v-icon>
-                            </div>
-
-                            <div>
-                                <h4>Advanced Security</h4>
-                                <p>Enterprise-level access protection.</p>
-                            </div>
-                        </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <v-icon>mdi-chart-line</v-icon>
-                            </div>
-
-                            <div>
-                                <h4>Smart Analytics</h4>
-                                <p>Powerful operational insights.</p>
-                            </div>
-                        </div>
-
-                    </div>
 
                 </div>
             </v-col>

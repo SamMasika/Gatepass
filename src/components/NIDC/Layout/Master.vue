@@ -1,6 +1,6 @@
 <template>
 <!-- Fixed Sidebar -->
-<v-navigation-drawer v-model="drawer" app :width="drawer ? 300 : 68" class="sidebar-rawer" v-if="user?.company?.isComplete !== false">
+<v-navigation-drawer v-model="drawer" app :width="drawer ? 300 : 68" class="sidebar-rawer" v-if="user?.is_password_changed === 1">
     <Sidebar />
 </v-navigation-drawer>
 <!-- App Bar -->
@@ -2368,4 +2368,93 @@ border: 1px solid rgba(226, 232, 240, 0.9);
 }
 
 }
+/* MAIN CONTAINER */
+.toggle-visible {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 14px;
+
+    border-radius: 12px;
+
+    background: linear-gradient(180deg, #ffffff, #f1f5f9);
+
+    border: 1px solid #e2e8f0;
+
+    transition: all 0.2s ease;
+}
+
+.toggle-visible:hover {
+    border-color: #94a3b8;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* TEXT */
+.toggle-visible .title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.toggle-visible .desc {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* SWITCH */
+.switch-strong {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    display: inline-block;
+}
+
+.switch-strong input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* TRACK */
+.slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+
+    background: #cbd5e1;
+    border-radius: 999px;
+
+    transition: 0.3s;
+}
+
+/* KNOB */
+.slider::before {
+    content: "";
+    position: absolute;
+
+    height: 18px;
+    width: 18px;
+
+    left: 3px;
+    top: 3px;
+
+    background: white;
+    border-radius: 50%;
+
+    transition: 0.3s;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ACTIVE STATE (IMPORTANT COLOR) */
+.switch-strong input:checked+.slider {
+    background: linear-gradient(135deg, #1b867c, #003B73);
+}
+
+.switch-strong input:checked+.slider::before {
+    transform: translateX(20px);
+}
+
 </style>

@@ -8,6 +8,7 @@ const defaultUser = {
   email: "",
   phone: "",
   current_gate:null,
+  is_password_changed: null,
   roles: []
 };
 

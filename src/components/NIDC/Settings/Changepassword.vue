@@ -56,31 +56,33 @@ export default {
     },
     methods: {
         async changePassword() {
-            // First validate the form
-            const isValid = this.$refs.form.validate();
-            console.log('Form is valid:', isValid); // Debugging the form validation
-            console.log('Form data:', this.change_password); // Debugging the form data
+    // First validate the form
+    const isValid = this.$refs.form.validate();
 
-            if (!isValid) return;
+    if (!isValid) return;
 
-            try {
-                const response = await axios.post("/update-password", this.change_password);
+    try {
+        const response = await axios.post("/update-password", this.change_password);
 
-                // Use the showAlert function for success
-                this.showAlert(response.data.message, "success");
+        // Show success message
+        this.showAlert(response.data.message, "success");
 
-                // Reset the form
-                this.$refs.form.reset();
-                this.$refs.form.resetValidation();
-            } catch (error) {
-                // Use the showAlert function for error
-                this.showAlert(
-                    error.response ?.data ?.message || "An error occurred. Please try again.",
-                    "error"
-                );
-            }
-        },
+        // Reset the form
+        this.$refs.form.reset();
+        this.$refs.form.resetValidation();
 
+        // Reload the page after a short delay so the user can see the success message
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500); // 1.5 seconds delay
+
+    } catch (error) {
+        this.showAlert(
+            error.response?.data?.message || "An error occurred. Please try again.",
+            "error"
+        );
+    }
+},
         showAlert(message, type) {
             this.$swal.fire({
                 icon: type, // 'success' or 'error'

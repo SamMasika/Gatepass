@@ -33,7 +33,7 @@
                     <div class="menu-divider"></div>
 
                     <div class="menu-items">
-					
+
                         <!--  ALL OTHER ACTIONS ONLY IF NOT EXPIRED -->
                         <template v-if="item.operation_status !== 'EXPIRED'">
 
@@ -47,29 +47,44 @@
                                         <div class="menu-item-subtitle">See Pass Details</div>
                                     </div>
                                 </div>
-									<v-icon size="18" color="#94a3b8">
-																			mdi-chevron-right
-																	</v-icon>
+
+<v-icon size="18" color="#94a3b8">
+
+mdi-chevron-right
+
+</v-icon>
                             </div> -->
-									<!-- <div class="premium-menu-item" @click="addVisitorDialog(item)" v-if="item.workflow_status=='PENDING_SUBMISSION'">
-																	<div class="menu-item-left">
-																			<div class="menu-item-icon create-bg">
-																					<v-icon size="18" color="#10B981"> mdi-account-plus-outline </v-icon>
-																			</div>
-																			<div>
-																					<div class="menu-item-title">Add Visitor</div>
-																					<div class="menu-item-subtitle">
-																							Attach visitor to this gate pass
-																					</div>
-																			</div>
+                            <!-- <div class="premium-menu-item" @click="addVisitorDialog(item)" v-if="item.workflow_status=='PENDING_SUBMISSION'">
 
-																	</div>
+<div class="menu-item-left">
 
-																	<v-icon size="18" color="#94a3b8">
-																			mdi-chevron-right
-																	</v-icon>
+<div class="menu-item-icon create-bg">
 
-															</div> -->
+<v-icon size="18" color="#10B981"> mdi-account-plus-outline </v-icon>
+
+</div>
+
+<div>
+
+<div class="menu-item-title">Add Visitor</div>
+
+<div class="menu-item-subtitle">
+
+Attach visitor to this gate pass
+
+</div>
+
+</div>
+
+</div>
+
+<v-icon size="18" color="#94a3b8">
+
+mdi-chevron-right
+
+</v-icon>
+
+</div> -->
 
                             <!-- <div class="premium-menu-item" @click="submitPass(item)" v-if="item.workflow_status=='PENDING_SUBMISSION'">
                                 <div class="menu-item-left">
@@ -81,11 +96,13 @@
                                         <div class="menu-item-subtitle">Initial security review</div>
                                     </div>
                                 </div>
-									<v-icon size="18" color="#94a3b8">
-																			mdi-chevron-right
-																	</v-icon>
+
+<v-icon size="18" color="#94a3b8">
+
+mdi-chevron-right
+
+</v-icon>
                             </div> -->
-                          
 
                             <!-- <div class="premium-menu-item" @click="submitGate1Pass(item)" v-if="item.workflow_status == 'IN_REVIEW' && item.current_gate == 'GATE_2'">
                                 <div class="menu-item-left">
@@ -117,41 +134,37 @@
                             <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
                         </div>
                         <!-- EXPIRED LABEL (OPTIONAL) -->
-								
-                <div class="premium-menu-item" @click="viewActivities(item)">
-                    <div class="menu-item-left">
-                        <div class="menu-item-icon activities-bg">
-                            <v-icon size="18" color="#8B5CF6">mdi-calendar-clock</v-icon>
+
+                        <div class="premium-menu-item" @click="viewActivities(item)">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon activities-bg">
+                                    <v-icon size="18" color="#8B5CF6">mdi-calendar-clock</v-icon>
+                                </div>
+                                <div>
+                                    <div class="menu-item-title">View Records</div>
+                                    <div class="menu-item-subtitle">See transaction history</div>
+                                </div>
+                            </div>
+                            <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
                         </div>
-                        <div>
-                            <div class="menu-item-title">View Records</div>
-                            <div class="menu-item-subtitle">See transaction history</div>
-                        </div>
-                    </div>
-                    <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
-                </div>
-				<!-- RENEW / REACTIVATE (EXPIRED or COMPLETED) -->
-<div
-  class="premium-menu-item"
-  @click="openReactivateDialog(item)"
-  v-if="
+                        <!-- RENEW / REACTIVATE (EXPIRED or COMPLETED) -->
+                        <div class="premium-menu-item" @click="openReactivateDialog(item)" v-if="
     $hasPermission('GATEPASS_CREATE') &&
     (item.operation_status === 'EXPIRED' || item.operation_status === 'COMPLETED')
-  "
->
-  <div class="menu-item-left">
-    <div class="menu-item-icon create-bg">
-      <v-icon size="18" color="#10B981">mdi-refresh</v-icon>
-    </div>
+  ">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon create-bg">
+                                    <v-icon size="18" color="#10B981">mdi-refresh</v-icon>
+                                </div>
 
-    <div>
-      <div class="menu-item-title">Renew / Reactivate</div>
-      <div class="menu-item-subtitle">Extend validity & restart workflow</div>
-    </div>
-  </div>
+                                <div>
+                                    <div class="menu-item-title">Renew / Reactivate</div>
+                                    <div class="menu-item-subtitle">Extend validity & restart workflow</div>
+                                </div>
+                            </div>
 
-  <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
-</div>
+                            <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
+                        </div>
 
                         <div v-if="item.operation_status === 'EXPIRED'" class="expired-text pa-3 d-flex align-center">
                             <v-icon color="error" size="18" class="mr-2">mdi-alert-circle</v-icon>
@@ -222,151 +235,106 @@
         </v-card>
 
     </v-dialog>
-<!-- =========================================================
+    <!-- =========================================================
      REACTIVATE / RENEW GATE PASS DIALOG
 ========================================================= -->
-<v-dialog v-model="reactivateDialog" max-width="620" persistent transition="dialog-bottom-transition">
-  <v-card class="premium-dialog overflow-hidden" rounded="xl" elevation="0">
+    <v-dialog v-model="reactivateDialog" max-width="620" persistent transition="dialog-bottom-transition">
+        <v-card class="premium-dialog overflow-hidden" rounded="xl" elevation="0">
 
-    <!-- HEADER -->
-    <div class="dialog-header">
-      <div class="header-glow"></div>
-      <div class="d-flex align-center position-relative">
-        <div class="dialog-icon">
-          <v-icon size="32" color="white">mdi-refresh</v-icon>
-        </div>
-        <div class="ml-4">
-          <div class="dialog-title">Renew / Reactivate Gate Pass</div>
-          <div class="dialog-subtitle">
-            {{ selectedGatePass?.pass_number }}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BODY -->
-    <div class="dialog-body">
-      <v-form ref="reactivateForm">
-        <v-row>
-          <!-- Valid From -->
-          <v-col cols="12" md="6">
-            <div class="premium-input-group">
-              <label class="premium-label">Valid From *</label>
-              <v-text-field
-                v-model="reactivateForm.valid_from"
-                type="date"
-                variant="solo-filled"
-                flat
-                rounded="xl"
-                hide-details="auto"
-                :min="today"
-                :rules="[v => !!v || 'Required']"
-              />
+            <!-- HEADER -->
+            <div class="dialog-header">
+                <div class="header-glow"></div>
+                <div class="d-flex align-center position-relative">
+                    <div class="dialog-icon">
+                        <v-icon size="32" color="white">mdi-refresh</v-icon>
+                    </div>
+                    <div class="ml-4">
+                        <div class="dialog-title">Renew / Reactivate Gate Pass</div>
+                        <div class="dialog-subtitle">
+                            {{ selectedGatePass?.pass_number }}
+                        </div>
+                    </div>
+                </div>
             </div>
-          </v-col>
 
-          <!-- Valid To -->
-          <v-col cols="12" md="6">
-            <div class="premium-input-group">
-              <label class="premium-label">Valid To *</label>
-              <v-text-field
-                v-model="reactivateForm.valid_to"
-                type="date"
-                variant="solo-filled"
-                flat
-                rounded="xl"
-                hide-details="auto"
-                :min="reactivateForm.valid_from || today"
-                :rules="[v => !!v || 'Required']"
-              />
+            <!-- BODY -->
+            <div class="dialog-body">
+                <v-form ref="reactivateForm">
+                    <v-row>
+
+                        <!-- Multi-day -->
+                        <v-col cols="12">
+                            <div class="field mt-4">
+                                <div class="toggle-visible">
+                                    <div class="text">
+                                        <div class="title">Multi-day Visit</div>
+                                        <div class="desc">Enable if visitor stays for more than one day</div>
+                                    </div>
+
+                                    <label class="switch-strong">
+                                        <input type="checkbox" v-model="reactivateForm.is_multi_day" />
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </v-col>
+
+                        <!-- Valid From -->
+                        <v-col cols="12" :md="reactivateForm.is_multi_day ? 6 : 12">
+                            <div class="premium-input-group">
+                                <label class="premium-label">Valid From *</label>
+                                <v-text-field v-model="reactivateForm.valid_from" type="date" variant="solo-filled" flat rounded="lg" hide-details="auto" :min="today" :rules="[v => !!v || 'Required']" />
+                            </div>
+                        </v-col>
+
+                        <!-- Valid To (only when Multi-day is on) -->
+                        <v-col v-if="reactivateForm.is_multi_day" cols="12" md="6">
+                            <div class="premium-input-group">
+                                <label class="premium-label">Valid To *</label>
+                                <v-text-field v-model="reactivateForm.valid_to" type="date" variant="solo-filled" flat rounded="lg" hide-details="auto" :min="reactivateForm.valid_from || today" :rules="[v => !!v || 'Required']" />
+                            </div>
+                        </v-col>
+
+                        <!-- Time In -->
+                        <v-col cols="12" md="6">
+                            <div class="premium-input-group">
+                                <label class="premium-label">Time In</label>
+                                <v-text-field v-model="reactivateForm.time_in" type="time" variant="solo-filled" flat rounded="lg" hide-details />
+                            </div>
+                        </v-col>
+
+                        <!-- Time Out -->
+                        <v-col cols="12" md="6">
+                            <div class="premium-input-group">
+                                <label class="premium-label">Time Out</label>
+                                <v-text-field v-model="reactivateForm.time_out" type="time" variant="solo-filled" flat rounded="lg" hide-details />
+                            </div>
+                        </v-col>
+
+                        <!-- Remarks -->
+                        <v-col cols="12">
+                            <div class="premium-input-group">
+                                <label class="premium-label">Remarks (optional)</label>
+                                <v-textarea v-model="reactivateForm.remarks" rows="2" variant="solo-filled" flat rounded="lg" hide-details placeholder="Reason for reactivation / extension" />
+                            </div>
+                        </v-col>
+                    </v-row>
+                </v-form>
             </div>
-          </v-col>
 
-          <!-- Time In -->
-          <v-col cols="12" md="6">
-            <div class="premium-input-group">
-              <label class="premium-label">Time In</label>
-              <v-text-field
-                v-model="reactivateForm.time_in"
-                type="time"
-                variant="solo-filled"
-                flat
-                rounded="xl"
-                hide-details
-              />
+            <!-- FOOTER -->
+            <div class="dialog-footer">
+                <v-btn variant="outlined" rounded="xl" height="48" class="px-8" @click="reactivateDialog = false">
+                    Cancel
+                </v-btn>
+
+                <v-btn rounded="xl" height="48" class="px-8 button-color ml-3" elevation="0" :loading="reactivateLoading" @click="submitReactivate">
+                    <v-icon start size="18">mdi-refresh</v-icon>
+                    Reactivate Pass
+                </v-btn>
             </div>
-          </v-col>
-
-          <!-- Time Out -->
-          <v-col cols="12" md="6">
-            <div class="premium-input-group">
-              <label class="premium-label">Time Out</label>
-              <v-text-field
-                v-model="reactivateForm.time_out"
-                type="time"
-                variant="solo-filled"
-                flat
-                rounded="xl"
-                hide-details
-              />
-            </div>
-          </v-col>
-
-          <!-- Multi-day -->
-          <v-col cols="12">
-            <v-checkbox
-              v-model="reactivateForm.is_multi_day"
-              label="Multi-day pass"
-              hide-details
-              color="primary"
-            />
-          </v-col>
-
-          <!-- Remarks -->
-          <v-col cols="12">
-            <div class="premium-input-group">
-              <label class="premium-label">Remarks (optional)</label>
-              <v-textarea
-                v-model="reactivateForm.remarks"
-                rows="2"
-                variant="solo-filled"
-                flat
-                rounded="xl"
-                hide-details
-                placeholder="Reason for reactivation / extension"
-              />
-            </div>
-          </v-col>
-        </v-row>
-      </v-form>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="dialog-footer">
-      <v-btn
-        variant="outlined"
-        rounded="xl"
-        height="48"
-        class="px-8"
-        @click="reactivateDialog = false"
-      >
-        Cancel
-      </v-btn>
-
-      <v-btn
-        rounded="xl"
-        height="48"
-        class="px-8 button-color ml-3"
-        elevation="0"
-        :loading="reactivateLoading"
-        @click="submitReactivate"
-      >
-        <v-icon start size="18">mdi-refresh</v-icon>
-        Reactivate Pass
-      </v-btn>
-    </div>
-  </v-card>
-</v-dialog>
+        </v-card>
+    </v-dialog>
     <!-- =========================================================
     PREMIUM VIEW GATE PASS DIALOG
 ========================================================= -->
@@ -405,73 +373,67 @@
             BODY
         ========================== -->
             <div class="enterprise-body">
-				<!-- DAILY TRANSACTIONS SECTION -->
-<div class="mt-8">
-    <div class="section-header d-flex align-center mb-4">
-        <v-icon color="#114575" class="mr-3">mdi-calendar-clock</v-icon>
-        <div>
-            <div class="text-h6">Daily Activity</div>
-            <div class="text-subtitle-2 text-medium-emphasis">
-                Transaction history per day ({{ dailyTransactions.length }} days)
-            </div>
-        </div>
-    </div>
+                <!-- DAILY TRANSACTIONS SECTION -->
+                <div class="mt-8">
+                    <div class="section-header d-flex align-center mb-4">
+                        <v-icon color="#114575" class="mr-3">mdi-calendar-clock</v-icon>
+                        <div>
+                            <div class="text-h6">Daily Activity</div>
+                            <div class="text-subtitle-2 text-medium-emphasis">
+                                Transaction history per day ({{ dailyTransactions.length }} days)
+                            </div>
+                        </div>
+                    </div>
 
-    <v-card v-for="day in dailyTransactions" :key="day.date" class="mb-6" rounded="xl" elevation="0">
-        <v-card-title class="d-flex justify-space-between align-center py-4 px-6">
-            <div class="d-flex align-center">
-                <v-icon color="primary" class="mr-3">mdi-calendar</v-icon>
-                <div>
-                    <strong>{{ day.formatted_date }}</strong> 
-                    <span class="text-caption ml-2">({{ day.day_of_week }})</span>
+                    <v-card v-for="day in dailyTransactions" :key="day.date" class="mb-6" rounded="xl" elevation="0">
+                        <v-card-title class="d-flex justify-space-between align-center py-4 px-6">
+                            <div class="d-flex align-center">
+                                <v-icon color="primary" class="mr-3">mdi-calendar</v-icon>
+                                <div>
+                                    <strong>{{ day.formatted_date }}</strong>
+                                    <span class="text-caption ml-2">({{ day.day_of_week }})</span>
+                                </div>
+                            </div>
+
+                            <v-btn color="primary" rounded="xl" size="small" @click="downloadDailyGatePass(day.date)" prepend-icon="mdi-file-pdf-box">
+                                Generate PDF
+                            </v-btn>
+                        </v-card-title>
+
+                        <v-card-text>
+                            <v-simple-table>
+                                <thead>
+                                    <tr>
+                                        <th>Visitor</th>
+                                        <th>Status</th>
+                                        <th>Current Gate</th>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="trans in day.transactions" :key="trans.id">
+                                        <td>
+                                            <strong>{{ trans.visitor?.first_name }} {{ trans.visitor?.last_name }}</strong>
+                                        </td>
+                                        <td>
+                                            <v-chip :color="getStatusColor(trans.checkin_status)" small>
+                                                {{ movementStatusLabel(trans.checkin_status) }}
+                                            </v-chip>
+                                        </td>
+                                        <td>{{ trans.current_gate || '-' }}</td>
+                                        <td>{{ trans.checkin_at || '-' }}</td>
+                                        <td>{{ trans.checkout_at || '-' }}</td>
+                                    </tr>
+                                </tbody>
+                            </v-simple-table>
+                        </v-card-text>
+                    </v-card>
+
+                    <div v-if="dailyTransactions.length === 0 && !loadingDetails" class="text-center py-10 text-medium-emphasis">
+                        No daily transactions recorded yet.
+                    </div>
                 </div>
-            </div>
-
-            <v-btn 
-                color="primary" 
-                rounded="xl" 
-                size="small"
-                @click="downloadDailyGatePass(day.date)"
-                prepend-icon="mdi-file-pdf-box"
-            >
-                Generate PDF
-            </v-btn>
-        </v-card-title>
-
-        <v-card-text>
-            <v-simple-table>
-                <thead>
-                    <tr>
-                        <th>Visitor</th>
-                        <th>Status</th>
-                        <th>Current Gate</th>
-                        <th>Check In</th>
-                        <th>Check Out</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="trans in day.transactions" :key="trans.id">
-                        <td>
-                            <strong>{{ trans.visitor?.first_name }} {{ trans.visitor?.last_name }}</strong>
-                        </td>
-                        <td>
-                            <v-chip :color="getStatusColor(trans.checkin_status)" small>
-                                {{ movementStatusLabel(trans.checkin_status) }}
-                            </v-chip>
-                        </td>
-                        <td>{{ trans.current_gate || '-' }}</td>
-                        <td>{{ trans.checkin_at || '-' }}</td>
-                        <td>{{ trans.checkout_at || '-' }}</td>
-                    </tr>
-                </tbody>
-            </v-simple-table>
-        </v-card-text>
-    </v-card>
-
-    <div v-if="dailyTransactions.length === 0 && !loadingDetails" class="text-center py-10 text-medium-emphasis">
-        No daily transactions recorded yet.
-    </div>
-</div>
                 <!-- SUMMARY -->
                 <div class="summary-grid">
                     <div class="summary-card card-teal">
@@ -530,299 +492,223 @@
                                 <!-- =================================================
                 TABLE TOOLBAR
             ================================================== -->
-                              <!-- TABLE TOOLBAR -->
-<!-- TABLE TOOLBAR -->
-<div class="table-toolbar">
-  <div class="toolbar-actions">
-    <!-- SEARCH -->
-    <v-text-field 
-      v-model="visitorSearch" 
-      placeholder="Search visitor, company or pass..." 
-      prepend-inner-icon="mdi-magnify" 
-      variant="solo" 
-      flat 
-      density="comfortable" 
-      hide-details 
-      class="search-field" 
-    />
+                                <!-- TABLE TOOLBAR -->
+                                <!-- TABLE TOOLBAR -->
+                                <div class="table-toolbar">
+                                    <div class="toolbar-actions">
+                                        <!-- SEARCH -->
+                                        <v-text-field v-model="visitorSearch" placeholder="Search visitor, company or pass..." prepend-inner-icon="mdi-magnify" variant="solo" flat density="comfortable" hide-details class="search-field" />
 
-    <!-- BULK ACTIONS -->
-  <!-- BULK ACTIONS -->
-<div v-if="selectedVisitors.length > 0" class="d-flex align-center flex-wrap gap-3 ml-4">
-  
-  <!-- Approve at Gate 1 -->
-  <v-btn
-    v-if="user?.current_gate === 'GATE_1'"
-    class="premium-bulk-btn approve-btn"
-    rounded="xl"
-    elevation="0"
-    @click="openBulkApprove"
-  >
-    <span class="btn-glow"></span>
-    <v-icon start size="20">mdi-shield-check-outline</v-icon>
-    Approve ({{ selectedVisitors.length }})
-  </v-btn>
+                                        <!-- BULK ACTIONS -->
+                                        <!-- BULK ACTIONS -->
+                                        <div v-if="selectedVisitors.length > 0" class="d-flex align-center flex-wrap gap-3 ml-4">
 
-  <!-- Check In (Gate 2) -->
-  <v-btn
-    v-if="user?.current_gate === 'GATE_2'"
-    class="premium-bulk-btn checkin-btn"
-    rounded="xl"
-    elevation="0"
-    @click="openBulkCheckIn"
-  >
-    <span class="btn-glow"></span>
-    <v-icon start size="20">mdi-check-circle</v-icon>
-    Check In ({{ selectedVisitors.length }})
-  </v-btn>
+                                            <!-- Approve at Gate 1 -->
+                                            <v-btn v-if="user?.current_gate === 'GATE_1'" class="premium-bulk-btn approve-btn" rounded="xl" elevation="0" @click="openBulkApprove">
+                                                <span class="btn-glow"></span>
+                                                <v-icon start size="20">mdi-shield-check-outline</v-icon>
+                                                Approve ({{ selectedVisitors.length }})
+                                            </v-btn>
 
-  <!-- Check Out (Gate 2) -->
-  <v-btn
-    v-if="user?.current_gate === 'GATE_2'"
-    class="premium-bulk-btn checkout-btn"
-    rounded="xl"
-    elevation="0"
-    @click="openBulkCheckOut"
-  >
-    <span class="btn-glow"></span>
-    <v-icon start size="20">mdi-exit-to-app</v-icon>
-    Check Out ({{ selectedVisitors.length }})
-  </v-btn>
+                                            <!-- Check In (Gate 2) -->
+                                            <v-btn v-if="user?.current_gate === 'GATE_2'" class="premium-bulk-btn checkin-btn" rounded="xl" elevation="0" @click="openBulkCheckIn">
+                                                <span class="btn-glow"></span>
+                                                <v-icon start size="20">mdi-check-circle</v-icon>
+                                                Check In ({{ selectedVisitors.length }})
+                                            </v-btn>
 
-  <!-- Final Exit (Gate 1) -->
-  <v-btn
-    v-if="user?.current_gate === 'GATE_1'"
-    class="premium-bulk-btn final-exit-btn"
-    rounded="xl"
-    elevation="0"
-    @click="openBulkGate1CheckOut"
-  >
-    <span class="btn-glow"></span>
-    <v-icon start size="20">mdi-exit-to-app</v-icon>
-    Final Exit ({{ selectedVisitors.length }})
-  </v-btn>
+                                            <!-- Check Out (Gate 2) -->
+                                            <v-btn v-if="user?.current_gate === 'GATE_2'" class="premium-bulk-btn checkout-btn" rounded="xl" elevation="0" @click="openBulkCheckOut">
+                                                <span class="btn-glow"></span>
+                                                <v-icon start size="20">mdi-exit-to-app</v-icon>
+                                                Check Out ({{ selectedVisitors.length }})
+                                            </v-btn>
 
-</div>
-  </div>
-</div>                        <!-- =================================================
+                                            <!-- Final Exit (Gate 1) -->
+                                            <v-btn v-if="user?.current_gate === 'GATE_1'" class="premium-bulk-btn final-exit-btn" rounded="xl" elevation="0" @click="openBulkGate1CheckOut">
+                                                <span class="btn-glow"></span>
+                                                <v-icon start size="20">mdi-exit-to-app</v-icon>
+                                                Final Exit ({{ selectedVisitors.length }})
+                                            </v-btn>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- =================================================
                 TABLE
             ================================================== -->
-                               <!-- =================================================
+                                <!-- =================================================
 TABLE WRAPPER
 ================================================== -->
-<div class="table-wrapper">
+                                <div class="table-wrapper">
 
-    <!-- ================= HEADER ================= -->
-   <div class="table-head">
-      <!-- CHECKBOX HEADER -->
-      <div class="th mx-3">
-        <v-checkbox
-          v-model="selectAll"
-          hide-details
-          density="compact"
-          color="primary"
-          @change="toggleSelectAll"
-        />
-      </div>
-        <div class="th mx-5">Visitor</div>
-        <div class="th">Phone</div>
-        <div class="th">Company/Institution</div>
-        <div class="th">Gate Pass</div>
-        <div class="th">Current Gate</div>
-        <div class="th">Status</div>
-        <div class="th">Actions</div>
-
-    </div>
-
-    <!-- ================= BODY ================= -->
-    <transition-group name="fade-slide" tag="div">
-
-       <div
-        v-for="item in paginatedVisitors"
-        :key="item.id"
-        class="table-row"
-      >
-        <!-- CHECKBOX -->
-        <div class="td mx-3">
-          <v-checkbox
-            v-model="selectedVisitors"
-            :value="item.id"
-            hide-details
-            density="compact"
-            color="primary"
-          />
-        </div>
-
-            <!-- VISITOR -->
-            <div class="td mx-5">
-                <div class="visitor-box">
-                    <div class="avatar">
-                        {{ item.first_name?.charAt(0)?.toUpperCase() }}
-                    </div>
-
-                    <div>
-                        <div class="visitor-name">
-                            {{ item.first_name }} {{ item.last_name }}
-                        </div>
-
-                        <div class="visitor-id">
-                            {{ item.id_number || "ID not provided" }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PHONE -->
-            <div class="td">
-                {{ item.phone }}
-            </div>
-
-            <!-- COMPANY -->
-            <div class="td">
-                {{ item.company || '-' }}
-            </div>
-
-            <!-- PASS -->
-            <div class="td">
-                <div class="pass-chip">
-                    {{ selectedGatePass.pass_number }}
-                </div>
-            </div>
-
-            <!-- CURRENT GATE -->
-            <div class="td">
-                <div
-                    class="status-chip"
-                    :class="movementStatusClass(item.transactions?.[0]?.current_gate)"
-                >
-                    {{ movementStatusLabel(item.transactions?.[0]?.current_gate) || '-' }}
-                </div>
-            </div>
-
-            <!-- STATUS -->
-            <div class="td">
-                <div
-                    class="status-chip"
-                    :class="movementStatusClass(item.transactions?.[0]?.checkin_status)"
-                >
-                    {{ movementStatusLabel(item.transactions?.[0]?.checkin_status) || '-' }}
-                </div>
-            </div>
-
-            <!-- ACTIONS -->
-            <div class="td">
-                <div class="actions" v-if="selectedGatePass.workflow_status != 'IN_REVIEW'">
-
-                    <v-menu location="bottom end" transition="scale-transition" offset="12">
-
-                        <template #activator="{ props }">
-                            <v-btn
-                                v-bind="props"
-                                icon
-                                size="42"
-                                elevation="0"
-                                class="premium-action-btn"
-                            >
-                                <v-icon size="20">mdi-dots-horizontal</v-icon>
-                            </v-btn>
-                        </template>
-
-                        <v-card class="premium-menu-card" rounded="xl" elevation="0" min-width="220">
-
-                            <div class="menu-items">
-
-                                <!-- APPROVE -->
-                                <div
-                                    class="premium-menu-item"
-                                    @click="approveAtGate1(item)"
-                                    v-if="user?.current_gate === 'GATE_1' && canApproveAtGate1(item)"
-                                >
-                                    <div class="menu-item-left">
-                                        <div class="menu-item-icon view-bg">
-                                            <v-icon size="18">mdi-shield-check-outline</v-icon>
+                                    <!-- ================= HEADER ================= -->
+                                    <div class="table-head">
+                                        <!-- CHECKBOX HEADER -->
+                                        <div class="th mx-3">
+                                            <v-checkbox v-model="selectAll" hide-details density="compact" color="primary" @change="toggleSelectAll" />
                                         </div>
-                                        <div>
-                                            <div class="menu-item-title">Approve At Gate 1</div>
-                                            <div class="menu-item-subtitle">Approve visitor</div>
-                                        </div>
+                                        <div class="th mx-5">Visitor</div>
+                                        <div class="th">Phone</div>
+                                        <div class="th">Company/Institution</div>
+                                        <div class="th">Gate Pass</div>
+                                        <div class="th">Current Gate</div>
+                                        <div class="th">Status</div>
+                                        <div class="th">Actions</div>
+
                                     </div>
-                                </div>
 
-                                <!-- CHECK IN -->
-                                <div
-                                    class="premium-menu-item"
-                                    @click="checkInVisitorAtGate2Item(item)"
-                                    v-if="user?.current_gate === 'GATE_2'"
-                                >
-                                    <div class="menu-item-left">
-                                        <div class="menu-item-icon create-bg">
-                                            <v-icon size="18">mdi-check-circle</v-icon>
+                                    <!-- ================= BODY ================= -->
+                                    <transition-group name="fade-slide" tag="div">
+
+                                        <div v-for="item in paginatedVisitors" :key="item.id" class="table-row">
+                                            <!-- CHECKBOX -->
+                                            <div class="td mx-3">
+                                                <v-checkbox v-model="selectedVisitors" :value="item.id" hide-details density="compact" color="primary" />
+                                            </div>
+
+                                            <!-- VISITOR -->
+                                            <div class="td mx-5">
+                                                <div class="visitor-box">
+                                                    <div class="avatar">
+                                                        {{ item.first_name?.charAt(0)?.toUpperCase() }}
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="visitor-name">
+                                                            {{ item.first_name }} {{ item.last_name }}
+                                                        </div>
+
+                                                        <div class="visitor-id">
+                                                            {{ item.id_number || "ID not provided" }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- PHONE -->
+                                            <div class="td">
+                                                {{ item.phone }}
+                                            </div>
+
+                                            <!-- COMPANY -->
+                                            <div class="td">
+                                                {{ item.company || '-' }}
+                                            </div>
+
+                                            <!-- PASS -->
+                                            <div class="td">
+                                                <div class="pass-chip">
+                                                    {{ selectedGatePass.pass_number }}
+                                                </div>
+                                            </div>
+
+                                            <!-- CURRENT GATE -->
+                                            <div class="td">
+                                                <div class="status-chip" :class="movementStatusClass(item.transactions?.[0]?.current_gate)">
+                                                    {{ movementStatusLabel(item.transactions?.[0]?.current_gate) || '-' }}
+                                                </div>
+                                            </div>
+
+                                            <!-- STATUS -->
+                                            <div class="td">
+                                                <div class="status-chip" :class="movementStatusClass(item.transactions?.[0]?.checkin_status)">
+                                                    {{ movementStatusLabel(item.transactions?.[0]?.checkin_status) || '-' }}
+                                                </div>
+                                            </div>
+
+                                            <!-- ACTIONS -->
+                                            <div class="td">
+                                                <div class="actions" v-if="selectedGatePass.workflow_status != 'IN_REVIEW'">
+
+                                                    <v-menu location="bottom end" transition="scale-transition" offset="12">
+
+                                                        <template #activator="{ props }">
+                                                            <v-btn v-bind="props" icon size="42" elevation="0" class="premium-action-btn">
+                                                                <v-icon size="20">mdi-dots-horizontal</v-icon>
+                                                            </v-btn>
+                                                        </template>
+
+                                                        <v-card class="premium-menu-card" rounded="xl" elevation="0" min-width="220">
+
+                                                            <div class="menu-items">
+
+                                                                <!-- APPROVE -->
+                                                                <div class="premium-menu-item" @click="approveAtGate1(item)" v-if="user?.current_gate === 'GATE_1' && canApproveAtGate1(item)">
+                                                                    <div class="menu-item-left">
+                                                                        <div class="menu-item-icon view-bg">
+                                                                            <v-icon size="18">mdi-shield-check-outline</v-icon>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="menu-item-title">Approve At Gate 1</div>
+                                                                            <div class="menu-item-subtitle">Approve visitor</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- CHECK IN -->
+                                                                <div class="premium-menu-item" @click="checkInVisitorAtGate2Item(item)" v-if="user?.current_gate === 'GATE_2'">
+                                                                    <div class="menu-item-left">
+                                                                        <div class="menu-item-icon create-bg">
+                                                                            <v-icon size="18">mdi-check-circle</v-icon>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="menu-item-title">Check In</div>
+                                                                            <div class="menu-item-subtitle">Enter premises</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- CHECK OUT -->
+                                                                <div class="premium-menu-item" @click="checkOutVisitorAtGate2Item(item)" v-if="user?.current_gate === 'GATE_2'">
+                                                                    <div class="menu-item-left">
+                                                                        <div class="menu-item-icon warning-bg">
+                                                                            <v-icon size="18">mdi-exit-to-app</v-icon>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="menu-item-title">Check Out</div>
+                                                                            <div class="menu-item-subtitle">Exit premises</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- UPDATE -->
+                                                                <div class="premium-menu-item" @click="openVisitorUpdateModal(item)" v-if="selectedGatePass.workflow_status === 'PENDING_SUBMISSION'">
+                                                                    <div class="menu-item-left">
+                                                                        <div class="menu-item-icon warning-bg">
+                                                                            <v-icon size="18">mdi-account-edit-outline</v-icon>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="menu-item-title">Update Visitor</div>
+                                                                            <div class="menu-item-subtitle">Edit details</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </v-card>
+
+                                                    </v-menu>
+
+                                                </div>
+
+                                                <div v-else class="completed-text">
+                                                    No further action allowed — Under Security Review
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div>
-                                            <div class="menu-item-title">Check In</div>
-                                            <div class="menu-item-subtitle">Enter premises</div>
-                                        </div>
+
+                                    </transition-group>
+
+                                    <!-- ================= EMPTY ================= -->
+                                    <div v-if="!paginatedVisitors.length" class="empty-state">
+                                        <v-icon size="80">mdi-account-search-outline</v-icon>
+                                        <h3>No Visitors Found</h3>
+                                        <p>No matching records available.</p>
                                     </div>
+
                                 </div>
-
-                                <!-- CHECK OUT -->
-                                <div
-                                    class="premium-menu-item"
-                                    @click="checkOutVisitorAtGate2Item(item)"
-                                    v-if="user?.current_gate === 'GATE_2'"
-                                >
-                                    <div class="menu-item-left">
-                                        <div class="menu-item-icon warning-bg">
-                                            <v-icon size="18">mdi-exit-to-app</v-icon>
-                                        </div>
-                                        <div>
-                                            <div class="menu-item-title">Check Out</div>
-                                            <div class="menu-item-subtitle">Exit premises</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- UPDATE -->
-                                <div
-                                    class="premium-menu-item"
-                                    @click="openVisitorUpdateModal(item)"
-                                    v-if="selectedGatePass.workflow_status === 'PENDING_SUBMISSION'"
-                                >
-                                    <div class="menu-item-left">
-                                        <div class="menu-item-icon warning-bg">
-                                            <v-icon size="18">mdi-account-edit-outline</v-icon>
-                                        </div>
-                                        <div>
-                                            <div class="menu-item-title">Update Visitor</div>
-                                            <div class="menu-item-subtitle">Edit details</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </v-card>
-
-                    </v-menu>
-
-                </div>
-
-                <div v-else class="completed-text">
-                    No further action allowed — Under Security Review
-                </div>
-            </div>
-
-        </div>
-
-    </transition-group>
-
-    <!-- ================= EMPTY ================= -->
-    <div v-if="!paginatedVisitors.length" class="empty-state">
-        <v-icon size="80">mdi-account-search-outline</v-icon>
-        <h3>No Visitors Found</h3>
-        <p>No matching records available.</p>
-    </div>
-
-</div>
 
                                 <!-- =================================================
 
@@ -1050,7 +936,6 @@ FOOTER
                         </v-col>
 
                         <!-- COMPANY -->
-                       
 
                     </v-row>
 
@@ -1090,64 +975,35 @@ FOOTER
         </template>
 
     </approveAtGate1> -->
-	<!-- BULK APPROVE DIALOG -->
-<approveAtGate1 
-  v-model="bulkApproveDialog" 
-  title="Approve Multiple Visitors" 
-  :status="selectedGatePass.workflow_status" 
-  :gatePassNumber="selectedGatePass.pass_number" 
-  confirm-text="Yes, Approve All" 
-  cancel-text="Cancel" 
-  @confirm="bulkApproveVisitors"
->
-  <template #notice>
-    Are you sure you want to approve 
-    <strong>{{ selectedVisitors.length }}</strong> selected visitors at Gate 1?
-    <br>
-    This action cannot be easily undone.
-  </template>
-</approveAtGate1>
-<!-- BULK CHECK IN -->
-<checkInDialogshare 
-  v-model="bulkCheckInDialog" 
-  title="Bulk Check In" 
-  :status="selectedGatePass.workflow_status" 
-  :gatePassNumber="selectedGatePass.pass_number" 
-  confirm-text="Yes, Check In All" 
-  @confirm="bulkCheckInVisitors"
->
-  <template #notice>
-    Check in <strong>{{ selectedVisitors.length }}</strong> selected visitors at Gate 2?
-  </template>
-</checkInDialogshare>
+    <!-- BULK APPROVE DIALOG -->
+    <approveAtGate1 v-model="bulkApproveDialog" title="Approve Multiple Visitors" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Approve All" cancel-text="Cancel" @confirm="bulkApproveVisitors">
+        <template #notice>
+            Are you sure you want to approve
+            <strong>{{ selectedVisitors.length }}</strong> selected visitors at Gate 1?
+            <br>
+            This action cannot be easily undone.
+        </template>
+    </approveAtGate1>
+    <!-- BULK CHECK IN -->
+    <checkInDialogshare v-model="bulkCheckInDialog" title="Bulk Check In" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Check In All" @confirm="bulkCheckInVisitors">
+        <template #notice>
+            Check in <strong>{{ selectedVisitors.length }}</strong> selected visitors at Gate 2?
+        </template>
+    </checkInDialogshare>
 
-<!-- BULK CHECK OUT (Gate 2) -->
-<checkOutAtGate2 
-  v-model="bulkCheckOutDialog" 
-  title="Bulk Check Out" 
-  :status="selectedGatePass.workflow_status" 
-  :gatePassNumber="selectedGatePass.pass_number" 
-  confirm-text="Yes, Check Out All" 
-  @confirm="bulkCheckOutVisitors"
->
-  <template #notice>
-    Check out <strong>{{ selectedVisitors.length }}</strong> selected visitors?
-  </template>
-</checkOutAtGate2>
+    <!-- BULK CHECK OUT (Gate 2) -->
+    <checkOutAtGate2 v-model="bulkCheckOutDialog" title="Bulk Check Out" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Check Out All" @confirm="bulkCheckOutVisitors">
+        <template #notice>
+            Check out <strong>{{ selectedVisitors.length }}</strong> selected visitors?
+        </template>
+    </checkOutAtGate2>
 
-<!-- BULK FINAL CHECK OUT (Gate 1) -->
-<checkOutAtgate1 
-  v-model="bulkGate1CheckOutDialog" 
-  title="Bulk Final Exit (Gate 1)" 
-  :status="selectedGatePass.workflow_status" 
-  :gatePassNumber="selectedGatePass.pass_number" 
-  confirm-text="Yes, Confirm All Exits" 
-  @confirm="bulkGate1CheckOutVisitors"
->
-  <template #notice>
-    Authorize final exit for <strong>{{ selectedVisitors.length }}</strong> selected visitors through Gate 1?
-  </template>
-</checkOutAtgate1>
+    <!-- BULK FINAL CHECK OUT (Gate 1) -->
+    <checkOutAtgate1 v-model="bulkGate1CheckOutDialog" title="Bulk Final Exit (Gate 1)" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Confirm All Exits" @confirm="bulkGate1CheckOutVisitors">
+        <template #notice>
+            Authorize final exit for <strong>{{ selectedVisitors.length }}</strong> selected visitors through Gate 1?
+        </template>
+    </checkOutAtgate1>
     <InitialSubmissionDialog v-model="submitDialog" title="Submit to Gate 2 for Review" :status="selectedGatePass.workflow_status" :gatePassNumber="selectedGatePass.pass_number" confirm-text="Yes, Submit" cancel-text="No, Cancel" @confirm="submitToGate1FinalReview">
         <template #notice>
             Are you sure you want to submit this gate pass to Gate 2 security for review? This action will notify the security team to review and approve the pass before entry is granted.
@@ -1228,22 +1084,22 @@ export default {
             viewDialog: false,
             page: 1,
             itemsPerPage: 10,
-			selectedVisitor: {},
-			dailyTransactions: [],     // NEW
-			selectedDate: null,        // NEW - for PDF generation
-			loadingDetails: false,
+            selectedVisitor: {},
+            dailyTransactions: [], // NEW
+            selectedDate: null, // NEW - for PDF generation
+            loadingDetails: false,
             companyDialog: false,
             selectedVisitorTransactions: [],
             selectedGatePass: {},
-			visitorSearch: "",
-			selectedVisitors: [],     
-			selectAll: false,
-			bulkApproveDialog: false,
-			bulkCheckInDialog: false,
-			bulkCheckOutDialog: false,
-			bulkGate1CheckOutDialog: false,
-			pdfDialog: false,
-			visitorDialog: false,
+            visitorSearch: "",
+            selectedVisitors: [],
+            selectAll: false,
+            bulkApproveDialog: false,
+            bulkCheckInDialog: false,
+            bulkCheckOutDialog: false,
+            bulkGate1CheckOutDialog: false,
+            pdfDialog: false,
+            visitorDialog: false,
             pdfUrl: null,
             selectedGatePassPdf: null,
             pdfLoading: false,
@@ -1260,18 +1116,18 @@ export default {
             loadingStatus: false,
             UserToActivate: {},
             visitor: {},
-			statusAction: "",
-			reactivateDialog: false,
-			reactivateLoading: false,
-			reactivateForm: {
-			valid_from: '',
-			valid_to: '',
-			time_in: '',
-			time_out: '',
-			is_multi_day: false,
-			remarks: ''
-			},
-			today: new Date().toISOString().split('T')[0],
+            statusAction: "",
+            reactivateDialog: false,
+            reactivateLoading: false,
+            reactivateForm: {
+                valid_from: '',
+                valid_to: '',
+                time_in: '',
+                time_out: '',
+                is_multi_day: false,
+                remarks: ''
+            },
+            today: new Date().toISOString().split('T')[0],
             headers: [{
                     title: "Pass Number",
                     value: "pass_number",
@@ -1324,29 +1180,30 @@ export default {
 
     // mounted() {
     //     this.fetchRoles();
-	// },
+    // },
 
-	watch: {
-    // Keep Select All in sync when search/filter changes
-    filteredVisitors(newVal) {
-      if (newVal.length === 0) {
-        this.selectAll = false;
-        return;
-      }
-      this.selectAll = newVal.every(v => this.selectedVisitors.includes(v.id));
+    watch: {
+        // Keep Select All in sync when search/filter changes
+        filteredVisitors(newVal) {
+            if (newVal.length === 0) {
+                this.selectAll = false;
+                return;
+            }
+            this.selectAll = newVal.every(v => this.selectedVisitors.includes(v.id));
+        },
+
+        selectedVisitors(newVal) {
+            const filteredIds = this.filteredVisitors.map(v => v.id);
+            this.selectAll = filteredIds.length > 0 && filteredIds.every(id => newVal.includes(id));
+        }
     },
+    computed: {
 
-    selectedVisitors(newVal) {
-      const filteredIds = this.filteredVisitors.map(v => v.id);
-      this.selectAll = filteredIds.length > 0 && filteredIds.every(id => newVal.includes(id));
-    }
-  },
-	computed: {
-		
-  ...mapGetters({
+        ...mapGetters({
             authenticated: "auth/authenticated",
             user: "auth/user",
-        }),      filteredVisitors() {
+        }),
+        filteredVisitors() {
             const visitors = this.selectedGatePass ?
                 this.selectedGatePass.visitors || [] : [];
             const term = this.visitorSearch.toLowerCase();
@@ -1357,8 +1214,7 @@ export default {
                 (v.phone || "").toLowerCase().includes(term) ||
                 (v.id_number || "").toLowerCase().includes(term)
             );
-		},
-		
+        },
 
         selectedVisitorTransaction() {
             return this.selectedVisitor ?.transactions ?. [0] || null;
@@ -1398,203 +1254,205 @@ export default {
         },
         isInside() {
             return this.selectedVisitor && this.selectedVisitor.transactions && this.selectedVisitor.transactions[0] && this.selectedVisitor.transactions[0].current_gate === 'INSIDE';
-		},
-		
+        },
+
     },
 
     methods: {
-// Open bulk approval confirmation
-// openBulkApproveDialog() {
-//   if (this.selectedVisitors.length === 0) return;
-//   this.bulkApproveDialog = true;
-// },
+        // Open bulk approval confirmation
+        // openBulkApproveDialog() {
+        //   if (this.selectedVisitors.length === 0) return;
+        //   this.bulkApproveDialog = true;
+        // },
 
-// // Bulk Approve
-// async approveSelectedVisitors() {
-//   if (this.selectedVisitors.length === 0) return;
+        // // Bulk Approve
+        // async approveSelectedVisitors() {
+        //   if (this.selectedVisitors.length === 0) return;
 
-//   this.bulkApproveDialog = false;
-//   let successCount = 0;
-//   let failedCount = 0;
+        //   this.bulkApproveDialog = false;
+        //   let successCount = 0;
+        //   let failedCount = 0;
 
-//   for (const visitorId of this.selectedVisitors) {
-//     try {
-//       await axios.post(
-//         `/gate-passes/${this.selectedGatePass.id}/gate1/visitors/${visitorId}/approve`
-//       );
-//       successCount++;
-//     } catch (error) {
-//       console.error(`Failed to approve visitor ${visitorId}`, error);
-//       failedCount++;
-//     }
-//   }
+        //   for (const visitorId of this.selectedVisitors) {
+        //     try {
+        //       await axios.post(
+        //         `/gate-passes/${this.selectedGatePass.id}/gate1/visitors/${visitorId}/approve`
+        //       );
+        //       successCount++;
+        //     } catch (error) {
+        //       console.error(`Failed to approve visitor ${visitorId}`, error);
+        //       failedCount++;
+        //     }
+        //   }
 
-//   // Show result
-//   if (successCount > 0) {
-//     this.showAlert(
-//       `${successCount} visitor(s) approved successfully${failedCount ? ` (${failedCount} failed)` : ''}`,
-//       "success"
-//     );
-//   } else {
-//     this.showAlert("Failed to approve selected visitors", "error");
-//   }
+        //   // Show result
+        //   if (successCount > 0) {
+        //     this.showAlert(
+        //       `${successCount} visitor(s) approved successfully${failedCount ? ` (${failedCount} failed)` : ''}`,
+        //       "success"
+        //     );
+        //   } else {
+        //     this.showAlert("Failed to approve selected visitors", "error");
+        //   }
 
-//   // Reset selection and refresh
-//   this.selectedVisitors = [];
-//   this.selectAll = false;
-//   this.viewDialog = false; // close dialog to refresh view
+        //   // Reset selection and refresh
+        //   this.selectedVisitors = [];
+        //   this.selectAll = false;
+        //   this.viewDialog = false; // close dialog to refresh view
 
-//   // Optional: refresh after short delay
-//   setTimeout(() => {
-//     window.location.reload();
-//   }, 800);
-		// }// ==================== BULK ACTIONS ====================
+        //   // Optional: refresh after short delay
+        //   setTimeout(() => {
+        //     window.location.reload();
+        //   }, 800);
+        // }// ==================== BULK ACTIONS ====================
 
-// ==================== BULK ACTIONS ====================
-viewActivities(item) {
-        // Navigate to the detailed activities page
-        this.$router.push({
-            name: 'gatepass-activities',        // or use path: '/gate-passes/' + item.id + '/activities'
-            params: { id: item.id }
-        })
-    },
-openBulkApprove() {
-  this.bulkApproveDialog = true;
-},
-async bulkApproveVisitors() {
-  this.bulkApproveDialog = false;
-  let successCount = 0;
+        // ==================== BULK ACTIONS ====================
+        viewActivities(item) {
+            // Navigate to the detailed activities page
+            this.$router.push({
+                name: 'gatepass-activities', // or use path: '/gate-passes/' + item.id + '/activities'
+                params: {
+                    id: item.id
+                }
+            })
+        },
+        openBulkApprove() {
+            this.bulkApproveDialog = true;
+        },
+        async bulkApproveVisitors() {
+            this.bulkApproveDialog = false;
+            let successCount = 0;
 
-  for (const visitorId of [...this.selectedVisitors]) {
-    try {
-      await axios.post(
-        `/gate-passes/${this.selectedGatePass.id}/gate1/visitors/${visitorId}/approve`
-      );
-      successCount++;
-      // You can use response.data.message if you want per-item feedback
-    } catch (error) {
-      console.error(`Failed to approve visitor ${visitorId}`, error);
-    }
-  }
+            for (const visitorId of [...this.selectedVisitors]) {
+                try {
+                    await axios.post(
+                        `/gate-passes/${this.selectedGatePass.id}/gate1/visitors/${visitorId}/approve`
+                    );
+                    successCount++;
+                    // You can use response.data.message if you want per-item feedback
+                } catch (error) {
+                    console.error(`Failed to approve visitor ${visitorId}`, error);
+                }
+            }
 
-  if (successCount > 0) {
-    this.showAlert(
-      `${successCount} visitor(s) approved successfully`,
-      "success"
-    );
-  } else {
-    this.showAlert("Failed to approve any selected visitors", "error");
-  }
+            if (successCount > 0) {
+                this.showAlert(
+                    `${successCount} visitor(s) approved successfully`,
+                    "success"
+                );
+            } else {
+                this.showAlert("Failed to approve any selected visitors", "error");
+            }
 
-  this.selectedVisitors = [];
-  this.selectAll = false;
-  this.viewDialog = false;
+            this.selectedVisitors = [];
+            this.selectAll = false;
+            this.viewDialog = false;
 
-  setTimeout(() => {
-    window.location.reload();
-  }, 1000);
-},
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        },
 
-// Bulk Check In
-openBulkCheckIn() {
-  this.bulkCheckInDialog = true;
-},
-async bulkCheckInVisitors() {
-  this.bulkCheckInDialog = false;
-  let successCount = 0;
+        // Bulk Check In
+        openBulkCheckIn() {
+            this.bulkCheckInDialog = true;
+        },
+        async bulkCheckInVisitors() {
+            this.bulkCheckInDialog = false;
+            let successCount = 0;
 
-  for (const visitorId of [...this.selectedVisitors]) {
-    try {
-      await axios.post(
-        `/gate-passes/${this.selectedGatePass.id}/visitors/${visitorId}/check-in`
-      );
-      successCount++;
-    } catch (error) {
-      console.error(`Failed to check in visitor ${visitorId}`, error);
-    }
-  }
+            for (const visitorId of [...this.selectedVisitors]) {
+                try {
+                    await axios.post(
+                        `/gate-passes/${this.selectedGatePass.id}/visitors/${visitorId}/check-in`
+                    );
+                    successCount++;
+                } catch (error) {
+                    console.error(`Failed to check in visitor ${visitorId}`, error);
+                }
+            }
 
-  this.showAlert(
-    `${successCount} visitor(s) checked in successfully`,
-    successCount > 0 ? "success" : "error"
-  );
+            this.showAlert(
+                `${successCount} visitor(s) checked in successfully`,
+                successCount > 0 ? "success" : "error"
+            );
 
-  this.selectedVisitors = [];
-  this.selectAll = false;
-  this.viewDialog = false;
+            this.selectedVisitors = [];
+            this.selectAll = false;
+            this.viewDialog = false;
 
-  setTimeout(() => window.location.reload(), 1000);
-},
+            setTimeout(() => window.location.reload(), 1000);
+        },
 
-// Bulk Check Out (Gate 2)
-openBulkCheckOut() {
-  this.bulkCheckOutDialog = true;
-},
-async bulkCheckOutVisitors() {
-  this.bulkCheckOutDialog = false;
-  let successCount = 0;
+        // Bulk Check Out (Gate 2)
+        openBulkCheckOut() {
+            this.bulkCheckOutDialog = true;
+        },
+        async bulkCheckOutVisitors() {
+            this.bulkCheckOutDialog = false;
+            let successCount = 0;
 
-  for (const visitorId of [...this.selectedVisitors]) {
-    try {
-      await axios.post(
-        `/gate-passes/${this.selectedGatePass.id}/visitors/${visitorId}/exit`
-      );
-      successCount++;
-    } catch (error) {
-      console.error(`Failed to check out visitor ${visitorId}`, error);
-    }
-  }
+            for (const visitorId of [...this.selectedVisitors]) {
+                try {
+                    await axios.post(
+                        `/gate-passes/${this.selectedGatePass.id}/visitors/${visitorId}/exit`
+                    );
+                    successCount++;
+                } catch (error) {
+                    console.error(`Failed to check out visitor ${visitorId}`, error);
+                }
+            }
 
-  this.showAlert(
-    `${successCount} visitor(s) checked out successfully`,
-    successCount > 0 ? "success" : "error"
-  );
+            this.showAlert(
+                `${successCount} visitor(s) checked out successfully`,
+                successCount > 0 ? "success" : "error"
+            );
 
-  this.selectedVisitors = [];
-  this.selectAll = false;
-  this.viewDialog = false;
+            this.selectedVisitors = [];
+            this.selectAll = false;
+            this.viewDialog = false;
 
-  setTimeout(() => window.location.reload(), 1000);
-},
+            setTimeout(() => window.location.reload(), 1000);
+        },
 
-// Bulk Final Exit (Gate 1)
-openBulkGate1CheckOut() {
-  this.bulkGate1CheckOutDialog = true;
-},
-async bulkGate1CheckOutVisitors() {
-  this.bulkGate1CheckOutDialog = false;
-  let successCount = 0;
+        // Bulk Final Exit (Gate 1)
+        openBulkGate1CheckOut() {
+            this.bulkGate1CheckOutDialog = true;
+        },
+        async bulkGate1CheckOutVisitors() {
+            this.bulkGate1CheckOutDialog = false;
+            let successCount = 0;
 
-  for (const visitorId of [...this.selectedVisitors]) {
-    try {
-      await axios.post(
-        `/gate-passes/${this.selectedGatePass.id}/visitors/${visitorId}/check-out`
-      );
-      successCount++;
-    } catch (error) {
-      console.error(`Failed to process final exit for visitor ${visitorId}`, error);
-    }
-  }
+            for (const visitorId of [...this.selectedVisitors]) {
+                try {
+                    await axios.post(
+                        `/gate-passes/${this.selectedGatePass.id}/visitors/${visitorId}/check-out`
+                    );
+                    successCount++;
+                } catch (error) {
+                    console.error(`Failed to process final exit for visitor ${visitorId}`, error);
+                }
+            }
 
-  this.showAlert(
-    `${successCount} visitor(s) final exit authorized successfully`,
-    successCount > 0 ? "success" : "error"
-  );
+            this.showAlert(
+                `${successCount} visitor(s) final exit authorized successfully`,
+                successCount > 0 ? "success" : "error"
+            );
 
-  this.selectedVisitors = [];
-  this.selectAll = false;
-  this.viewDialog = false;
+            this.selectedVisitors = [];
+            this.selectAll = false;
+            this.viewDialog = false;
 
-  setTimeout(() => window.location.reload(), 1000);
-},
+            setTimeout(() => window.location.reload(), 1000);
+        },
 
-		toggleSelectAll() {
-      if (this.selectAll) {
-        this.selectedVisitors = this.filteredVisitors.map(v => v.id);
-      } else {
-        this.selectedVisitors = [];
-      }
-    },
+        toggleSelectAll() {
+            if (this.selectAll) {
+                this.selectedVisitors = this.filteredVisitors.map(v => v.id);
+            } else {
+                this.selectedVisitors = [];
+            }
+        },
 
         openVisitorUpdateModal(item) {
             this.selectedVisitor = {
@@ -1627,59 +1485,63 @@ async bulkGate1CheckOutVisitors() {
                     "error"
                 );
             }
-		},
-		
-     getStatusColor(status) {
-    const colors = {
-        'CHECKED_IN': 'success',
-        'APPROVED': 'primary',
-        'EXITING': 'warning',
-        'CHECKED_OUT': 'info',
-        'REJECTED': 'error'
-    };
-    return colors[status] || 'default';
-		},
-		viewPass(item) {
-    this.selectedGatePass = JSON.parse(JSON.stringify(item));
-    this.viewDialog = true;
-    this.selectedVisitors = [];
-    this.selectAll = false;
-    this.dailyTransactions = []; // reset
+        },
 
-    this.loadingDetails = true;
+        getStatusColor(status) {
+            const colors = {
+                'CHECKED_IN': 'success',
+                'APPROVED': 'primary',
+                'EXITING': 'warning',
+                'CHECKED_OUT': 'info',
+                'REJECTED': 'error'
+            };
+            return colors[status] || 'default';
+        },
+        viewPass(item) {
+            this.selectedGatePass = JSON.parse(JSON.stringify(item));
+            this.viewDialog = true;
+            this.selectedVisitors = [];
+            this.selectAll = false;
+            this.dailyTransactions = []; // reset
 
-   axios.get(`/gate-passes/${item.id}`)
-    .then(response => {
-        this.selectedGatePass = response.data.data.gate_pass;
-        this.dailyTransactions = response.data.data.daily_transactions || [];
-    })
-        .catch(error => {
-            this.showAlert(error.response?.data?.message || "Failed to load details", "error");
-        })
-        .finally(() => {
-            this.loadingDetails = false;
-        });
-		},
-		downloadDailyGatePass(date) {
-    if (!this.selectedGatePass?.id) return;
+            this.loadingDetails = true;
 
-    const url = `/gate-passes/${this.selectedGatePass.id}/download-daily?date=${date}`;
+            axios.get(`/gate-passes/${item.id}`)
+                .then(response => {
+                    this.selectedGatePass = response.data.data.gate_pass;
+                    this.dailyTransactions = response.data.data.daily_transactions || [];
+                })
+                .catch(error => {
+                    this.showAlert(error.response.data.message || "Failed to load details", "error");
+                })
+                .finally(() => {
+                    this.loadingDetails = false;
+                });
+        },
+        downloadDailyGatePass(date) {
+            if (!this.selectedGatePass ?.id) return;
 
-    axios.get(url, { responseType: 'blob' })
-        .then(response => {
-            const blob = new Blob([response.data], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `gatepass-${this.selectedGatePass.pass_number}-${date}.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-        })
-        .catch(() => {
-            this.showAlert("Failed to generate daily gate pass PDF", "error");
-        });
-},
+            const url = `/gate-passes/${this.selectedGatePass.id}/download-daily?date=${date}`;
+
+            axios.get(url, {
+                    responseType: 'blob'
+                })
+                .then(response => {
+                    const blob = new Blob([response.data], {
+                        type: 'application/pdf'
+                    });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `gatepass-${this.selectedGatePass.pass_number}-${date}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(link.href);
+                })
+                .catch(() => {
+                    this.showAlert("Failed to generate daily gate pass PDF", "error");
+                });
+        },
 
         canApproveAtGate1(item) {
             const status = this.selectedGatePass.workflow_status;
@@ -1712,7 +1574,7 @@ async bulkGate1CheckOutVisitors() {
                 })
                 .catch(error => {
                     this.showAlert(
-                        error.response ?.data ?.message || "Failed to load PDF",
+                        error.response.data.message || "Failed to load PDF",
                         "error"
                     );
                 })
@@ -1922,7 +1784,7 @@ async bulkGate1CheckOutVisitors() {
                 })
                 .catch(err => {
                     this.showAlert(
-                        err.response ?.data ?.message || 'Failed to add visitor',
+                        err.response.data.message || 'Failed to add visitor',
                         'error'
                     )
                 })
@@ -2063,52 +1925,52 @@ async bulkGate1CheckOutVisitors() {
                 );
                 this.viewDialog = false;
             }
-		},
-		openReactivateDialog(item) {
-  this.selectedGatePass = JSON.parse(JSON.stringify(item));
-const formatTime = (time) => {
-    if (!time) return '';
-    return time.substring(0, 5); // "08:00:00" → "08:00"
-  };
-  // Pre-fill sensible defaults
-  this.reactivateForm = {
-  valid_from: this.today,
-  valid_to: this.today,
-  time_in: formatTime(item.time_in),
-  time_out: formatTime(item.time_out),
-  is_multi_day: !!item.is_multi_day,
-  remarks: item.remarks || ''
-};
+        },
+        openReactivateDialog(item) {
+            this.selectedGatePass = JSON.parse(JSON.stringify(item));
+            const formatTime = (time) => {
+                if (!time) return '';
+                return time.substring(0, 5); // "08:00:00" → "08:00"
+            };
+            // Pre-fill sensible defaults
+            this.reactivateForm = {
+                valid_from: this.today,
+                valid_to: this.today,
+                time_in: formatTime(item.time_in),
+                time_out: formatTime(item.time_out),
+                is_multi_day: !!item.is_multi_day,
+                remarks: item.remarks || ''
+            };
 
-  this.reactivateDialog = true;
-},
+            this.reactivateDialog = true;
+        },
 
-async submitReactivate() {
-  if (!this.reactivateForm.valid_from || !this.reactivateForm.valid_to) {
-    this.showAlert('Please select Valid From and Valid To dates', 'error');
-    return;
-  }
+        async submitReactivate() {
+            if (!this.reactivateForm.valid_from || !this.reactivateForm.valid_to) {
+                this.showAlert('Please select Valid From and Valid To dates', 'error');
+                return;
+            }
 
-  this.reactivateLoading = true;
+            this.reactivateLoading = true;
 
-  try {
-    const response = await axios.post(
-      `/gate-passes/${this.selectedGatePass.id}/reactivate`,
-      this.reactivateForm
-    );
+            try {
+                const response = await axios.post(
+                    `/gate-passes/${this.selectedGatePass.id}/reactivate`,
+                    this.reactivateForm
+                );
 
-    this.reactivateDialog = false;
-    this.showAlert(response.data.message || 'Gate pass reactivated successfully', 'success');
-    this.refreshTable();
-  } catch (error) {
-    this.showAlert(
-      error.response?.data?.message || 'Failed to reactivate gate pass',
-      'error'
-    );
-  } finally {
-    this.reactivateLoading = false;
-  }
-},
+                this.reactivateDialog = false;
+                this.showAlert(response.data.message || 'Gate pass reactivated successfully', 'success');
+                this.refreshTable();
+            } catch (error) {
+                this.showAlert(
+                    error.response.data.message || 'Failed to reactivate gate pass',
+                    'error'
+                );
+            } finally {
+                this.reactivateLoading = false;
+            }
+        },
         refreshTable() {
             this.$refs.gatepassTable.fetchData();
         },
@@ -3229,7 +3091,7 @@ async submitReactivate() {
     min-width: 1150px;
 
     display: grid;
-    grid-template-columns:0.5fr 1.8fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr 1.0fr;
+    grid-template-columns: 0.5fr 1.8fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr 1.0fr;
     align-items: center;
     padding: 18px 22px;
 
@@ -3262,7 +3124,7 @@ async submitReactivate() {
     min-width: 1150px;
 
     display: grid;
-    grid-template-columns:0.5fr 1.8fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr 1.0fr;
+    grid-template-columns: 0.5fr 1.8fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr 1.0fr;
     align-items: center;
 
     padding: 18px 22px;
@@ -4562,57 +4424,99 @@ async submitReactivate() {
     height: 100%;
     border: none;
 }
+
 .premium-bulk-btn {
-  position: relative;
-  overflow: hidden;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: 0.3px;
-  padding: 10px 20px !important;
-  height: 48px !important;
-  transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    padding: 10px 20px !important;
+    height: 48px !important;
+    transition: all 0.3s ease;
 }
 
 .premium-bulk-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px rgb(0 0 0 / 20%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgb(0 0 0 / 20%) !important;
 }
 
 .btn-glow {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 40%;
-  height: 40%;
-  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-  opacity: 0;
-  transition: all 0.4s;
-  pointer-events: none;
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 40%;
+    height: 40%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+    opacity: 0;
+    transition: all 0.4s;
+    pointer-events: none;
 }
 
 .premium-bulk-btn:hover .btn-glow {
-  opacity: 1;
-  transform: scale(2);
+    opacity: 1;
+    transform: scale(2);
 }
 
 /* Gradient Variants */
 .approve-btn {
-  background: linear-gradient(135deg, #3b82f6, #1e40af) !important;
-  color: white;
+    background: linear-gradient(135deg, #3b82f6, #1e40af) !important;
+    color: white;
 }
 
 .checkin-btn {
-  background: linear-gradient(135deg, #10b981, #047857) !important;
-  color: white;
+    background: linear-gradient(135deg, #10b981, #047857) !important;
+    color: white;
 }
 
 .checkout-btn {
-  background: linear-gradient(135deg, #f59e0b, #b45309) !important;
-  color: white;
+    background: linear-gradient(135deg, #f59e0b, #b45309) !important;
+    color: white;
 }
 
 .final-exit-btn {
-  background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
-  color: white;
+    background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+    color: white;
+}
+
+.field label {
+    font-size: 12px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* MAIN CONTAINER */
+.toggle-visible {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 14px;
+
+    border-radius: 12px;
+
+    background: linear-gradient(180deg, #ffffff, #f1f5f9);
+
+    border: 1px solid #e2e8f0;
+
+    transition: all 0.2s ease;
+}
+
+.toggle-visible:hover {
+    border-color: #94a3b8;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* TEXT */
+.toggle-visible .title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.toggle-visible .desc {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
 }
 </style>

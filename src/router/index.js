@@ -27,12 +27,9 @@ import Archive from "@/components/NIDC/Gatepass/Archive.vue";
 import GatepassRecords from "@/components/NIDC/Gatepass/GatepassRecords.vue";
 
 /* =========================
-   HELPERS (IMPORTANT FIX)
+   HELPERS
 ========================= */
 
-/**
- * Use SAME permission logic as sidebar (Vuex getter)
- */
 function hasPermission(permission) {
   return store.getters["auth/hasPermission"](permission);
 }
@@ -43,7 +40,6 @@ function hasPermission(permission) {
 function getLandingRoute() {
   const routes = [
     { permission: "DASHBOARD_ACCESS", route: "dashboard" },
-    // { permission: "GATEPASS_ACCESS", route: "gate-pass" },
     { permission: "SECURITY_DASHBOARD", route: "security-dashboard" },
     { permission: "STAFF_DASHBOARD", route: "staff-dashboard" },
     { permission: "GATEPASS_CREATE", route: "create-pass" },
@@ -63,8 +59,15 @@ function getLandingRoute() {
     }
   }
 
-  // IMPORTANT: must always be public-safe route
-  return "profile"; // or "dashboard" ONLY if dashboard is always accessible
+  return "profile";
+}
+
+/**
+ * Check if user must change password first
+ */
+function mustChangePassword() {
+  const user = store.getters["auth/user"];
+  return user && !user.is_password_changed;
 }
 
 /* =========================
@@ -91,19 +94,18 @@ const routes = [
         component: Dashboard,
         meta: { permission: "DASHBOARD_ACCESS" },
       },
-
       {
         path: "change-password",
         name: "change-password",
         component: Changepassword,
+        meta: { allowWhenPasswordNotChanged: true }, // important
       },
-
       {
         path: "profile",
         name: "profile",
         component: Profile,
+        meta: { allowWhenPasswordNotChanged: true }, // important
       },
-
       {
         path: "security-dashboard",
         name: "security-dashboard",
@@ -116,42 +118,36 @@ const routes = [
         component: StaffDashboard,
         meta: { permission: "STAFF_DASHBOARD" },
       },
-
       {
         path: "users",
         name: "users",
         component: Users,
         meta: { permission: "USER_ACCESS" },
       },
-
       {
         path: "roles",
         name: "roles",
         component: Roles,
         meta: { permission: "ROLE_ACCESS" },
       },
-
       {
         path: "companies",
         name: "companies",
         component: Company,
         meta: { permission: "COMPANY_ACCESS" },
       },
-
       {
         path: "sections",
         name: "sections",
         component: Section,
         meta: { permission: "SECTION_ACCESS" },
       },
-
       {
         path: "staff",
         name: "staff",
         component: Staff,
         meta: { permission: "STAFF_ACCESS" },
       },
-
       {
         path: "gate-pass",
         name: "gate-pass",
@@ -165,7 +161,7 @@ const routes = [
         meta: { permission: "GATEPASS_ACCESS" },
       },
       {
-        path: "gate-pass/:id/activities",           // ← NEW
+        path: "gate-pass/:id/activities",
         name: "gatepass-activities",
         component: GatepassRecords,
         meta: { permission: "GATEPASS_ACCESS" },
@@ -176,7 +172,6 @@ const routes = [
         component: CreateGatePass,
         meta: { permission: "GATEPASS_CREATE" },
       },
-
       {
         path: "visit-purposes",
         name: "visit-purposes",
@@ -189,14 +184,12 @@ const routes = [
         component: Archive,
         meta: { permission: "GATEPASS_ACCESS" },
       },
-
       {
         path: "access-areas",
         name: "access-areas",
         component: AccessArea,
         meta: { permission: "AREA_ACCESS" },
       },
-
       {
         path: "logs",
         name: "logs",
@@ -217,42 +210,47 @@ const router = createRouter({
 });
 
 /* =========================
-   GLOBAL GUARD (FIXED)
+   GLOBAL GUARD
 ========================= */
 
 router.beforeEach((to, from, next) => {
   const authenticated = store.getters["auth/authenticated"];
 
-  // prevent infinite redirect loop
+  // Prevent infinite redirect loop
   if (from.name === to.name) {
     return next();
   }
 
+  // 1. Guest routes
   if (to.meta.guest && authenticated) {
-    const landing = getLandingRoute();
-    if (to.name !== landing) {
-      return next({ name: landing });
+    // If password not changed → force profile
+    if (mustChangePassword()) {
+      return next({ name: "profile" });
     }
-    return next();
+    return next({ name: getLandingRoute() });
   }
 
+  // 2. Protected routes
   if (to.meta.requiresAuth && !authenticated) {
-    if (to.name !== "login") {
-      return next({ name: "login" });
-    }
-    return next();
+    return next({ name: "login" });
   }
 
+  // 3. FORCE PASSWORD CHANGE (most important part)
+  if (authenticated && mustChangePassword()) {
+    // Only allow profile & change-password
+    if (!to.meta.allowWhenPasswordNotChanged) {
+      return next({ name: "profile" });
+    }
+  }
+
+  // 4. Permission check
   if (to.meta.permission) {
     if (!hasPermission(to.meta.permission)) {
-      const landing = getLandingRoute();
-      if (to.name !== landing) {
-        return next({ name: landing });
-      }
-      return next();
+      return next({ name: getLandingRoute() });
     }
   }
 
   next();
 });
+
 export default router;

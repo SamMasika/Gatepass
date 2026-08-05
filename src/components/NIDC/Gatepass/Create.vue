@@ -68,30 +68,49 @@
                 </div>
             </div>
 
-            <!-- ================= GROUP ================= -->
-            <div v-if="mode==='GROUP'" class="upload">
+       <!-- ================= GROUP ================= -->
+<div v-if="mode==='GROUP'" class="upload">
 
-                <v-icon size="46">mdi-cloud-upload-outline</v-icon>
+    <div class="upload-icon-wrap">
+        <v-icon size="42">mdi-cloud-upload-outline</v-icon>
+    </div>
 
-                <h3>Upload Visitor Excel File</h3>
-                <p>Columns: first_name, last_name, phone, id_number</p>
+    <h3 class="upload-title">Upload Visitor Excel File</h3>
+    <p class="upload-desc">
+        Required columns:
+        <span class="col-tag">first_name</span>
+        <span class="col-tag">last_name</span>
+        <span class="col-tag">phone</span>
+        <span class="col-tag">id_number</span>
+    </p>
 
-                <input type="file" @change="handleFile" />
+    <!-- DOWNLOAD SAMPLE BUTTON -->
+    <button type="button" class="btn-sample" @click="downloadSampleExcel">
+        <v-icon size="18">mdi-file-excel</v-icon>
+        <span>Download Sample Template</span>
+        <v-icon size="16" class="arrow">mdi-download</v-icon>
+    </button>
 
-                <div v-if="visitors.length" class="preview-list">
+    <div class="or-divider">
+        <span>or</span>
+    </div>
 
-                    <h4>Preview ({{ visitors.length }} visitors)</h4>
+    <label class="file-drop">
+        <input type="file" accept=".xlsx,.xls" @change="handleFile" hidden />
+        <v-icon size="20">mdi-paperclip</v-icon>
+        <span>Choose Excel file</span>
+    </label>
 
-                    <div v-for="(v, i) in visitors" :key="i" class="row">
-                        <span>{{ i + 1 }}</span>
-                        <strong>{{ v.first_name }} {{ v.last_name }}</strong>
-                        <small>{{ v.phone }}</small>
-                    </div>
+    <div v-if="visitors.length" class="preview-list">
+        <h4>Preview ({{ visitors.length }} visitors)</h4>
+        <div v-for="(v, i) in visitors" :key="i" class="row">
+            <span>{{ i + 1 }}</span>
+            <strong>{{ v.first_name }} {{ v.last_name }}</strong>
+            <small>{{ v.phone }}</small>
+        </div>
+    </div>
 
-                </div>
-
-            </div>
-
+</div>
             <!-- ================= VISIT DETAILS ================= -->
             <div class="form mt">
 
@@ -230,7 +249,7 @@ export default {
     components: {
         PageBreadcrumb,
 		PaginatedDropdown,
-PaginatedDropdownCompany
+        PaginatedDropdownCompany
     },
     mixins: [swtalert],
     data() {
@@ -326,8 +345,54 @@ PaginatedDropdownCompany
                     console.error(error);
                 });
         },
+
+        // ========== DOWNLOAD SAMPLE EXCEL ==========
+        downloadSampleExcel() {
+            // Sample data with correct column names
+            const sampleData = [
+                {
+                    first_name: "John",
+                    last_name: "Doe",
+                    phone: "+255712345678",
+                    id_number: "1990010112345678"
+                },
+                {
+                    first_name: "Jane",
+                    last_name: "Smith",
+                    phone: "+255798765432",
+                    id_number: "A1234567"
+                },
+                {
+                    first_name: "Michael",
+                    last_name: "Johnson",
+                    phone: "+255755512345",
+                    id_number: "P9876543"
+                }
+            ];
+
+            // Create worksheet
+            const worksheet = XLSX.utils.json_to_sheet(sampleData);
+
+            // Optional: set column widths for better readability
+            worksheet['!cols'] = [
+                { wch: 15 }, // first_name
+                { wch: 15 }, // last_name
+                { wch: 18 }, // phone
+                { wch: 20 }  // id_number
+            ];
+
+            // Create workbook
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Visitors");
+
+            // Download the file
+            XLSX.writeFile(workbook, "group_visitors_sample.xlsx");
+        },
+
         handleFile(event) {
             const file = event.target.files[0];
+            if (!file) return;
+
             const reader = new FileReader();
 
             reader.onload = (e) => {
@@ -391,7 +456,7 @@ PaginatedDropdownCompany
                 .catch(err => {
 
                     const message =
-                        err.response.data.message || 'Error occurred';
+                        err.response?.data?.message || 'Error occurred';
 
                     this.showAlert(message, 'error');
                 });
@@ -672,6 +737,29 @@ input {
     border-radius: 12px;
 }
 
+/* SAMPLE DOWNLOAD BUTTON */
+.btn-sample {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0 8px;
+    padding: 10px 18px;
+    background: #f1f5f9;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-sample:hover {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+    transform: translateY(-1px);
+}
+
 /* BUTTON */
 .btn-primary {
     width: 100%;
@@ -723,94 +811,6 @@ input {
     }
 }
 
-/* MAIN CONTAINER */
-.toggle-visible {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 12px 14px;
-
-    border-radius: 12px;
-
-    background: linear-gradient(180deg, #ffffff, #f1f5f9);
-
-    border: 1px solid #e2e8f0;
-
-    transition: all 0.2s ease;
-}
-
-.toggle-visible:hover {
-    border-color: #94a3b8;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-}
-
-/* TEXT */
-.toggle-visible .title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.toggle-visible .desc {
-    font-size: 11px;
-    color: #64748b;
-    margin-top: 2px;
-}
-
-/* SWITCH */
-.switch-strong {
-    position: relative;
-    width: 44px;
-    height: 24px;
-    display: inline-block;
-}
-
-.switch-strong input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-/* TRACK */
-.slider {
-    position: absolute;
-    inset: 0;
-    cursor: pointer;
-
-    background: #cbd5e1;
-    border-radius: 999px;
-
-    transition: 0.3s;
-}
-
-/* KNOB */
-.slider::before {
-    content: "";
-    position: absolute;
-
-    height: 18px;
-    width: 18px;
-
-    left: 3px;
-    top: 3px;
-
-    background: white;
-    border-radius: 50%;
-
-    transition: 0.3s;
-
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* ACTIVE STATE (IMPORTANT COLOR) */
-.switch-strong input:checked+.slider {
-    background: linear-gradient(135deg, #1b867c, #003B73);
-}
-
-.switch-strong input:checked+.slider::before {
-    transform: translateX(20px);
-}
 
 /* Section title */
 .section-label {
@@ -911,5 +911,139 @@ input {
 /* active selected glow */
 .access-item input:checked~.label-text {
     color: #0d47a1;
+}
+/* ========== PREMIUM UPLOAD SECTION ========== */
+.upload {
+    text-align: center;
+    padding: 32px 24px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #fcfcfc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(27, 134, 124, 0.06), transparent 60%);
+    pointer-events: none;
+}
+
+.upload-icon-wrap {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #1b867c, #003B73);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 10px 25px rgba(27, 134, 124, 0.25);
+}
+
+.upload-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
+
+.upload-desc {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    align-items: center;
+}
+
+.col-tag {
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #334155;
+    font-family: monospace;
+}
+
+/* Premium Sample Button */
+.btn-sample {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #0f172a, #003B73, #1b867c);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-sample:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
+}
+
+.btn-sample:active {
+    transform: translateY(0);
+}
+
+.btn-sample .arrow {
+    opacity: 0.85;
+}
+
+/* Divider */
+.or-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.or-divider::before,
+.or-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+/* File choose button */
+.file-drop {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px;
+    background: white;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.file-drop:hover {
+    border-color: #1b867c;
+    color: #0f172a;
+    background: #f0fdfa;
 }
 </style>
