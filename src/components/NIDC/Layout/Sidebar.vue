@@ -1,57 +1,77 @@
 <template>
-<div class="gp-sidebar">
+  <div class="gp-sidebar">
 
     <!-- LOGO -->
     <div class="logo-wrapper">
-        <v-img src="@/assets/nidc.png" max-width="140" />
+      <v-img src="@/assets/nidc.png" max-width="140" />
     </div>
 
     <!-- NAVIGATION -->
-    <v-list nav density="comfortable" active-class="gp-active">
+    <v-list
+      nav
+      density="comfortable"
+      v-model:opened="openedGroups"
+    >
 
-        <template v-for="(group, i) in filteredSidebar" :key="i">
+      <template v-for="(group, i) in filteredSidebar" :key="i">
 
-            <!-- SINGLE ITEM -->
-            <v-list-item v-if="!group.children" :to="group.to" router>
-                <template #prepend>
-                    <v-icon>{{ group.icon }}</v-icon>
-                </template>
-                <v-list-item-title>{{ group.title }}</v-list-item-title>
+        <!-- SINGLE ITEM -->
+        <v-list-item
+          v-if="!group.children"
+          :to="group.to"
+          :active="isActive(group.to)"
+          active-class="gp-active"
+          router
+        >
+          <template #prepend>
+            <v-icon>{{ group.icon }}</v-icon>
+          </template>
+          <v-list-item-title>{{ group.title }}</v-list-item-title>
+        </v-list-item>
+
+        <!-- GROUP -->
+        <v-list-group v-else :value="group.title">
+
+          <template #activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              :class="{ 'gp-active': isGroupActive(group) }"
+            >
+              <template #prepend>
+                <v-icon>{{ group.icon }}</v-icon>
+              </template>
+              <v-list-item-title>{{ group.title }}</v-list-item-title>
             </v-list-item>
+          </template>
 
-            <!-- GROUP -->
-            <v-list-group v-else>
+          <v-list-item
+            v-for="(child, j) in group.children"
+            :key="j"
+            :to="child.to"
+            :active="isActive(child.to)"
+            active-class="gp-active"
+            router
+          >
+            <template #prepend>
+              <v-icon size="18">{{ child.icon }}</v-icon>
+            </template>
+            <v-list-item-title>{{ child.title }}</v-list-item-title>
+          </v-list-item>
 
-                <template #activator="{ props }">
-                    <v-list-item v-bind="props">
-                        <template #prepend>
-                            <v-icon>{{ group.icon }}</v-icon>
-                        </template>
-                        <v-list-item-title>{{ group.title }}</v-list-item-title>
-                    </v-list-item>
-                </template>
+        </v-list-group>
 
-                <v-list-item v-for="(child, j) in group.children" :key="j" :to="child.to" router>
-                    <template #prepend>
-                        <v-icon size="18">{{ child.icon }}</v-icon>
-                    </template>
-                    <v-list-item-title>{{ child.title }}</v-list-item-title>
-                </v-list-item>
-
-            </v-list-group>
-
-        </template>
+      </template>
 
     </v-list>
-</div>
+  </div>
 </template>
-
 <script>
 export default {
     name: "GatePassSidebar",
 
     data() {
-        return {
+		return {
+			openedGroups: [],
             sidebarItems: [
 
                 // DASHBOARD
@@ -98,91 +118,11 @@ export default {
                             title: "All Passes",
                             icon: "mdi-file-document-outline",
                             to: "/gate-pass",
-                            permission: "GATEPASS_ACCESS"
+							permission: "GATEPASS_ACCESS",
+							match:"/gate-pass"
                         },
-                        // {
-                        //     title: "Archive",
-                        //     icon: "mdi-archive-outline",
-                        //     to: "/archive",
-                        //     permission: "GATEPASS_ACCESS"
-                        // },
                     ]
                 },
-
-                // ENTRY APPROVAL FLOW
-                // {
-
-                //     title: "Get Check Approvals",
-                //     icon: "mdi-shield-check-outline",
-                //     children: [{
-                //             title: "Gate 2 - First Approval",
-                //             icon: "mdi-shield-outline",
-                //             to: "/entry-approval"
-                // 		,permission: "GATEPASS_APPROVE"
-                //         },
-                //         {
-                //             title: "Gate 1 - Final Approval",
-                //             icon: "mdi-shield-check",
-                // 		to: "/final-approval",
-                // 		permission: "GATEPASS_APPROVE"
-                //         },
-                //     ]
-                // },
-
-                // EXIT FLOW
-                // {
-                //     title: "Exit Control",
-                //     icon: "mdi-exit-run",
-                //     children: [{
-                //             title: "Gate 2 - Exit Check",
-                //             icon: "mdi-logout",
-                //             to: "/check-out"
-                //         },
-                //         {
-                //             title: "Gate 1 - Final Exit",
-                //             icon: "mdi-door-closed-lock",
-                //             to: "/final-exit"
-                //         }
-                //     ]
-                // },
-
-                // Staff TRACKING
-                // {
-                // 	permission: "STAFF_ACCESS",
-                //     title: "Staff",
-                //     icon: "mdi-account-group-outline",
-                // 	children: [
-                // 		{
-                //             title: "Sections",
-                //             icon: "mdi-folder-plus",
-                // 		to: "/sections",
-                // 		permission: "SECTION_ACCESS"
-                //         },
-                //         {
-                //             title: "Staff",
-                //             icon: "mdi-account-check-outline",
-                //             to: "/staff",
-                //             permission: "STAFF_ACCESS"
-                //         }
-                //     ]
-                // },
-                // VISITOR TRACKING
-                // {
-
-                //     title: "Visitors",
-                //     icon: "mdi-account-group-outline",
-                //     children: [{
-                //             title: "All Visitors",
-                //             icon: "mdi-account-multiple-outline",
-                //             to: "/visitors"
-                //         },
-                //         {
-                //             title: "Inside Premises",
-                //             icon: "mdi-account-check-outline",
-                //             to: "/visitors/inside"
-                //         }
-                //     ]
-                // },
 
                 // REPORTS
                 {
@@ -252,81 +192,112 @@ export default {
     },
 
     computed: {
-        filteredSidebar() {
+    filteredSidebar() {
+      if (this.$hasRole("admin")) {
+        return this.sidebarItems;
+      }
 
-            if (this.$hasRole("admin")) {
-                return this.sidebarItems;
-            }
+      return this.sidebarItems
+        .map(group => {
+          if (!group.children) {
+            if (!group.permission) return group;
+            return this.$hasPermission(group.permission) ? group : null;
+          }
 
-            return this.sidebarItems
-                .map(group => {
+          const children = group.children.filter(child => {
+            if (!child.permission) return true;
+            return this.$hasPermission(child.permission);
+          });
 
-                    if (!group.children) {
-                        if (!group.permission) return group;
-                        return this.$hasPermission(group.permission) ? group : null;
-                    }
+          if (!children.length) return null;
 
-                    const children = group.children.filter(child => {
-                        if (!child.permission) return true;
-                        return this.$hasPermission(child.permission);
-                    });
-
-                    if (!children.length) return null;
-
-                    return {
-                        ...group,
-                        children
-                    };
-                })
-                .filter(Boolean);
-        }
+          return {
+            ...group,
+            children
+          };
+        })
+        .filter(Boolean);
     }
+  },
+
+ watch: {
+    "$route.path": {
+      immediate: true,
+      handler() {
+        this.openActiveGroup();
+      }
+    }
+  },
+
+  methods: {
+    // Exact or nested match for a single item
+    isActive(path) {
+      if (!path) return false;
+      const current = this.$route.path;
+
+      if (current === path) return true;
+      if (current.startsWith(path + "/")) return true;
+
+      return false;
+    },
+
+    // Parent group is active if any of its children is active
+    isGroupActive(group) {
+      if (!group.children) return false;
+      return group.children.some(child => this.isActive(child.to));
+    },
+
+    openActiveGroup() {
+      const activeGroup = this.filteredSidebar.find(group => {
+        if (!group.children) return false;
+        return group.children.some(child => this.isActive(child.to));
+      });
+
+      if (activeGroup) {
+        this.openedGroups = [activeGroup.title];
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
 .gp-sidebar {
-    min-height: 100vh;
-    padding: 20px 0;
-    background: #ffffff;
-   
+  min-height: 100vh;
+  padding: 20px 0;
+  background: #ffffff;
 }
 
-/* LOGO */
 .logo-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
 }
 
-/* ITEMS */
 .v-list-item {
-    margin: 6px 12px;
-    border-radius: 12px;
-    font-weight: 500;
-    transition: all 0.25s ease;
+  margin: 6px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
-/* HOVER */
 .v-list-item:hover {
-    background: linear-gradient(135deg, #1b867c, #003B73, #0f172a);
-    color: white !important;
+  background: linear-gradient(135deg, #1b867c, #003B73, #0f172a);
+  color: white !important;
 }
 
+/* Active style for both parent and child */
 .gp-active {
-    background: linear-gradient(135deg, #1b867c, #003B73, #0f172a);
-
-    color: white !important;
+  background: linear-gradient(135deg, #1b867c, #003B73, #0f172a) !important;
+  color: white !important;
 }
 
-/* ICON */
 .gp-active .v-icon {
-    color: white;
+  color: white !important;
 }
 
-/* CHILD */
 .v-list-group__items .v-list-item {
-    margin-left: 28px;
-    font-size: 14px;
+  margin-left: 28px;
+  font-size: 14px;
 }
 </style>
