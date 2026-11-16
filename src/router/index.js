@@ -39,9 +39,9 @@ function hasPermission(permission) {
  */
 function getLandingRoute() {
   const routes = [
-    { permission: "DASHBOARD_ACCESS", route: "dashboard" },
     { permission: "SECURITY_DASHBOARD", route: "security-dashboard" },
     { permission: "STAFF_DASHBOARD", route: "staff-dashboard" },
+    { permission: "DASHBOARD_ACCESS", route: "dashboard" },
     { permission: "GATEPASS_CREATE", route: "create-pass" },
     { permission: "STAFF_ACCESS", route: "staff" },
     { permission: "USER_ACCESS", route: "users" },
@@ -59,7 +59,8 @@ function getLandingRoute() {
     }
   }
 
-  return "profile";
+  // Fallback: anyone can open the main dashboard
+  return "dashboard";
 }
 
 /**
@@ -92,19 +93,19 @@ const routes = [
         path: "dashboard",
         name: "dashboard",
         component: Dashboard,
-        meta: { permission: "DASHBOARD_ACCESS" },
+        // No permission meta → any authenticated user can access
       },
       {
         path: "change-password",
         name: "change-password",
         component: Changepassword,
-        meta: { allowWhenPasswordNotChanged: true }, // important
+        meta: { allowWhenPasswordNotChanged: true },
       },
       {
         path: "profile",
         name: "profile",
         component: Profile,
-        meta: { allowWhenPasswordNotChanged: true }, // important
+        meta: { allowWhenPasswordNotChanged: true },
       },
       {
         path: "security-dashboard",
@@ -223,7 +224,6 @@ router.beforeEach((to, from, next) => {
 
   // 1. Guest routes
   if (to.meta.guest && authenticated) {
-    // If password not changed → force profile
     if (mustChangePassword()) {
       return next({ name: "profile" });
     }
@@ -235,15 +235,14 @@ router.beforeEach((to, from, next) => {
     return next({ name: "login" });
   }
 
-  // 3. FORCE PASSWORD CHANGE (most important part)
+  // 3. FORCE PASSWORD CHANGE
   if (authenticated && mustChangePassword()) {
-    // Only allow profile & change-password
     if (!to.meta.allowWhenPasswordNotChanged) {
       return next({ name: "profile" });
     }
   }
 
-  // 4. Permission check
+  // 4. Permission check (only if meta.permission exists)
   if (to.meta.permission) {
     if (!hasPermission(to.meta.permission)) {
       return next({ name: getLandingRoute() });

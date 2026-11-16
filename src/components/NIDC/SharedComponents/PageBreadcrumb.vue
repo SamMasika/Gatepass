@@ -1,134 +1,112 @@
 <template>
-<div class="premium-breadcrumb">
-
-    <!-- ITEMS -->
+  <div class="premium-breadcrumb">
     <div class="breadcrumb-items">
+      <!-- DASHBOARD -->
+      <div class="breadcrumb-link" @click="$router.push('/dashboard')">
+        <v-icon size="15" class="breadcrumb-icon">mdi-view-dashboard-outline</v-icon>
+        Dashboard
+      </div>
 
-        <!-- DASHBOARD -->
-        <div class="breadcrumb-link" @click="$router.push('/dashboard')">
-            Dashboard
+      <!-- PARENT PAGE -->
+      <template v-if="parent">
+        <v-icon size="16" class="breadcrumb-separator">mdi-chevron-right</v-icon>
+        <div
+          class="breadcrumb-link"
+          @click="parentRoute && $router.push(parentRoute)"
+        >
+          {{ parent }}
         </div>
+      </template>
 
-        <!-- PARENT PAGE -->
-        <template v-if="parent">
-
-            <v-icon size="16" class="breadcrumb-separator">
-                mdi-chevron-right
-            </v-icon>
-            <div class="breadcrumb-link" @click="parentRoute && $router.push(parentRoute)">
-                {{ parent }}
-            </div>
-
-        </template>
-
-        <!-- CURRENT PAGE -->
-        <template v-if="title">
-            <v-icon size="16" class="breadcrumb-separator">
-                mdi-chevron-right
-            </v-icon>
-
-            <div class="breadcrumb-current">
-                {{ title }}
-            </div>
-
-        </template>
-
+      <!-- CURRENT PAGE -->
+      <template v-if="title">
+        <v-icon size="16" class="breadcrumb-separator">mdi-chevron-right</v-icon>
+        <div class="breadcrumb-current">
+          {{ title }}
+        </div>
+      </template>
     </div>
-
-</div>
+  </div>
 </template>
 
 <script>
 export default {
+  name: "PageBreadcrumb",
 
-    name: "PageBreadcrumb",
-
-    props: {
-
-        title: {
-            type: String,
-            required: true
-        },
-
-        parent: {
-            type: String,
-            required: false
-        },
-
-        parentRoute: {
-            type: String,
-            required: false
-        }
-
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    parent: {
+      type: String,
+      required: false
+    },
+    parentRoute: {
+      type: String,
+      required: false
     }
-
-}
+  }
+};
 </script>
 
 <style scoped>
-/* =========================================
-    WRAPPER
-========================================= */
-
 .premium-breadcrumb {
-    margin-bottom: 10px;
+  margin-bottom: 20px;
 }
-
-/* =========================================
-    ITEMS
-========================================= */
 
 .breadcrumb-items {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
 }
-
-/* =========================================
-    LINK
-========================================= */
 
 .breadcrumb-link {
-    display: flex;
-    align-items: center;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    color: #64748b;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
-/* HOVER */
 .breadcrumb-link:hover {
-    color: #1b867c;
-
-    transform: translateX(2px);
+  color: var(--brand);
+  background: var(--surface-alt);
+  transform: translateX(1px);
 }
 
-/* =========================================
-    SEPARATOR
-========================================= */
+.breadcrumb-icon {
+  opacity: 0.85;
+}
 
 .breadcrumb-separator {
-    margin-inline: 10px;
-
-    color: #94a3b8;
+  margin: 0 6px;
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 
-/* =========================================
-    CURRENT
-========================================= */
-
 .breadcrumb-current {
-    font-size: 14px;
-    font-weight: 800;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.1px;
+  padding: 4px 8px;
+  background: var(--surface-alt);
+  border-radius: 8px;
+}
 
-    color: #0f172a;
+/* Dark theme fine-tuning */
+[data-theme="dark"] .breadcrumb-link:hover {
+  background: var(--surface-alt);
+}
 
-    letter-spacing: 0.2px;
+[data-theme="dark"] .breadcrumb-current {
+  background: var(--surface-alt);
 }
 </style>

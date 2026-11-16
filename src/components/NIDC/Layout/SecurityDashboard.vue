@@ -1,436 +1,274 @@
 <template>
-<v-container fluid class="dashboard">
-
-    <!-- =========================================================
-        TOP HERO
-    ========================================================== -->
-    <section class="hero-section">
-
-        <div class="hero-left">
-
-            <h1>
-                Gate Pass Dashboard
-            </h1>
-
-            <p>
-                Smart visitor access management with real-time
-                monitoring, approvals, analytics and security tracking.
-            </p>
-
-        </div>
-
-    </section>
-
-    <!-- =====================================================
-    PREMIUM MINI KPI SECTION
-===================================================== -->
+ 
+    <!-- KPI SECTION -->
     <section class="premium-kpi-section">
+      <div
+        v-for="kpi in securityKpis"
+        :key="kpi.label"
+        class="premium-kpi-card"
+      >
+        <div class="premium-left">
+          <div class="premium-icon-wrap" :style="{ background: kpi.bg }">
+            <v-icon size="22" :color="kpi.color">{{ kpi.icon }}</v-icon>
+          </div>
+          <div>
+            <div class="premium-label">{{ kpi.label }}</div>
+            <div class="premium-sub">Live</div>
+          </div>
+        </div>
+        <div class="premium-value" :style="{ color: kpi.color }">
+          {{ kpi.value }}
+        </div>
+        <div class="premium-glow" :style="{ background: kpi.color }"></div>
+      </div>
+    </section>
 
-        <div v-for="kpi in kpis" :key="kpi.label" class="premium-kpi-card">
-
-            <!-- LEFT -->
-            <div class="premium-left">
-
-                <div class="premium-icon-wrap" :style="{
-                    background: kpi.bg
-                }">
-
-                    <v-icon size="20" :color="kpi.color">
-                        {{ kpi.icon }}
-                    </v-icon>
-
-                </div>
-
-                <div>
-
-                    <div class="premium-label">
-                        {{ kpi.label }}
-                    </div>
-
-                    <!-- <div class="premium-sub">
-                        Live monitoring
-                    </div> -->
-
-                </div>
-
+    <!-- MAIN CONTENT -->
+    <v-row dense>
+      <!-- LEFT: Live Visitors -->
+      <v-col cols="12" lg="8">
+        <div class="premium-card">
+          <div class="card-head">
+            <div>
+              <div class="card-mini-title">Live Monitoring</div>
+              <h2>Visitors Currently Inside</h2>
             </div>
-
-            <!-- RIGHT -->
-            <div class="premium-value" :style="{
-               
-            }">
-                {{ kpi.value }}
+            <div class="live-pill">
+              <span></span>
+              LIVE
             </div>
+          </div>
 
-            <!-- GLOW -->
-            <div class="premium-glow" :style="{
-                background: kpi.color
-            }"></div>
+          <div
+            v-for="visitor in visitors"
+            :key="visitor.id"
+            class="list-item"
+          >
+            <div class="list-left">
+              <div class="visitor-avatar">
+                {{ visitor.name.charAt(0) }}
+              </div>
+              <div>
+                <div class="list-title">{{ visitor.name }}</div>
+                <div class="list-subtitle">
+                  {{ visitor.company }} • {{ visitor.pass_no }}
+                </div>
+              </div>
+            </div>
+            <div class="visitor-meta">
+              <div class="meta-item">
+                <v-icon size="16">mdi-clock-outline</v-icon>
+                {{ visitor.time_in }}
+              </div>
+              <div class="meta-item">
+                <v-icon size="16">mdi-timer-outline</v-icon>
+                {{ visitor.duration }}
+              </div>
+            </div>
+          </div>
 
+          <div v-if="!visitors.length" class="empty-state">
+            No visitors currently inside
+          </div>
+        </div>
+      </v-col>
+
+      <!-- RIGHT: Quick Actions + Gate Status -->
+      <v-col cols="12" lg="4">
+        <!-- Quick Actions -->
+        <div class="premium-card mb-6">
+          <div class="card-head no-margin">
+            <div>
+              <div class="card-mini-title">Operations</div>
+              <h2>Quick Actions</h2>
+            </div>
+          </div>
+
+          <div
+            v-for="action in securityActions"
+            :key="action.title"
+            class="quick-action"
+            @click="goTo(action.route)"
+          >
+            <div class="quick-left">
+              <div class="quick-icon">
+                <v-icon size="20">{{ action.icon }}</v-icon>
+              </div>
+              <div>
+                <div class="quick-title">{{ action.title }}</div>
+                <div class="quick-subtitle">{{ action.subtitle }}</div>
+              </div>
+            </div>
+            <v-icon size="18">mdi-arrow-top-right</v-icon>
+          </div>
         </div>
 
-    </section>
-    <!-- =========================================================
-        MAIN CONTENT
-    ========================================================== -->
-   
-</v-container>
+        <!-- Gate Status -->
+        <div class="premium-card">
+          <div class="card-head no-margin">
+            <div>
+              <div class="card-mini-title">Infrastructure</div>
+              <h2>Gate Status</h2>
+            </div>
+          </div>
+
+          <div
+            v-for="gate in gateStatus"
+            :key="gate.gate"
+            class="status-card success"
+          >
+            <div class="status-left">
+              <div class="status-icon">
+                <v-icon size="18">mdi-gate-open</v-icon>
+              </div>
+              <div>
+                <div class="status-title">{{ gate.gate }}</div>
+                <div class="status-sub">{{ gate.status }}</div>
+              </div>
+            </div>
+            <div class="pulse green"></div>
+          </div>
+
+          <div class="status-card warning mt-2">
+            <div class="status-left">
+              <div class="status-icon">
+                <v-icon size="18">mdi-account-clock-outline</v-icon>
+              </div>
+              <div>
+                <div class="status-title">{{ stats.inside }} Visitors Inside</div>
+                <div class="status-sub">Currently on premises</div>
+              </div>
+            </div>
+            <div class="pulse orange"></div>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+ 
 </template>
 
 <script>
-import {
-    mapGetters
-} from "vuex";
+import { mapGetters } from "vuex";
 import swtalert from "@/mixins/swtalert";
 import dashboardReport from "@/mixins/dashboardReport";
 
 export default {
+  name: "SecurityDashboard",
 
-    name: "SecurityDashboard",
+  mixins: [swtalert, dashboardReport],
 
-   
-    mixins: [swtalert,dashboardReport],
-
-   data() {
+  data() {
     return {
+      stats: {
+        totalGatePasses: 0,
+        pending: 0,
+        approved: 0,
+        rejected: 0,
+        inside: 32,
+        outside: 0,
+        entry: 0,
+        exit: 0,
+        waitingApproval: 0,
+        completed: 0,
+      },
 
-     stats: {
-            totalGatePasses: 0,
-            pending: 0,
-            approved: 0,
-            rejected: 0,
-            inside: 0,
-            outside: 0,
-            entry: 0,
-            exit: 0,
-            waitingApproval: 0,
-            completed: 0,
+      visitors: [
+        {
+          id: 1,
+          name: "John Doe",
+          company: "ABC Limited",
+          pass_no: "GP-00124",
+          time_in: "08:15 AM",
+          duration: "2h 10m",
         },
+        {
+          id: 2,
+          name: "Jane Smith",
+          company: "XYZ Company",
+          pass_no: "GP-00125",
+          time_in: "09:02 AM",
+          duration: "1h 23m",
+        },
+      ],
 
-      
-        visitors: [
+      gateStatus: [
+        { gate: "Gate 1", status: "ONLINE" },
+        { gate: "Gate 2", status: "ONLINE" },
+      ],
 
-            {
-                id: 1,
-                name: "John Doe",
-                company: "ABC Limited",
-                pass_no: "GP-00124",
-                time_in: "08:15 AM",
-                duration: "2h 10m"
-            },
+      securityActions: [
+        {
+          title: "Verify Visitor",
+          icon: "mdi-account-check-outline",
+          route: "/gate/verify",
+          subtitle: "Check-in / Check-out",
+        },
+        {
+          title: "Today's Active Passes",
+          icon: "mdi-file-document-outline",
+          route: "/active-passes",
+          subtitle: "Current valid access",
+        },
+        {
+          title: "Check-In",
+          icon: "mdi-login",
+          route: "/gate/check-in",
+          subtitle: "Record entry",
+        },
+        {
+          title: "Check-Out",
+          icon: "mdi-logout",
+          route: "/gate/check-out",
+          subtitle: "Record exit",
+        },
+      ],
+    };
+  },
 
-            {
-                id: 2,
-                name: "Jane Smith",
-                company: "XYZ Company",
-                pass_no: "GP-00125",
-                time_in: "09:02 AM",
-                duration: "1h 23m"
-            }
+  computed: {
+    ...mapGetters({
+      user: "auth/user",
+    }),
 
-        ],
+    securityKpis() {
+      return [
+        {
+          label: "Visitors Inside",
+          value: this.stats.inside,
+          icon: "mdi-account-group",
+          color: "#10b981",
+          bg: "rgba(16,185,129,0.12)",
+        },
+        {
+          label: "Checked Out Today",
+          value: this.stats.exit || 48,
+          icon: "mdi-logout",
+          color: "#3b82f6",
+          bg: "rgba(59,130,246,0.12)",
+        },
+        {
+          label: "Active Passes",
+          value: this.stats.approved || 86,
+          icon: "mdi-card-account-details",
+          color: "#8b5cf6",
+          bg: "rgba(139,92,246,0.12)",
+        },
+        {
+          label: "Pending Verification",
+          value: this.stats.waitingApproval || 4,
+          icon: "mdi-clock-alert-outline",
+          color: "#f59e0b",
+          bg: "rgba(245,158,11,0.12)",
+        },
+      ];
+    },
+  },
 
-       
-
-      
-        gateStatus: [
-
-            {
-                gate: "Gate 1",
-                status: "ONLINE"
-            },
-
-            {
-                gate: "Gate 2",
-                status: "ONLINE"
-            }
-
-        ],
-
-
-    }
-},
-    computed: {
-
-        ...mapGetters({
-
-            user: "auth/user"
-
-        })
-
-	},
-	
-
-    methods: {
-
-        goTo(route) {
-
-            this.$router.push(route);
-
-		},
-
-	
-        getStatusColor(status) {
-
-            if (status === "Active") return "success";
-            if (status === "Pending") return "warning";
-            if (status === "Approved") return "primary";
-
-            return "grey";
-
-        }
-
-    }
-
+  methods: {
+    goTo(route) {
+      this.$router.push(route);
+    },
+  },
 };
 </script>
 
-<style scoped>
-/* =========================================================
-    GLOBAL
-========================================================= */
-
-.dashboard {
-    position: relative;
-    overflow: hidden;
-    min-height: 100vh;
-    padding: 30px;
-
-}
-
-/* =========================================================
-    HERO
-========================================================= */
-
-.hero-section {
-    position: relative;
-    z-index: 2;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-
-    margin-bottom: 28px;
-}
-
-.hero-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-
-    padding: 10px 16px;
-
-    border-radius: 999px;
-
-    background: rgba(255, 255, 255, .75);
-
-    border: 1px solid rgba(255, 255, 255, .95);
-
-    backdrop-filter: blur(12px);
-
-    margin-bottom: 20px;
-
-    font-size: 12px;
-    font-weight: 700;
-
-    color: #334155;
-}
-
-.hero-chip span {
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: #10b981;
-}
-
-.hero-left h1 {
-    font-size: 1.5rem;
-    line-height: 1;
-
-    font-weight: 900;
-
-    letter-spacing: -.06em;
-
-    color: #0f172a;
-
-    margin-bottom: 18px;
-}
-
-.hero-left h1 span {
-    background: linear-gradient(135deg, #1b867c, #003B73, #0f172a);
-
-    -webkitbackground-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.hero-left p {
-    max-width: 700px;
-
-    color: #64748b;
-
-    line-height: 1.8;
-
-    font-size: 15px;
-}
-
-
-
-/* =====================================================
-    PREMIUM MINI KPI SECTION
-===================================================== */
-
-.premium-kpi-section {
-    position: relative;
-    z-index: 2;
-
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-
-    gap: 14px;
-
-    margin-bottom: 24px;
-}
-
-/* =====================================================
-    KPI CARD
-===================================================== */
-
-.premium-kpi-card {
-    position: relative;
-    overflow: hidden;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 18px 20px;
-
-    border-radius: 24px;
-
-    background:
-        linear-gradient(145deg,
-            rgba(255, 255, 255, .96),
-            rgba(255, 255, 255, .88));
-
-    border: 1px solid rgba(255, 255, 255, .95);
-
-    backdrop-filter: blur(18px);
-
-    box-shadow:
-        0 10px 30px rgba(15, 23, 42, .05);
-
-    min-height: 95px;
-
-    transition: .35s ease;
-}
-
-.premium-kpi-card:hover {
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 18px 35px rgba(37, 99, 235, .10);
-}
-
-/* =====================================================
-    LEFT
-===================================================== */
-
-.premium-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-
-    position: relative;
-    z-index: 2;
-}
-
-.premium-icon-wrap {
-    width: 52px;
-    height: 52px;
-
-    border-radius: 18px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-}
-
-.premium-label {
-    font-size: 14px;
-    font-weight: 700;
-
-    color: #0f172a;
-}
-
-.premium-sub {
-    margin-top: 4px;
-
-    font-size: 11px;
-    font-weight: 600;
-
-    color: #94a3b8;
-}
-
-/* =====================================================
-    VALUE
-===================================================== */
-
-.premium-value {
-    position: relative;
-    z-index: 2;
-
-    font-size: 1.5rem;
-    line-height: 1;
-
-    font-weight: 900;
-
-    letter-spacing: -.05em;
-}
-
-/* =====================================================
-    GLOW EFFECT
-===================================================== */
-
-.premium-glow {
-    position: absolute;
-
-    width: 120px;
-    height: 120px;
-
-    border-radius: 50%;
-
-    opacity: .08;
-
-    filter: blur(50px);
-
-    right: -40px;
-    top: -40px;
-}
-
-/* =====================================================
-    RESPONSIVE
-===================================================== */
-
-@media(max-width: 1200px) {
-
-    .premium-kpi-section {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
-
-@media(max-width: 700px) {
-
-    .premium-kpi-section {
-        grid-template-columns: 1fr;
-    }
-
-}
-
-
-</style>

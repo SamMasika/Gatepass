@@ -56,6 +56,7 @@
                 prepend-inner-icon="mdi-email-outline"
                 variant="outlined"
                 density="comfortable"
+								rounded="lg"
                 class="custom-field mb-5"
                 :rules="[v => !!v || 'Email is required']"
               />
@@ -70,6 +71,7 @@
                 @click:append-inner="showPassword = !showPassword"
                 variant="outlined"
                 density="comfortable"
+								rounded="lg"
                 class="custom-field"
                 :rules="[v => !!v || 'Password is required']"
               />
@@ -85,6 +87,7 @@
                 class="login-btn"
                 :loading="loading"
                 elevation="0"
+                rounded="lg"
               >
                 <v-icon start>mdi-login</v-icon>
                 Secure Login

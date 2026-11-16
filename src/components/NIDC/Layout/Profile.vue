@@ -1,18 +1,15 @@
 <template>
   <v-container fluid class="ultra-wrapper py-12">
-
     <PageBreadcrumb title="Profile Overview" />
 
     <v-row justify="center">
       <v-col cols="12" lg="10">
-
-        <v-card class="ultra-card border" elevation="0">
-
+        <v-card class="ultra-card" elevation="0">
           <!-- TOP HEADER -->
           <div class="ultra-header">
             <div class="header-content">
               <v-avatar size="130" class="ultra-avatar">
-                <img v-if="user.avatar" :src="user.avatar" />
+                <img v-if="user.avatar" :src="user.avatar" alt="Avatar" />
                 <v-icon v-else size="80" color="white">mdi-account</v-icon>
               </v-avatar>
 
@@ -25,8 +22,7 @@
 
           <!-- BODY -->
           <div class="ultra-body px-12 py-10">
-
-            <!-- WARNING SECURITY ALERT -->
+            <!-- SECURITY ALERT -->
             <div v-if="user && user.is_password_changed === 0" class="security-alert mb-10">
               <div class="security-alert-inner">
                 <div class="security-icon-wrap">
@@ -81,7 +77,7 @@
 
                   <v-btn
                     block
-                    class="button-color mb-4"
+                    class="primary-btn mb-4"
                     elevation="0"
                     @click="$router.push('/change-password')"
                   >
@@ -92,8 +88,7 @@
                   <v-btn
                     block
                     variant="outlined"
-                    rounded="xl"
-                    class="luxury-outline-btn"
+                    class="outline-btn"
                     @click="editUser"
                   >
                     <v-icon start>mdi-account-edit</v-icon>
@@ -102,17 +97,15 @@
                 </div>
               </v-col>
             </v-row>
-
           </div>
         </v-card>
-
       </v-col>
     </v-row>
 
     <!-- EDIT PROFILE DIALOG -->
     <v-dialog v-model="editDialog" max-width="600">
       <v-card class="luxury-dialog pa-10">
-        <h2 class="mb-6">Edit Profile</h2>
+        <h2 class="dialog-title mb-6">Edit Profile</h2>
 
         <v-text-field
           label="First Name"
@@ -140,13 +133,12 @@
 
         <div class="d-flex justify-end mt-8">
           <v-btn variant="text" @click="editDialog = false">Cancel</v-btn>
-          <v-btn class="button-color ml-4" @click="saveProfile">
+          <v-btn class="primary-btn ml-4" @click="saveProfile">
             Save Changes
           </v-btn>
         </div>
       </v-card>
     </v-dialog>
-
   </v-container>
 </template>
 
@@ -217,18 +209,17 @@ export default {
 
 /* Card */
 .ultra-card {
-  background: #ffffff;
+  background: var(--surface);
   border-radius: 24px;
   overflow: hidden;
-  box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.05),
-    0 10px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Header */
 .ultra-header {
   padding: 50px 60px;
-  background: linear-gradient(135deg, #1b867c, #003B73, #0f172a);
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark), #0f172a);
 }
 
 .header-content {
@@ -237,43 +228,44 @@ export default {
 }
 
 .ultra-avatar {
-  border: 5px solid #ffffff;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border: 5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 
 .ultra-name {
   font-size: 30px;
   font-weight: 700;
   color: #ffffff;
+  letter-spacing: -0.5px;
 }
 
 .ultra-email {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.85);
   margin-top: 6px;
-  opacity: 0.9;
+  font-size: 15px;
 }
 
 /* Body */
 .ultra-body {
-  background: #ffffff;
+  background: var(--surface);
 }
 
-/* ========== WARNING SECURITY ALERT ========== */
+/* Security Alert */
 .security-alert {
   border-radius: 20px;
-  background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+  background: linear-gradient(135deg, var(--orange), #d97706);
   padding: 2px;
-  box-shadow: 0 20px 40px rgba(217, 119, 6, 0.22);
+  box-shadow: 0 16px 32px rgba(234, 88, 12, 0.2);
 }
 
 .security-alert-inner {
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  background: var(--warning-light);
   border-radius: 18px;
   padding: 28px 32px;
   display: flex;
   align-items: center;
   gap: 24px;
-  border: 1px solid #fcd34d;
+  border: 1px solid rgba(234, 88, 12, 0.3);
 }
 
 .security-icon-wrap {
@@ -281,11 +273,11 @@ export default {
   height: 56px;
   min-width: 56px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, var(--orange), #d97706);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(217, 119, 6, 0.35);
+  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.35);
 }
 
 .security-content {
@@ -295,20 +287,20 @@ export default {
 .security-title {
   font-size: 18px;
   font-weight: 700;
-  color: #92400e;
+  color: var(--orange);
   margin-bottom: 6px;
 }
 
 .security-text {
   font-size: 14.5px;
-  color: #b45309;
+  color: var(--text-secondary);
   line-height: 1.55;
   margin: 0;
   max-width: 520px;
 }
 
 .security-btn {
-  background: linear-gradient(90deg, #f59e0b, #d97706) !important;
+  background: linear-gradient(90deg, var(--orange), #d97706) !important;
   color: white !important;
   height: 48px;
   border-radius: 14px;
@@ -316,16 +308,15 @@ export default {
   padding: 0 24px;
   text-transform: none;
   letter-spacing: 0.3px;
-  box-shadow: 0 8px 18px rgba(217, 119, 6, 0.35);
+  box-shadow: 0 8px 18px rgba(234, 88, 12, 0.35);
   white-space: nowrap;
 }
 
 .security-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(217, 119, 6, 0.45);
+  box-shadow: 0 12px 24px rgba(234, 88, 12, 0.45);
 }
 
-/* Responsive for alert */
 @media (max-width: 960px) {
   .security-alert-inner {
     flex-direction: column;
@@ -341,50 +332,98 @@ export default {
 
 /* Glass Boxes */
 .glass-box {
-  background: #ffffff;
+  background: var(--surface-alt);
   border-radius: 18px;
   padding: 30px;
-  border: 1px solid #eef1f5;
-  transition: 0.3s ease;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
 }
 
 .glass-box:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand);
 }
 
 .section-title {
   font-size: 18px;
-  font-weight: 600;
-  color: #111827;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
 }
 
 /* Info Rows */
 .info-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .label {
-  color: #9ca3af;
+  color: var(--text-muted);
   font-size: 13px;
+  font-weight: 500;
 }
 
 .value {
   font-weight: 600;
-  color: #111827;
+  color: var(--text);
+  font-size: 14.5px;
+}
+
+/* Buttons */
+.primary-btn {
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark)) !important;
+  color: white !important;
+  height: 48px;
+  border-radius: 14px !important;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.3px;
+  box-shadow: 0 6px 16px rgba(27, 134, 124, 0.25);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(27, 134, 124, 0.35);
+}
+
+.outline-btn {
+  height: 48px;
+  border-radius: 14px !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.outline-btn:hover {
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+  background: var(--surface-alt) !important;
 }
 
 /* Dialog */
 .luxury-dialog {
   border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
 }
 
-/* Outline button */
-.luxury-outline-btn {
-  height: 48px;
-  border-radius: 14px !important;
-  border: 1px solid #e5e7eb !important;
+.dialog-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
 }
 </style>

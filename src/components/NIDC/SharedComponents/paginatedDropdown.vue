@@ -918,7 +918,6 @@ export default {
 
     width: 72px;
     height: 72px;
-
     margin: auto;
 
     border-radius: 24px;
