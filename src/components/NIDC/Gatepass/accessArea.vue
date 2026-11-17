@@ -127,28 +127,28 @@
                         <div class="premium-menu-item" @click="editItem(item)">
                             <div class="menu-item-left">
                                 <div class="menu-item-icon activities-bg">
-                                    <v-icon size="18" color="#8B5CF6">mdi-pencil-outline</v-icon>
+                                    <v-icon size="18" color="var(--deep-purple)">mdi-pencil-outline</v-icon>
                                 </div>
                                 <div>
                                     <div class="menu-item-title">Edit Area</div>
                                     <div class="menu-item-subtitle">Update details</div>
                                 </div>
                             </div>
-                            <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
+                            <v-icon size="18" color="var(--gray)">mdi-chevron-right</v-icon>
                         </div>
 
                         <!-- DELETE -->
                         <div class="premium-menu-item" @click="deleteDialog(item)">
                             <div class="menu-item-left">
                                 <div class="menu-item-icon view-bg">
-                                    <v-icon size="18" color="#ef4444">mdi-delete-outline</v-icon>
+                                    <v-icon size="18" color="var(--accent-red)">mdi-delete-outline</v-icon>
                                 </div>
                                 <div>
                                     <div class="menu-item-title">Delete Area</div>
                                     <div class="menu-item-subtitle">Permanently remove</div>
                                 </div>
                             </div>
-                            <v-icon size="18" color="#94a3b8">mdi-chevron-right</v-icon>
+                            <v-icon size="18" color="var(--gray)">mdi-chevron-right</v-icon>
                         </div>
                     </div>
                 </v-card>
@@ -265,96 +265,3 @@ export default {
 }
 </script>
 
-<style scoped>
-/* Premium Dialog */
-.premium-dialog {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-}
-
-.dialog-header {
-    padding: 28px 32px;
-    background: linear-gradient(135deg, var(--brand), var(--brand-dark), #0f172a);
-    color: white;
-}
-
-.dialog-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(8px);
-}
-
-.dialog-title {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-}
-
-.dialog-subtitle {
-    font-size: 13.5px;
-    opacity: 0.85;
-    margin-top: 4px;
-    max-width: 420px;
-}
-
-.dialog-body {
-    padding: 32px;
-    background: var(--surface);
-}
-
-.dialog-footer {
-    padding: 20px 32px;
-    background: var(--surface-alt);
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: flex-end;
-}
-
-/* Input Groups */
-.premium-input-group {
-    margin-bottom: 8px;
-}
-
-.premium-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-    letter-spacing: 0.2px;
-}
-
-/* Buttons */
-.primary-btn {
-    background: linear-gradient(135deg, var(--brand), var(--brand-dark)) !important;
-    color: white !important;
-    font-weight: 600;
-    text-transform: none;
-    letter-spacing: 0.3px;
-    box-shadow: 0 6px 16px rgba(27, 134, 124, 0.25);
-}
-
-.primary-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(27, 134, 124, 0.35);
-}
-
-.outline-btn {
-    border: 1px solid var(--border) !important;
-    color: var(--text) !important;
-    font-weight: 600;
-    text-transform: none;
-}
-
-.outline-btn:hover {
-    border-color: var(--brand) !important;
-    color: var(--brand) !important;
-}
-</style>

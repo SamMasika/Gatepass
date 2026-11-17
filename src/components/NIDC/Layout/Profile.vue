@@ -1,145 +1,226 @@
 <template>
-  <v-container fluid class="ultra-wrapper py-12">
-    <PageBreadcrumb title="Profile Overview" />
+  <div class="profile-page">
+    <div class="container">
+      <PageBreadcrumb title="Profile Overview" />
 
-    <v-row justify="center">
-      <v-col cols="12" lg="10">
-        <v-card class="ultra-card" elevation="0">
-          <!-- TOP HEADER -->
-          <div class="ultra-header">
-            <div class="header-content">
-              <v-avatar size="130" class="ultra-avatar">
-                <img v-if="user.avatar" :src="user.avatar" alt="Avatar" />
-                <v-icon v-else size="80" color="white">mdi-account</v-icon>
-              </v-avatar>
+      <!-- Security Alert -->
+      <div v-if="user && user.is_password_changed === 0" class="security-alert mb-6">
+        <div class="security-alert-inner">
+          <div class="security-icon-wrap">
+            <v-icon size="26" color="white">mdi-shield-lock-outline</v-icon>
+          </div>
+          <div class="security-content">
+            <h3 class="security-title">Security Action Required</h3>
+            <p class="security-text">
+              Please change your temporary password before accessing other features.
+            </p>
+          </div>
+          <v-btn
+            class="security-btn"
+            elevation="0"
+            @click="$router.push('/change-password')"
+          >
+            <v-icon start size="18">mdi-lock-reset</v-icon>
+            Change Password
+          </v-btn>
+        </div>
+      </div>
 
-              <div class="ml-6">
-                <h1 class="ultra-name">{{ user.first_name }} {{ user.last_name }}</h1>
-                <p class="ultra-email">{{ user.email }}</p>
-              </div>
+      <!-- Hero -->
+      <div class="profile-hero">
+        <div class="hero-top">
+          <div class="avatar-wrap">
+            <div class="avatar">
+              <img v-if="user.avatar" :src="user.avatar" alt="Profile" />
+              <span v-else>{{ initials }}</span>
             </div>
           </div>
 
-          <!-- BODY -->
-          <div class="ultra-body px-12 py-10">
-            <!-- SECURITY ALERT -->
-            <div v-if="user && user.is_password_changed === 0" class="security-alert mb-10">
-              <div class="security-alert-inner">
-                <div class="security-icon-wrap">
-                  <v-icon size="28" color="white">mdi-shield-lock-outline</v-icon>
-                </div>
+          <div class="hero-actions">
+            <v-btn
+              class="btn-edit"
+              variant="outlined"
+              @click="editUser"
+            >
+              <v-icon start size="16">mdi-pencil-outline</v-icon>
+              Edit Profile
+            </v-btn>
+          </div>
+        </div>
 
-                <div class="security-content">
-                  <h3 class="security-title">Security Action Required</h3>
-                  <p class="security-text">
-                    For your protection, please change your temporary password before accessing other features of your account.
-                  </p>
-                </div>
+        <div class="hero-info">
+          <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+          <p class="role">{{ user.roles?.[0]?.name || 'User' }}</p>
+          <div class="meta-row">
+            <span class="meta-item">
+              <v-icon size="14">mdi-email-outline</v-icon>
+              {{ user.email }}
+            </span>
+            <span class="meta-item">
+              <v-icon size="14">mdi-phone-outline</v-icon>
+              {{ user.phone || '—' }}
+            </span>
+          </div>
+        </div>
+      </div>
 
-                <v-btn
-                  class="security-btn"
-                  elevation="0"
-                  @click="$router.push('/change-password')"
-                >
-                  <v-icon start size="20">mdi-lock-reset</v-icon>
-                  Change Password Now
-                </v-btn>
+      <!-- Cards -->
+      <div class="cards">
+        <!-- Personal Information -->
+        <div class="card">
+          <div class="card-head">
+            <h2>Personal Information</h2>
+          </div>
+          <div class="card-body">
+            <div class="fields">
+              <div class="field">
+                <label>Full Name</label>
+                <div class="value">{{ user.first_name }} {{ user.last_name }}</div>
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <div class="value">{{ user.email }}</div>
+              </div>
+              <div class="field">
+                <label>Phone</label>
+                <div class="value">{{ user.phone || '—' }}</div>
+              </div>
+              <div class="field">
+                <label>Department</label>
+                <div class="value">{{ user.section?.name || '—' }}</div>
               </div>
             </div>
-
-            <v-row>
-              <!-- PERSONAL INFO -->
-              <v-col cols="12" md="6">
-                <div class="glass-box">
-                  <h3 class="section-title mb-6">Personal Information</h3>
-
-                  <div class="info-row">
-                    <span class="label">Full Name</span>
-                    <span class="value">{{ user.first_name }} {{ user.last_name }}</span>
-                  </div>
-
-                  <div class="info-row">
-                    <span class="label">Phone</span>
-                    <span class="value">{{ user.phone || '—' }}</span>
-                  </div>
-
-                  <div class="info-row">
-                    <span class="label">Email</span>
-                    <span class="value">{{ user.email }}</span>
-                  </div>
-                </div>
-              </v-col>
-
-              <!-- ACCOUNT SETTINGS -->
-              <v-col cols="12" md="6">
-                <div class="glass-box">
-                  <h3 class="section-title mb-6">Account & Security</h3>
-
-                  <v-btn
-                    block
-                    class="primary-btn mb-4"
-                    elevation="0"
-                    @click="$router.push('/change-password')"
-                  >
-                    <v-icon start>mdi-lock-reset</v-icon>
-                    Change Password
-                  </v-btn>
-
-                  <v-btn
-                    block
-                    variant="outlined"
-                    class="outline-btn"
-                    @click="editUser"
-                  >
-                    <v-icon start>mdi-account-edit</v-icon>
-                    Edit Profile
-                  </v-btn>
-                </div>
-              </v-col>
-            </v-row>
           </div>
-        </v-card>
-      </v-col>
-    </v-row>
+        </div>
+
+        <!-- Account -->
+        <div class="card">
+          <div class="card-head">
+            <h2>Account</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <label>Role</label>
+              <div class="value">{{ user.roles?.[0]?.name || 'User' }}</div>
+            </div>
+            <div class="row">
+              <label>Status</label>
+              <div class="value">
+                <span class="badge">{{ user.status == 1 ? 'Active' : 'Inactive' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security -->
+        <div class="card">
+          <div class="card-head">
+            <h2>Security</h2>
+          </div>
+          <div class="card-body">
+            <div class="security">
+              <div>
+                <strong>Password</strong>
+                <p>Change your account password</p>
+              </div>
+              <router-link to="/change-password" class="action">Change</router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- EDIT PROFILE DIALOG -->
-    <v-dialog v-model="editDialog" max-width="600">
-      <v-card class="luxury-dialog pa-10">
-        <h2 class="dialog-title mb-6">Edit Profile</h2>
+    <v-dialog v-model="editDialog" max-width="600" persistent>
+      <v-card class="premium-dialog" rounded="xl" elevation="0">
+        <div class="dialog-header">
+          <div class="d-flex align-center">
+            <div class="dialog-icon">
+              <v-icon size="34" color="white">mdi-account-edit-outline</v-icon>
+            </div>
+            <div class="ml-5">
+              <div class="dialog-title">Edit Profile</div>
+              <div class="dialog-subtitle">Update your personal information</div>
+            </div>
+          </div>
+        </div>
 
-        <v-text-field
-          label="First Name"
-          v-model="editData.first_name"
-          variant="outlined"
-          class="mb-3"
-        />
-        <v-text-field
-          label="Last Name"
-          v-model="editData.last_name"
-          variant="outlined"
-          class="mb-3"
-        />
-        <v-text-field
-          label="Phone"
-          v-model="editData.phone"
-          variant="outlined"
-          class="mb-3"
-        />
-        <v-text-field
-          label="Email"
-          v-model="editData.email"
-          variant="outlined"
-        />
+        <div class="dialog-body">
+          <v-row>
+            <v-col cols="12" md="6">
+              <div class="premium-input-group">
+                <label class="premium-label">First Name</label>
+                <v-text-field
+                  v-model="editData.first_name"
+                  variant="solo-filled"
+                  flat
+                  rounded="xl"
+                  hide-details
+                />
+              </div>
+            </v-col>
+            <v-col cols="12" md="6">
+              <div class="premium-input-group">
+                <label class="premium-label">Last Name</label>
+                <v-text-field
+                  v-model="editData.last_name"
+                  variant="solo-filled"
+                  flat
+                  rounded="xl"
+                  hide-details
+                />
+              </div>
+            </v-col>
+            <v-col cols="12">
+              <div class="premium-input-group">
+                <label class="premium-label">Phone</label>
+                <v-text-field
+                  v-model="editData.phone"
+                  variant="solo-filled"
+                  flat
+                  rounded="xl"
+                  hide-details
+                />
+              </div>
+            </v-col>
+            <v-col cols="12">
+              <div class="premium-input-group">
+                <label class="premium-label">Email</label>
+                <v-text-field
+                  v-model="editData.email"
+                  variant="solo-filled"
+                  flat
+                  rounded="xl"
+                  hide-details
+                />
+              </div>
+            </v-col>
+          </v-row>
+        </div>
 
-        <div class="d-flex justify-end mt-8">
-          <v-btn variant="text" @click="editDialog = false">Cancel</v-btn>
-          <v-btn class="primary-btn ml-4" @click="saveProfile">
+        <div class="dialog-footer">
+          <v-btn
+            variant="outlined"
+            rounded="xl"
+            height="48"
+            class="outline-btn"
+            @click="editDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            class="primary-btn ml-3"
+            rounded="xl"
+            height="48"
+            elevation="0"
+            @click="saveProfile"
+          >
             Save Changes
           </v-btn>
         </div>
       </v-card>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -150,20 +231,27 @@ import { mapGetters } from 'vuex';
 
 export default {
   mixins: [swtalert],
-  components: {
-    PageBreadcrumb
-  },
+  components: { PageBreadcrumb },
+
   data() {
     return {
       editDialog: false,
-      editData: {}
+      editData: {},
     };
   },
+
   computed: {
     ...mapGetters({
       user: 'auth/user',
-    })
+    }),
+
+    initials() {
+      const first = this.user?.first_name?.[0] || '';
+      const last = this.user?.last_name?.[0] || '';
+      return (first + last).toUpperCase();
+    },
   },
+
   methods: {
     editUser() {
       this.editData = { ...this.user };
@@ -173,24 +261,19 @@ export default {
     saveProfile() {
       const { first_name, last_name, phone, email } = this.editData;
 
-      axios.post(`/update-user`, {
-        first_name,
-        last_name,
-        phone,
-        email,
-      })
-      .then((response) => {
-        this.$store.dispatch('auth/updateUser', response.data.user);
-        this.showAlert(response.data.message, "success");
-        this.editDialog = false;
-      })
-      .catch((error) => {
-        console.error(error);
-        this.showAlert(
-          error.response?.data?.message || "Could not update profile.",
-          "error"
-        );
-      });
+      axios
+        .post('/update-user', { first_name, last_name, phone, email })
+        .then((response) => {
+          this.$store.dispatch('auth/updateUser', response.data.user);
+          this.showAlert(response.data.message, 'success');
+          this.editDialog = false;
+        })
+        .catch((error) => {
+          this.showAlert(
+            error.response?.data?.message || 'Could not update profile.',
+            'error'
+          );
+        });
     },
   },
 
@@ -198,232 +281,274 @@ export default {
     if (this.user) {
       this.editData = { ...this.user };
     }
-  }
+  },
 };
 </script>
 
 <style scoped>
-.ultra-wrapper {
+.profile-page {
   min-height: 100vh;
+  padding: 28px 20px 80px;
+  background: var(--surface-alt, #f7f8fa);
 }
 
-/* Card */
-.ultra-card {
-  background: var(--surface);
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Header */
-.ultra-header {
-  padding: 50px 60px;
-  background: linear-gradient(135deg, var(--brand), var(--brand-dark), #0f172a);
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-}
-
-.ultra-avatar {
-  border: 5px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-}
-
-.ultra-name {
-  font-size: 30px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.5px;
-}
-
-.ultra-email {
-  color: rgba(255, 255, 255, 0.85);
-  margin-top: 6px;
-  font-size: 15px;
-}
-
-/* Body */
-.ultra-body {
-  background: var(--surface);
+.container {
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 /* Security Alert */
 .security-alert {
   border-radius: 20px;
-  background: linear-gradient(135deg, var(--orange), #d97706);
+  background: linear-gradient(135deg, var(--orange, #f59e0b), #d97706);
   padding: 2px;
-  box-shadow: 0 16px 32px rgba(234, 88, 12, 0.2);
 }
 
 .security-alert-inner {
-  background: var(--warning-light);
+  background: var(--warning-light, #fffbeb);
   border-radius: 18px;
-  padding: 28px 32px;
+  padding: 24px 28px;
   display: flex;
   align-items: center;
-  gap: 24px;
-  border: 1px solid rgba(234, 88, 12, 0.3);
+  gap: 20px;
 }
 
 .security-icon-wrap {
-  width: 56px;
-  height: 56px;
-  min-width: 56px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--orange), #d97706);
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--orange, #f59e0b), #d97706);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.35);
-}
-
-.security-content {
-  flex: 1;
 }
 
 .security-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--orange);
-  margin-bottom: 6px;
+  color: var(--orange, #d97706);
+  margin: 0 0 4px;
 }
 
 .security-text {
-  font-size: 14.5px;
+  font-size: 13.5px;
   color: var(--text-secondary);
-  line-height: 1.55;
   margin: 0;
-  max-width: 520px;
 }
 
 .security-btn {
-  background: linear-gradient(90deg, var(--orange), #d97706) !important;
+  background: linear-gradient(90deg, var(--orange, #f59e0b), #d97706) !important;
   color: white !important;
-  height: 48px;
-  border-radius: 14px;
+  height: 44px;
+  border-radius: 12px;
   font-weight: 600;
-  padding: 0 24px;
   text-transform: none;
-  letter-spacing: 0.3px;
-  box-shadow: 0 8px 18px rgba(234, 88, 12, 0.35);
-  white-space: nowrap;
 }
 
-.security-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(234, 88, 12, 0.45);
-}
-
-@media (max-width: 960px) {
-  .security-alert-inner {
-    flex-direction: column;
-    text-align: center;
-    gap: 18px;
-    padding: 28px 24px;
-  }
-
-  .security-text {
-    max-width: 100%;
-  }
-}
-
-/* Glass Boxes */
-.glass-box {
-  background: var(--surface-alt);
-  border-radius: 18px;
-  padding: 30px;
+/* Hero */
+.profile-hero {
+  background: var(--surface);
+  border-radius: 24px;
   border: 1px solid var(--border);
-  transition: all 0.3s ease;
+  padding: 28px;
+  margin-bottom: 16px;
 }
 
-.glass-box:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--brand);
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.2px;
-}
-
-/* Info Rows */
-.info-row {
+.hero-top {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--brand), var(--brand-dark));
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 650;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.btn-edit {
+  height: 40px;
+  border-radius: 12px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.hero-info h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+
+.role {
+  margin: 0 0 14px;
+  font-size: 14px;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.meta-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
   align-items: center;
-  margin-bottom: 18px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.info-row:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.label {
-  color: var(--text-muted);
-  font-size: 13px;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
-.value {
-  font-weight: 600;
-  color: var(--text);
-  font-size: 14.5px;
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-/* Buttons */
-.primary-btn {
-  background: linear-gradient(135deg, var(--brand), var(--brand-dark)) !important;
-  color: white !important;
-  height: 48px;
-  border-radius: 14px !important;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: 0.3px;
-  box-shadow: 0 6px 16px rgba(27, 134, 124, 0.25);
-}
-
-.primary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(27, 134, 124, 0.35);
-}
-
-.outline-btn {
-  height: 48px;
-  border-radius: 14px !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text) !important;
-  font-weight: 600;
-  text-transform: none;
-}
-
-.outline-btn:hover {
-  border-color: var(--brand) !important;
-  color: var(--brand) !important;
-  background: var(--surface-alt) !important;
-}
-
-/* Dialog */
-.luxury-dialog {
-  border-radius: 24px;
+.card {
   background: var(--surface);
+  border-radius: 20px;
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
 }
 
-.dialog-title {
-  font-size: 22px;
-  font-weight: 700;
+.card:first-child {
+  grid-column: 1 / -1;
+}
+
+.card-head {
+  padding: 18px 22px 0;
+}
+
+.card-head h2 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 650;
   color: var(--text);
-  letter-spacing: -0.3px;
+}
+
+.card-body {
+  padding: 14px 22px 20px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+}
+
+.field label,
+.row label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted, #94a3b8);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.field .value,
+.row .value {
+  font-size: 14.5px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.row {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border-light, #f4f6f8);
+}
+
+.row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 650;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.security {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.security strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.security p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.action {
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--brand);
+  background: var(--surface-alt);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.action:hover {
+  background: var(--border);
+}
+
+/* Dialog styles come from shared premium-dialog.css */
+@media (max-width: 768px) {
+  .hero-top {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero-info {
+    text-align: center;
+  }
+  .meta-row {
+    justify-content: center;
+  }
+  .cards,
+  .fields {
+    grid-template-columns: 1fr;
+  }
+  .security-alert-inner {
+    flex-direction: column;
+    text-align: center;
+  }
 }
 </style>

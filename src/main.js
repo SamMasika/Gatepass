@@ -3,21 +3,19 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from 'axios';
-
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
-
 import Swal from 'sweetalert2';
 import ApexCharts from 'apexcharts';
 import VueApexCharts from 'vue3-apexcharts';
-
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import '@mdi/font/css/materialdesignicons.css';
-
 import '@/assets/css/swal.css';
 import '@/assets/css/gate-dialog.css';
 import '@/assets/css/global.css';
 import '@/assets/css/dashboard.css';
+import './assets/css/dialog.css'
+import './assets/css/button.css'
 
 // custom store subscriptions
 require('@/store/subscribe');
@@ -85,6 +83,5 @@ async function bootstrapAuth() {
   app.use(store);
   app.use(router);
   app.use(vuetify);
-
   app.mount('#app');
 })();

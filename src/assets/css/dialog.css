@@ -1,0 +1,66 @@
+/* =========================================
+   PREMIUM DIALOG
+========================================= */
+.premium-dialog {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.dialog-header {
+    padding: 28px 32px;
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark), #0f172a);
+    color: var(--white);
+}
+
+.dialog-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+}
+
+.dialog-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.dialog-subtitle {
+    font-size: 13.5px;
+    opacity: 0.85;
+    margin-top: 4px;
+    max-width: 420px;
+}
+
+.dialog-body {
+    padding: 32px;
+    background: var(--surface);
+}
+
+.dialog-footer {
+    padding: 20px 32px;
+    background: var(--surface-alt);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Input groups used inside dialogs */
+.premium-input-group {
+    margin-bottom: 8px;
+}
+
+.premium-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    letter-spacing: 0.2px;
+}

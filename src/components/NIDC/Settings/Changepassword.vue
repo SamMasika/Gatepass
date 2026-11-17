@@ -1,36 +1,64 @@
 <template>
- <!-- BREADCRUMB -->
+<v-container fluid class="px-6 py-4">
+    <!-- BREADCRUMB -->
     <PageBreadcrumb title="Change Password" />
 
-<v-container class="d-flex justify-center align-center fill-height" fluid>
-    <v-card class="password-card pa-8 border" max-width="600" flat elevation="0">
-        <!-- Title -->
-        <v-card-title class=" font-weight-bold text-center">
-            Change Password
-        </v-card-title>
+    <!-- CENTERED CARD -->
+    <v-row justify="center" class="mt-6">
+        <v-col cols="12" sm="10" md="7" lg="5">
+            <v-card class="premium-password-card" rounded="xl" elevation="0">
+                <!-- HEADER -->
+                <div class="password-header">
+                    <div class="password-icon">
+                        <v-icon size="36" color="white">mdi-shield-lock-outline</v-icon>
+                    </div>
+                    <div class="ml-4">
+                        <div class="password-title">Change Password</div>
+                        <div class="password-subtitle">
+                            Ensure your new password is strong and secure.
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Subtitle -->
-        <v-card-subtitle class="text-center mb-5">
-            Ensure your new password is strong and secure.
-        </v-card-subtitle>
+                <!-- BODY -->
+                <div class="password-body">
+                    <v-form ref="form" v-model="formValid" @submit.prevent="changePassword">
+                        <!-- CURRENT PASSWORD -->
+                        <div class="premium-input-group">
+                            <label class="premium-label">Current Password</label>
+                            <v-text-field v-model="change_password.old_password" placeholder="Enter current password" variant="solo-filled" flat rounded="lg" hide-details="auto" prepend-inner-icon="mdi-lock-outline" :type="showCurrent ? 'text' : 'password'" :append-inner-icon="showCurrent ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="showCurrent = !showCurrent" :rules="[(v) => !!v || 'Current password is required']" />
+                        </div>
 
-        <!-- Form -->
-        <v-form ref="form" v-model="formValid" @submit.prevent="changePassword">
-            <!-- Current Password -->
-            <v-text-field v-model="change_password.old_password" label="Current Password" variant="outlined" :type="showCurrent ? 'text' : 'password'" :append-inner-icon="showCurrent ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="showCurrent = !showCurrent" prepend-inner-icon="mdi-lock" class="my-3" :rules="[v => v && v.length > 0 || 'Current password is required']"></v-text-field>
+                        <!-- NEW PASSWORD -->
+                        <div class="premium-input-group">
+                            <label class="premium-label">New Password</label>
+                            <v-text-field v-model="change_password.new_password" placeholder="Enter new password" variant="solo-filled" flat rounded="lg" hide-details="auto" prepend-inner-icon="mdi-lock-check-outline" :type="showNew ? 'text' : 'password'" :append-inner-icon="showNew ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="showNew = !showNew" :rules="[
+                    (v) => !!v || 'New password is required',
+                    (v) => (v && v.length >= 8) || 'Password must be at least 8 characters',
+                  ]" />
+                        </div>
 
-            <!-- New Password -->
-            <v-text-field v-model="change_password.new_password" label="New Password" variant="outlined" :type="showNew ? 'text' : 'password'" :append-inner-icon="showNew ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="showNew = !showNew" prepend-inner-icon="mdi-lock-check" class="my-3" :rules="[v => v && v.length >= 8 || 'Password must be at least 8 characters']"></v-text-field>
+                        <!-- CONFIRM PASSWORD -->
+                        <div class="premium-input-group">
+                            <label class="premium-label">Confirm New Password</label>
+                            <v-text-field v-model="change_password.new_password_confirmation" placeholder="Confirm new password" variant="solo-filled" flat rounded="lg" hide-details="auto" prepend-inner-icon="mdi-lock-check-outline" :type="showConfirm ? 'text' : 'password'" :append-inner-icon="showConfirm ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="showConfirm = !showConfirm" :rules="[
+                    (v) => !!v || 'Please confirm your password',
+                    (v) => v === change_password.new_password || 'Passwords do not match',
+                  ]" />
+                        </div>
 
-            <!-- Confirm New Password -->
-            <v-text-field v-model="change_password.new_password_confirmation" label="Confirm New Password" variant="outlined" :type="showConfirm ? 'text' : 'password'" :append-inner-icon="showConfirm ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="showConfirm = !showConfirm" prepend-inner-icon="mdi-lock-check" class="my-3" :rules="[v => v && v === change_password.new_password || 'Passwords do not match']"></v-text-field>
-
-            <!-- Submit Button -->
-            <v-btn type="submit" block class="button-color" size="large" rounded="lg" elevation="0">
-                <v-icon left>mdi-check-bold</v-icon> Update
-            </v-btn>
-        </v-form>
-    </v-card>
+                        <!-- SUBMIT -->
+                        <div class="mt-6">
+                            <v-btn type="submit" block class="primary-btn" rounded="lg" height="52" elevation="0">
+                                <v-icon start>mdi-check-bold</v-icon>
+                                Update Password
+                            </v-btn>
+                        </div>
+                    </v-form>
+                </div>
+            </v-card>
+        </v-col>
+    </v-row>
 </v-container>
 </template>
 
@@ -40,10 +68,12 @@ import PageBreadcrumb from "../SharedComponents/PageBreadcrumb.vue";
 
 export default {
     components: {
-        PageBreadcrumb
+        PageBreadcrumb,
     },
+
     data() {
         return {
+            formValid: false,
             showCurrent: false,
             showNew: false,
             showConfirm: false,
@@ -54,38 +84,36 @@ export default {
             },
         };
     },
+
     methods: {
         async changePassword() {
-    // First validate the form
-    const isValid = this.$refs.form.validate();
+            const {
+                valid
+            } = await this.$refs.form.validate();
+            if (!valid) return;
 
-    if (!isValid) return;
+            try {
+                const response = await axios.post("/update-password", this.change_password);
 
-    try {
-        const response = await axios.post("/update-password", this.change_password);
+                this.showAlert(response.data.message || "Password updated successfully", "success");
 
-        // Show success message
-        this.showAlert(response.data.message, "success");
+                this.$refs.form.reset();
+                this.$refs.form.resetValidation();
 
-        // Reset the form
-        this.$refs.form.reset();
-        this.$refs.form.resetValidation();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } catch (error) {
+                this.showAlert(
+                    error.response ?.data ?.message || "An error occurred. Please try again.",
+                    "error"
+                );
+            }
+        },
 
-        // Reload the page after a short delay so the user can see the success message
-        setTimeout(() => {
-            window.location.reload();
-        }, 1500); // 1.5 seconds delay
-
-    } catch (error) {
-        this.showAlert(
-            error.response?.data?.message || "An error occurred. Please try again.",
-            "error"
-        );
-    }
-},
         showAlert(message, type) {
             this.$swal.fire({
-                icon: type, // 'success' or 'error'
+                icon: type,
                 title: message,
                 showConfirmButton: false,
                 timer: 2000,
@@ -96,40 +124,73 @@ export default {
 </script>
 
 <style scoped>
-/* Center the card */
-.v-container {
-    height: 100vh;
+.premium-password-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
 }
 
-/* Password Card */
-.password-card {
-    width: 100%;
-    max-width: 600px;
-    /* box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); */
-    padding: 16px;
+.password-header {
+    display: flex;
+    align-items: center;
+    padding: 32px;
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark), #0f172a);
+    color: var(--white);
 }
 
-/* Title and subtitle styling */
-.text-h5 {
-    font-weight: bold;
+.password-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
 }
 
-/* Update Button */
-.change-btn {
-    background-color: #3674b5 !important;
-    color: white !important;
-    font-weight: bold;
+.password-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
 }
 
-/* Adjusting form fields for consistent padding */
-.my-3 {
-    margin-top: 16px;
-    margin-bottom: 16px;
+.password-subtitle {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-top: 4px;
 }
 
-/* Icon adjustments */
-.mdi-lock,
-.mdi-lock-check {
-    color: #3674b5;
+.password-body {
+    padding: 32px;
+    background: var(--surface);
+}
+
+.premium-input-group {
+    margin-bottom: 20px;
+}
+
+.premium-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    letter-spacing: 0.2px;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark)) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--brand) 25%, transparent);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--brand) 35%, transparent);
 }
 </style>

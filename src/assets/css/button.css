@@ -1,0 +1,40 @@
+/* =========================================
+   PREMIUM BUTTONS
+========================================= */
+.primary-btn {
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark)) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 16px rgba(27, 134, 124, 0.25);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(27, 134, 124, 0.35);
+}
+
+.outline-btn {
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    font-weight: 600;
+    text-transform: none;
+}
+
+.outline-btn:hover {
+    border-color: var(--brand) !important;
+    color: var(--brand) !important;
+}
+
+/* Optional: action button used in tables */
+.premium-action-btn {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+}
+
+.premium-action-btn:hover {
+    border-color: var(--brand) !important;
+    color: var(--brand) !important;
+}

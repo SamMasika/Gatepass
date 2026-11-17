@@ -24,6 +24,8 @@
     --orange: #ea580c;
     --red: #dc2626;
     --white: #ffffff;
+    --deep-purple: #8B5CF6;
+    --green: #22c55e;
 
     /* Semantic */
     --text: #0f172a;
@@ -73,6 +75,8 @@
     --deep-purple: #a78bfa;
     --orange: #fb923c;
     --red: #f87171;
+    --white: #ffffff;
+    --green: #22c55e;
 
     --text: #f1f5f9;
     --text-muted: #94a3b8;
@@ -92,6 +96,7 @@
     --deep-purple-light: #4c1d95;
     --light-blue-light: #0c4a6e;
     --white: #ffffff;
+    --green: #22c55e;
     --shadow-sm: 0 1px 6px rgba(0, 0, 0, 0.25);
     --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.35);
     --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.45);

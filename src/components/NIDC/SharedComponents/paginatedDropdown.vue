@@ -305,7 +305,7 @@ export default {
     font-size: 14px;
     font-weight: 700;
 
-    color: #334155;
+    color: var(--text);
 }
 
 /* ========================================
@@ -322,9 +322,9 @@ export default {
 
     border-radius: 10px !important;
 
-    background: #ffffff !important;
+    background: var(--input-bg) !important;
 
-    border: 1px solid #e2e8f0 !important;
+    border: 1px solid var(--border) !important;
 
     box-shadow:
         0 2px 12px rgba(15, 23, 42, 0.04);
@@ -345,12 +345,12 @@ export default {
 
 /* HOVER */
 .premium-autocomplete :deep(.v-field:hover) {
-    border-color: #cbd5e1 !important;
+    border-color: var(--border) !important;
 }
 
 /* FOCUS */
 .premium-autocomplete :deep(.v-field--focused) {
-    border-color: #2563eb !important;
+    border-color: var(--brand) !important;
 
     box-shadow:
         0 0 0 4px rgba(37, 99, 235, 0.08);
@@ -362,12 +362,12 @@ export default {
 
     font-weight: 500 !important;
 
-    color: #0f172a !important;
+    color: var(--text) !important;
 }
 
 /* PLACEHOLDER */
 .premium-autocomplete :deep(input::placeholder) {
-    color: #94a3b8 !important;
+    color: var(--text-muted) !important;
 }
 
 /* REMOVE DEFAULT PADDING JUMPS */
@@ -390,7 +390,7 @@ export default {
     height: 34px;
     border-radius: 12px;
 
-    background: #f1f5f9;
+    background: var(--input-bg);
 
     display: flex;
     align-items: center;
@@ -408,7 +408,7 @@ export default {
 
     border-radius: 22px !important;
 
-    background: #ffffff !important;
+    background: var(--surface) !important;
 
     /* border: 1px solid #e2e8f0; */
 
@@ -458,10 +458,10 @@ export default {
 
     background:
         linear-gradient(135deg,
-            #2563eb,
-            #4f46e5);
+            var(--brand),
+            var(--brand-dark));
 
-    color: white;
+    color: var(--white);
 
     font-size: 14px;
     font-weight: 700;
@@ -478,7 +478,7 @@ export default {
 .item-text {
     font-size: 14px !important;
     font-weight: 600 !important;
-    color: #0f172a !important;
+    color: var(--text) !important;
 }
 
 /* ========================================
@@ -497,7 +497,7 @@ export default {
     font-size: 13px;
     font-weight: 600;
 
-    color: #64748b;
+    color: var(--text-muted);
 }
 
 /* ========================================
@@ -515,12 +515,12 @@ export default {
 
     font-weight: 700 !important;
 
-    color: white !important;
+    color: var(--white) !important;
 
     background:
         linear-gradient(135deg,
-            #2563eb,
-            #4f46e5) !important;
+            var(--brand),
+            var(--brand-dark)) !important;
 
     box-shadow:
         0 10px 20px rgba(37, 99, 235, 0.18);
@@ -543,7 +543,7 @@ export default {
     font-size: 16px;
     font-weight: 700;
 
-    color: #0f172a;
+    color: var(--text);
 }
 
 /* SUBTITLE */
@@ -552,7 +552,7 @@ export default {
 
     font-size: 13px;
 
-    color: #64748b;
+    color: var(--text-muted);
 }
 
 /* ======================================================
@@ -572,8 +572,8 @@ export default {
 
     background:
         linear-gradient(145deg,
-            #ffffff,
-            #f8fafc) !important;
+            var(--white),
+            var(--input-bg)) !important;
 
     border:
         1px solid rgba(226, 232, 240, 0.9) !important;
@@ -622,13 +622,13 @@ export default {
 
     font-weight: 600 !important;
 
-    color: #0f172a !important;
+    color: var(--text) !important;
 }
 
 /* PLACEHOLDER */
 .ultra-premium-autocomplete :deep(input::placeholder) {
 
-    color: #94a3b8 !important;
+    color: var(--text-muted) !important;
 
     font-weight: 500;
 }
@@ -663,8 +663,8 @@ export default {
     background:
         linear-gradient(
             135deg,
-            #f8fafc,
-            #eef2ff
+            var(--input-bg),
+            var(--surface-alt)
         );
 
     display: flex;
@@ -792,9 +792,9 @@ export default {
 
     border-radius: 16px;
 
-    background: linear-gradient(135deg, #26a69a, #114575, #003b73);
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark), var(--brand-darker));
 
-    color: white;
+    color: var(--white);
 
     display: flex;
     align-items: center;
@@ -858,7 +858,7 @@ export default {
     font-size: 13px;
     font-weight: 700;
 
-    color: #64748b;
+    color: var(--text-muted);
 }
 
 /* ======================================================
@@ -881,12 +881,12 @@ export default {
 
     letter-spacing: 0.3px;
 
-    color: white !important;
+    color: var(--white) !important;
 
     background:
         linear-gradient(135deg,
-            #2563eb,
-            #4f46e5) !important;
+            var(--brand),
+            var(--brand-dark)) !important;
 
     box-shadow:
         0 14px 28px rgba(37, 99, 235, 0.22);
@@ -924,14 +924,14 @@ export default {
 
     background:
         linear-gradient(135deg,
-            #f8fafc,
-            #eef2ff);
+            var(--input-bg),
+            var(--border));
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    color: #94a3b8;
+    color: var(--text-muted);
 
     border:
         1px solid rgba(226, 232, 240, 0.9);
@@ -944,7 +944,7 @@ export default {
     font-size: 17px;
     font-weight: 800;
 
-    color: #0f172a;
+    color: var(--text);
 }
 
 .empty-subtitle {
@@ -955,6 +955,6 @@ export default {
 
     line-height: 1.5;
 
-    color: #64748b;
+    color: var(--text-muted);
 }
 </style>

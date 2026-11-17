@@ -102,24 +102,24 @@ export default {
                         },
                     ],
                 },
-                {
-                    title: "Reports",
-                    icon: "mdi-chart-box-outline",
-                    children: [
-                        {
-                            title: "Gate Pass Reports",
-                            icon: "mdi-file-chart",
-                            to: "/reports/gate-pass",
-                            permission: "REPORTS_ACCESS",
-                        },
-                        {
-                            title: "Visitor Reports",
-                            icon: "mdi-chart-bar",
-                            to: "/reports/visitors",
-                            permission: "REPORTS_ACCESS",
-                        },
-                    ],
-                },
+                // {
+                //     title: "Reports",
+                //     icon: "mdi-chart-box-outline",
+                //     children: [
+                //         {
+                //             title: "Gate Pass Reports",
+                //             icon: "mdi-file-chart",
+                //             to: "/reports/gate-pass",
+                //             permission: "REPORTS_ACCESS",
+                //         },
+                //         {
+                //             title: "Visitor Reports",
+                //             icon: "mdi-chart-bar",
+                //             to: "/reports/visitors",
+                //             permission: "REPORTS_ACCESS",
+                //         },
+                //     ],
+                // },
                 {
                     title: "System Configuration",
                     icon: "mdi-cog-outline",
@@ -156,7 +156,7 @@ export default {
                         },
                         {
                             title: "Access Area",
-                            icon: "mdi-badge-account-outline",
+                            icon: "mdi-shield-key-outline",
                             to: "/access-areas",
                             permission: "AREA_ACCESS",
                         },
@@ -292,12 +292,12 @@ export default {
 .sidebar-item.gp-active,
 .sidebar-item.gp-active:hover {
     background: linear-gradient(135deg, var(--brand), var(--brand-dark)) !important;
-    color: white !important;
+    color: var(--white) !important;
 }
 
 .sidebar-item.gp-active .item-icon,
 .sidebar-item.gp-active .v-icon {
-    color: white !important;
+    color: var(--white) !important;
 }
 
 .item-icon {

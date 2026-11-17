@@ -253,27 +253,27 @@ export default {
   display: block;
   font-size: 13px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text);
   margin-bottom: 8px;
 }
 
 .gd-remarks-label .optional {
   font-weight: 400;
-  color: #9ca3af;
+  color: var(--text-muted);
   font-size: 12px;
 }
 
 .gd-remarks-label .required {
-  color: #ef4444;
+  color: var(--red);
   margin-left: 2px;
 }
 
 .gd-textarea :deep(.v-field) {
   border-radius: 12px !important;
-  background: #f9fafb;
+  background: var(--input-bg);
 }
 
 .gd-textarea :deep(.v-field--focused) {
-  background: #ffffff;
+  background: var(--white);
 }
 </style>
