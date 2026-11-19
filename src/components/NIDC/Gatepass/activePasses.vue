@@ -4173,7 +4173,7 @@ export default {
 .pdf-title {
     font-size: 15px;
     font-weight: 600;
-    color: #fff;
+    color:var(--white);
 }
 
 .pdf-subtitle {

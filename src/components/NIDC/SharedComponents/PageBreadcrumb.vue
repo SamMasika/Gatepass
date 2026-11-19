@@ -3,7 +3,7 @@
     <div class="breadcrumb-items">
       <!-- DASHBOARD -->
       <div class="breadcrumb-link" @click="$router.push('/dashboard')">
-        <v-icon size="15" class="breadcrumb-icon">mdi-view-dashboard-outline</v-icon>
+       
         Dashboard
       </div>
 

@@ -183,7 +183,7 @@ export default {
 
     padding: 16px 18px;
 
-    color: #fff;
+    color: var(--white);
 }
 
 .sd-icon-ring {
@@ -232,8 +232,8 @@ export default {
     padding: 12px;
 
     border-radius: 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: var(--surface);
+    border: 1px solid var(--border);
 }
 
 .sd-avatar {
@@ -243,7 +243,7 @@ export default {
 
     background: linear-gradient(135deg, #3b82f6, #2563eb);
 
-    color: white;
+    color: var(--white);
 
     display: flex;
     align-items: center;
@@ -256,7 +256,7 @@ export default {
 .sd-item-name {
     font-size: 14px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--text);
 }
 
 .sd-item-desc {
@@ -288,7 +288,7 @@ export default {
 
     padding: 12px 16px;
 
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--border);
 }
 
 .sd-cancel {
@@ -297,15 +297,14 @@ export default {
 
 .sd-reject {
     font-size: 12px;
-    color: #ef4444 !important;
+    color: var(--red) !important;
 }
-
 .sd-confirm {
     font-size: 12px;
     border-radius: 10px;
 
     background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
-    color: white !important;
+    color: var(--white) !important;
 
     padding: 6px 14px;
 }

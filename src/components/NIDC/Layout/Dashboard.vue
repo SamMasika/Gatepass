@@ -66,12 +66,7 @@
         <!-- LEFT COLUMN -->
         <v-col cols="12" lg="8">
           <div class="premium-card analytics-card mb-6">
-            <div class="card-head">
-              <div>
-                <div class="card-mini-title">Analytics</div>
-                <h2>Visitor Access Analytics</h2>
-              </div>
-            </div>
+           
             <div class="chart-wrapper">
               <gate-chart />
             </div>
